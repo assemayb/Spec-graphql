@@ -1,7 +1,7 @@
 import { DataTypes, ModelDefined, Optional } from "sequelize"
 
-import Specialist from './Specialist'
-import Thread from "./Thread"
+import { Specialist } from './Specialist'
+import { Thread } from "./Thread"
 
 import { dbConfig } from "../config/database"
 

@@ -11,6 +11,7 @@ import { buildSchema } from "type-graphql"
 
 import { HelloResolver } from "./resolvers/helloResolver"
 import { UserResolver } from "./resolvers/userResolver"
+import { ThreadResolver } from "./resolvers/threadResolver"
 
 (async () => {
     const app = experss()
@@ -24,17 +25,17 @@ import { UserResolver } from "./resolvers/userResolver"
     app.use(cors({
         credentials: true
     }))
-    
+
     // connection the database
     dbConfig.authenticate()
-    .then(() => console.log("Database connection is successful"))
-    .then(() => dbConfig.sync( /*    { force: true }  */))
-    .catch((err) => console.log(err));
+        .then(() => console.log("Database connection is successful"))
+        .then(() => dbConfig.sync( /*    { force: true }  */))
+        .catch((err) => console.log(err));
 
     // graphql apollo server
     const apolloServer = new ApolloServer({
         schema: await buildSchema({
-            resolvers: [HelloResolver, UserResolver ]
+            resolvers: [HelloResolver, UserResolver, ThreadResolver]
         }),
         context: ({ req, res }) => ({ req, res })
     })

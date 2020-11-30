@@ -8,9 +8,10 @@ export interface ThreadAttributes {
     id: number
     question: string
     specialization: string 
+    threadCreator: string
 }
 
-const Thread: ModelDefined<ThreadAttributes, {}> = dbConfig.define("thread", {
+export const Thread: ModelDefined<ThreadAttributes, {}> = dbConfig.define("thread", {
     id: {
         type: DataTypes.INTEGER(),
         primaryKey: true,
@@ -23,6 +24,10 @@ const Thread: ModelDefined<ThreadAttributes, {}> = dbConfig.define("thread", {
     specialization: {
         type: DataTypes.STRING(100),
         allowNull: false
+    },
+    threadCreator: {
+        type: DataTypes.STRING(100),
+        allowNull: false
     }
 }, {
     tableName: "threads"
@@ -32,4 +37,3 @@ Thread.hasMany(Reply, {
     foreignKey: "replyThread"
  })
 
-export default Thread;

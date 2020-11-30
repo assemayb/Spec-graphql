@@ -9,6 +9,7 @@ import { createAccessToken, createRefreshToken } from '../utils/auth';
 import { isAuthenticated } from "../utils/isAuth"
 import { MyContext } from '../utils/context';
 
+
 @Resolver()
 export class UserResolver {
     @Query(() => [UserType], { nullable: true })
@@ -43,7 +44,7 @@ export class UserResolver {
         return true
     }
 
-    @Mutation(() => LoginResponse)
+    @Mutation(() => LoginResponse, {nullable: true})
     async loginUser(
         @Arg("username", () => String) username: string,
         @Arg("password", () => String) password: string,
@@ -82,10 +83,9 @@ export class UserResolver {
 
     @Query(() => String)
     @UseMiddleware(isAuthenticated)
-    bye(
+    test(
         @Ctx() { payload }: MyContext
     ) {
-        console.log(payload)
         return `your id is ${payload?.userId}`
     }
 

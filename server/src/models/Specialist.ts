@@ -15,7 +15,7 @@ interface SpecialistAttributes {
 interface SpecialistCreationAttributes
     extends Optional<SpecialistAttributes, "id"> { }
 
-const Specialist: ModelDefined<
+export const Specialist: ModelDefined<
     SpecialistAttributes,
     SpecialistCreationAttributes
 > = dbConfig.define(
@@ -56,5 +56,3 @@ const Specialist: ModelDefined<
     }
 );
 
-
-export default Specialist;
