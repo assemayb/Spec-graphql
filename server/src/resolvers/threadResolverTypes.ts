@@ -35,6 +35,16 @@ export class CreateThreadInput {
     @Field(() => String)
     specialization?: string
 
-    @Field(() => String, {nullable: true})
+    @Field(() => String, { nullable: true })
     threadCreator?: string
 }
+
+@InputType()
+export class UpdateThreadInput {
+    @Field(() => String, { nullable: true })
+    question?: string
+
+    @Field(() => String, { nullable: true })
+    specialization?: string
+
+} 

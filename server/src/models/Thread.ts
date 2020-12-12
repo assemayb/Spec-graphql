@@ -3,11 +3,11 @@ import { dbConfig } from "../config/database"
 
 import Reply from './Reply'
 
- 
+
 export interface ThreadAttributes {
     id: number
     question: string
-    specialization: string 
+    specialization: string
     threadCreator: string
 }
 
@@ -33,7 +33,7 @@ export const Thread: ModelDefined<ThreadAttributes, {}> = dbConfig.define("threa
     tableName: "threads"
 })
 
-Thread.hasMany(Reply, { 
+Thread.hasMany(Reply, {
     foreignKey: "replyThread"
- })
+})
 

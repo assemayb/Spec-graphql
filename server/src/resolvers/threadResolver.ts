@@ -1,5 +1,5 @@
 import { Ctx, ObjectType, Int, InputType, Mutation, Arg, Query, UseMiddleware } from "type-graphql"
-import { CreateThreadInput, ThreadType } from "./threadResolverTypes"
+import { CreateThreadInput, ThreadType, UpdateThreadInput } from "./threadResolverTypes"
 
 import { Thread, ThreadAttributes } from "../models/Thread"
 import { MyContext } from "../utils/context";
@@ -15,8 +15,9 @@ export class ThreadResolver {
     @UseMiddleware(isAuthenticated)
     async createThread(
         @Arg("options", () => CreateThreadInput) options: CreateThreadInput,
-        @Ctx() { payload } : MyContext
-        ) {
+        @Ctx() { payload }: MyContext
+    ) {
+        // the threadCreator is implicitly added from the payload data
         const { question, specialization, threadCreator } = options
         try {
             await Thread.create({
@@ -31,19 +32,53 @@ export class ThreadResolver {
         return true
     }
 
+    // Update a certian thread
+    @Mutation(() => Boolean)
+    @UseMiddleware(isAuthenticated)
+    async updateThread(
+        @Arg("id", () => Int) id: number,
+        @Arg("options", () => UpdateThreadInput) options: UpdateThreadInput,
+        @Ctx() { req, res, payload }: MyContext
+    ) {
+
+        let transaction = await dbConfig.transaction()
+        let thread = await Thread.findOne({ where: { id }, transaction })
+        const threadCreatorID = thread?.getDataValue("threadCreator")
+
+        const requestUserID = payload?.userId
+        if (threadCreatorID == requestUserID) {
+            try {
+                await Thread.update(options, {
+                    where: {
+                        id
+                    }, 
+                    transaction
+                })
+                await transaction.commit()
+                return true
+            } catch (err) {
+                console.error(err)
+                await transaction.rollback()
+                return false
+            }
+
+        } else {
+            throw new Error("Not Authenticated to perform this action")
+        }
+
+
+    }
+
     // List a the logged-in User Threads
     @Query(() => [ThreadType], { nullable: true })
     @UseMiddleware(isAuthenticated)
-
     async listMyThreads(
-        // @Arg("id", () => Int) id: string,
         @Ctx() { req, res, payload }: MyContext
     ) {
         let userThreads;
         try {
 
             userThreads = await Thread.findAll({
-                // include: "threadCreator",
                 where: {
                     threadCreator: payload?.userId
                 }
@@ -63,7 +98,6 @@ export class ThreadResolver {
         try {
 
             userThreads = await Thread.findAll({
-                // include: "threadCreator",
                 where: {
                     threadCreator: id
                 }
@@ -123,4 +157,5 @@ export class ThreadResolver {
         }
 
     }
+
 }
