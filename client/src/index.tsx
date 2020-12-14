@@ -4,22 +4,34 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
-import { ApolloProvider, ApolloClient, InMemoryCache, gql } from '@apollo/client';
+import { ApolloProvider, ApolloClient, InMemoryCache, gql, createHttpLink } from '@apollo/client';
 
-export const client = new ApolloClient({
+const link = createHttpLink({
   uri: 'http://localhost:8000/graphql',
-  cache: new InMemoryCache()
+  // useGETForQueries: true,
+  credentials: 'include'
+})
+
+const token = localStorage.getItem("accessToken")
+export const client = new ApolloClient(
+  {
+    cache: new InMemoryCache(),
+    headers: {
+      authorization: `bearer ${token}`,
+    },
+  link
 });
 
-client
-  .query({
-    query: gql`
-     {
-       hello
-     }
-    `
-  })
-  .then(result => console.log(result.data));
+// users list query
+// client
+//   .query({
+//     query: gql`
+//      query {
+//       hello
+//      }
+//     `
+//   })
+//   .then(result => console.log(result.data));
 
 ReactDOM.render(
   <React.StrictMode>

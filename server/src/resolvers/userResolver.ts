@@ -8,10 +8,35 @@ import { sendRefreshToken } from '../utils/sendRefreshToken';
 import { createAccessToken, createRefreshToken } from '../utils/auth';
 import { isAuthenticated } from "../utils/isAuth"
 import { MyContext } from '../utils/context';
-
+import {verify} from "jsonwebtoken"
 
 @Resolver()
 export class UserResolver {
+
+    @Query(() => UserType, {nullable: true})
+    async me(
+        @Ctx() context: MyContext
+    ) {
+        console.log("the ME query")
+        const authorization = context.req.headers['authorization']
+        if(!authorization) {
+            return null
+        }
+        try {
+            const token = authorization.split(" ")[1]
+            const payload: any = verify(token, process.env.ACCESS_TOKEN_SECRET!)
+            
+            let me;
+            let transaction = await dbConfig.transaction();
+            me = await User.findOne({ where: {id: payload.userId}, transaction})
+            console.log("your id", payload.userId)
+            return me
+
+        } catch (error) {
+            console.log(error)
+            throw new Error(error)
+        }
+    }
     @Query(() => [UserType], { nullable: true })
     async getAllUsers() {
         let users;
@@ -28,8 +53,10 @@ export class UserResolver {
     async register(
         @Arg("username", () => String) username: string,
         @Arg("password", () => String) password: string,
-        @Arg("email", () => String) email: string
-    ) {
+        @Arg("email", () => String) email: string,
+        @Ctx() { req }: MyContext,
+        ) {
+        
         const hashedPassword = await hash(password, 12)
         try {
             await User.create({

@@ -22,9 +22,12 @@ import { ThreadResolver } from "./resolvers/threadResolver"
     // express server middlewares
     app.use(cookieParser())
     app.use(morgan("dev"))
-    app.use(cors({
+
+    const corsOptions = {
+        origin: "http://localhost:3000",
         credentials: true
-    }))
+    }
+    app.use(cors(corsOptions))
 
     // connection the database
     dbConfig.authenticate()
