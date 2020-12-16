@@ -1,5 +1,6 @@
 import React from 'react'
 import { useMeQuery } from '../generated/graphql';
+import {gql, useQuery} from "@apollo/client";
 
 interface HeaderProps {
 

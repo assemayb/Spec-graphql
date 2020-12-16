@@ -1,4 +1,5 @@
 import React from 'react'
+import { getAccessToken } from '../accessToken';
 import { useUsersListQuery } from '../generated/graphql';
 
 interface TestProps {
@@ -9,7 +10,7 @@ export const Test: React.FC<TestProps> = () => {
     const { data, error, loading } = useUsersListQuery({
         fetchPolicy: "network-only"
     })
-    console.log(data?.getAllUsers)
+
     if (loading) {
         return (<div>loading......</div>)
     }

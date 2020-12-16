@@ -13,7 +13,7 @@ interface ReplyAttributes {
     replyThread: string
 }
 
-const Reply: ModelDefined<ReplyAttributes, {}> = dbConfig.define("reply", {
+export const Reply: ModelDefined<ReplyAttributes, {}> = dbConfig.define("reply", {
     id: {
         type: DataTypes.INTEGER(),
         primaryKey: true,
@@ -51,5 +51,3 @@ const Reply: ModelDefined<ReplyAttributes, {}> = dbConfig.define("reply", {
 Specialist.hasMany(Reply, {
     foreignKey: "replySpecialist",
 })
-
-export default Reply;

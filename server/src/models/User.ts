@@ -14,7 +14,7 @@ export interface UserAttributes {
 
 export interface UserCreationAttributes extends Optional<UserAttributes, "email" | "id"> { }
 
-const User: ModelDefined<UserAttributes, UserCreationAttributes> = dbConfig.define("User", {
+export const User: ModelDefined<UserAttributes, UserCreationAttributes> = dbConfig.define("User", {
     id: {
         type: DataTypes.INTEGER(),
         autoIncrement: true,
@@ -40,4 +40,3 @@ User.hasMany(Thread, {
     foreignKey: "threadCreator"
 })
 
-export default User;

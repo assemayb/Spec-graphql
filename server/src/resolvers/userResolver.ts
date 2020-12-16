@@ -1,5 +1,5 @@
 import { ObjectType, Int, Field, Resolver, Mutation, Arg, Query, Ctx, UseMiddleware } from 'type-graphql';
-import User from "../models/User"
+import {User} from "../models/User"
 
 import { dbConfig } from "../config/database"
 import { hash, compare } from "bcryptjs"
@@ -17,7 +17,6 @@ export class UserResolver {
     async me(
         @Ctx() context: MyContext
     ) {
-        console.log("the ME query")
         const authorization = context.req.headers['authorization']
         if(!authorization) {
             return null
@@ -29,7 +28,6 @@ export class UserResolver {
             let me;
             let transaction = await dbConfig.transaction();
             me = await User.findOne({ where: {id: payload.userId}, transaction})
-            console.log("your id", payload.userId)
             return me
 
         } catch (error) {
@@ -38,7 +36,9 @@ export class UserResolver {
         }
     }
     @Query(() => [UserType], { nullable: true })
-    async getAllUsers() {
+    async getAllUsers(
+        @Ctx() {req}: MyContext
+    ) { 
         let users;
         try {
             users = User.findAll()

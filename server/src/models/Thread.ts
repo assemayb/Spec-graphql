@@ -1,7 +1,7 @@
 import { DataTypes, ModelDefined } from "sequelize";
 import { dbConfig } from "../config/database"
 
-import Reply from './Reply'
+import { Reply } from './Reply'
 
 
 export interface ThreadAttributes {
