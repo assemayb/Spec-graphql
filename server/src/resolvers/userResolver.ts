@@ -1,5 +1,5 @@
 import { ObjectType, Int, Field, Resolver, Mutation, Arg, Query, Ctx, UseMiddleware } from 'type-graphql';
-import {User} from "../models/User"
+import { User } from "../models/User"
 
 import { dbConfig } from "../config/database"
 import { hash, compare } from "bcryptjs"
@@ -8,26 +8,26 @@ import { sendRefreshToken } from '../utils/sendRefreshToken';
 import { createAccessToken, createRefreshToken } from '../utils/auth';
 import { isAuthenticated } from "../utils/isAuth"
 import { MyContext } from '../utils/context';
-import {verify} from "jsonwebtoken"
+import { verify } from "jsonwebtoken"
 
 @Resolver()
 export class UserResolver {
 
-    @Query(() => UserType, {nullable: true})
+    @Query(() => UserType, { nullable: true })
     async me(
         @Ctx() context: MyContext
     ) {
         const authorization = context.req.headers['authorization']
-        if(!authorization) {
+        if (!authorization) {
             return null
         }
         try {
             const token = authorization.split(" ")[1]
             const payload: any = verify(token, process.env.ACCESS_TOKEN_SECRET!)
-            
+
             let me;
             let transaction = await dbConfig.transaction();
-            me = await User.findOne({ where: {id: payload.userId}, transaction})
+            me = await User.findOne({ where: { id: payload.userId }, transaction })
             return me
 
         } catch (error) {
@@ -37,8 +37,8 @@ export class UserResolver {
     }
     @Query(() => [UserType], { nullable: true })
     async getAllUsers(
-        @Ctx() {req}: MyContext
-    ) { 
+        @Ctx() { req }: MyContext
+    ) {
         let users;
         try {
             users = User.findAll()
@@ -48,15 +48,30 @@ export class UserResolver {
         }
         return users
     }
-
+    @Query(() => Boolean)
+    isUserLoggedIn(
+        @Ctx() { req }: MyContext
+    ) {
+        const tokenCookie = req.cookies["jid"]
+        if (!tokenCookie) {
+            return false
+        }
+        let payload;
+        try {
+            payload = verify(tokenCookie, process.env.REFRESH_TOKEN_SECRET!)
+        } catch (error) {
+            return false
+        }
+        return true
+    }
     @Mutation(() => Boolean)
     async register(
         @Arg("username", () => String) username: string,
         @Arg("password", () => String) password: string,
         @Arg("email", () => String) email: string,
         @Ctx() { req }: MyContext,
-        ) {
-        
+    ) {
+
         const hashedPassword = await hash(password, 12)
         try {
             await User.create({
@@ -71,7 +86,7 @@ export class UserResolver {
         return true
     }
 
-    @Mutation(() => LoginResponse, {nullable: true})
+    @Mutation(() => LoginResponse, { nullable: true })
     async loginUser(
         @Arg("username", () => String) username: string,
         @Arg("password", () => String) password: string,

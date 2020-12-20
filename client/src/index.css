@@ -11,3 +11,55 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+li , .link {
+  text-decoration: none
+}
+
+.header {
+  position: relative;
+  background-color: rgb(83, 220, 111);
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.app-menu {
+  list-style: none;
+  display: flex;
+  flex-direction: row;
+}
+
+.home-page {
+  padding: 2rem;
+  margin-top: 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.app-menu li {
+  list-style: none;
+  text-decoration: none;
+  padding: 1rem;
+  
+}
+
+.app-menu li > Link {
+  text-decoration: none;
+}
+
+.user-state {
+  position: absolute;
+  display: flex;
+  align-self: center;
+  justify-self: center;
+  right: 10px;
+}
+
+.login-form, .signup-form {
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  align-items: center;
+}

@@ -26,8 +26,8 @@ export const Register: React.FC<RouteComponentProps> = ({ }) => {
         setPassword("")
     }
     return (
-        <div style={styles.form}>
-            <form>
+        <div >
+            <form className="signup-form">
                 <label htmlFor="username">username: </label>
                 <input id="username" type="text" value={username} onChange={e => setUsername(e.target.value)} />
                 <label htmlFor="password">password: </label>
@@ -39,13 +39,3 @@ export const Register: React.FC<RouteComponentProps> = ({ }) => {
         </div>
     );
 }
-
-const styles = {
-    form: {
-        // display: "",
-        // justifyContent: "center",
-        // alignItems: "center",
-        // padding: "2rem"
-    }
-}
-

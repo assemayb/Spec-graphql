@@ -30,9 +30,10 @@ import { createRefreshToken, createAccessToken } from "./utils/auth"
         credentials: true
     }
     app.use(cors(corsOptions))
-
+    
     app.post("/refresh_token", async (req, res) => {
         const token = req.cookies["jid"]
+        console.log("the refresh token endpoint", token)
         if (!token) {
             res.json({ ok: false, accessToken: "" })
         }

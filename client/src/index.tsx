@@ -5,8 +5,9 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 
 import {
+
   ApolloProvider, ApolloClient, InMemoryCache, gql, createHttpLink,
-  HttpLink, ApolloLink, Observable, concat, from
+  HttpLink, ApolloLink, Observable
 } from '@apollo/client';
 import { onError } from '@apollo/client/link/error';
 import { TokenRefreshLink } from "apollo-link-token-refresh"
@@ -16,25 +17,53 @@ import { getAccessToken, setAccessToken } from './accessToken';
 
 // import { onError } from '@apollo/client/link/error';
 
-// const link = createHttpLink({
-//   uri: 'http://localhost:8000/graphql',
-//   // useGETForQueries: true,
-//   credentials: 'include'
-// })
+
+// const authMiddlewareLink = new ApolloLink((operation, forward) => {
+//   const accessToken = getAccessToken()
+//   operation.setContext({
+//     headers: {
+//       authorization: `Bearer ${accessToken}`,
+//     },
+//   })
+//   return forward(operation);
+// });
+
 const cache = new InMemoryCache()
 const httpLink = new HttpLink({
   uri: 'http://localhost:8000/graphql',
   credentials: 'include'
 })
-const authMiddlewareLink = new ApolloLink((operation, forward) => {
-  const accessToken = getAccessToken()
-  operation.setContext({
-    headers: {
-      authorization: `Bearer ${accessToken}`,
-    },
-  })
-  return forward(operation);
-});
+
+const requestLink = new ApolloLink(
+  (operation, forward) =>
+    new Observable(observer => {
+      let handle: any;
+      Promise.resolve(operation)
+        .then(operation => {
+          const accessToken = getAccessToken();
+          if (accessToken) {
+            operation.setContext({
+              headers: {
+                authorization: `Bearer ${accessToken}`
+              }
+            });
+          }
+        })
+        .then(() => {
+          handle = forward(operation).subscribe({
+            next: observer.next.bind(observer),
+            error: observer.error.bind(observer),
+            complete: observer.complete.bind(observer)
+          });
+        })
+        .catch(observer.error.bind(observer));
+
+      return () => {
+        if (handle) handle.unsubscribe();
+      };
+    })
+);
+
 
 const tokenRefreshLink = new TokenRefreshLink({
   accessTokenField: "accessToken",
@@ -46,7 +75,6 @@ const tokenRefreshLink = new TokenRefreshLink({
     try {
       const tokenDecoded: any = jwtDecode(token);
       const expDate: number = tokenDecoded.exp
-
       if (Date.now() >= expDate * 1000) {
         return false;
       } else {
@@ -75,27 +103,29 @@ const tokenRefreshLink = new TokenRefreshLink({
 export const client = new ApolloClient(
   {
     cache,
-    link: from([
-      tokenRefreshLink,
+
+    link: ApolloLink.from([
       onError(({ graphQLErrors, networkError }) => {
-        console.log(graphQLErrors);
-        console.log(networkError);
+        if (graphQLErrors) {
+          graphQLErrors.map(({ message, locations, path }) =>
+            console.log(
+              `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`,
+            ),
+          );
+
+        }
+
+        if (networkError) {
+          console.log(`[Network error]: ${networkError}`);
+        }
       }),
-      authMiddlewareLink,
+      tokenRefreshLink,
+      requestLink,
       httpLink,
-    ])
+    ]),
+
   });
 
-
-// client
-//   .query({
-//     query: gql`
-//      query {
-//       hello
-//      }
-//     `
-//   })
-//   .then(result => console.log(result.data));
 
 ReactDOM.render(
   <React.StrictMode>

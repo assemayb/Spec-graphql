@@ -9,15 +9,12 @@ import { Login } from "./pages/Login"
 import { Header } from "./components/Header"
 export const BaseRouter: React.FC = () => {
     return (
-        <div>
-            <Header />
-            <Switch>
-                <Route exact path="/" component={Home} />
-                <Route path="/test" component={Test} />
-                <Route path="/register" component={Register} />
-                <Route path="/login" component={Login} />
-            </Switch>
-        </div>
+        <Switch>
+            <Route exact path="/" component={Home} />
+            <Route path="/test" component={Test} />
+            <Route exact path="/register" component={Register} />
+            <Route exact path="/login" component={Login} />
+        </Switch>
     )
 }
 

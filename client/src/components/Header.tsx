@@ -1,29 +1,52 @@
-import React from 'react'
-import { useMeQuery } from '../generated/graphql';
-import {gql, useQuery} from "@apollo/client";
-
+import React, { useEffect, useState } from 'react'
+import { IsUserLoggedInDocument, IsUserLoggedInQuery, MeDocument, MeQuery, useIsUserLoggedInQuery, useLogoutMutation, useMeQuery } from '../generated/graphql';
+import { gql, useQuery } from "@apollo/client";
+import { setAccessToken } from '../accessToken';
+import { Link } from "react-router-dom"
 interface HeaderProps {
 
 }
 
+
 export const Header: React.FC<HeaderProps> = ({ }) => {
-    const { data, error, loading } = useMeQuery()
-    let body: any = null;
-    if (loading) {
-        body = <h4>loading...</h4>
+    // const [isLogged, setIsLogged] = useState<Boolean|null>(null)
+    const { data, loading } = useMeQuery()
+    const [logout, { client }] = useLogoutMutation()
+
+    const handleLogout = async () => {
+        await logout();
+        setAccessToken("")
+        await client.resetStore()
     }
+
+    let UserLogStatebody: any = null;
+    if (loading) {
+        UserLogStatebody = <div>loading...</div>
+    }
+
     else if (data && data.me) {
-        body = <h4>ur logged in as {data.me.username}</h4>
+        UserLogStatebody =
+            <div>
+                hello,  {data.me.username} {" "}
+                <button onClick={() => handleLogout()}>logout</button>
+            </div>
     }
     else {
-        body = <div>not logged in</div>;
+        UserLogStatebody = <div>not logged in</div>;
     }
+
     return (
-        <div style={{
-            backgroundColor: "blueviolet",
-            color: "black"
-        }}>
-            {body}
+        <div className="header">
+            <ul className="app-menu">
+                <li><Link className="link" to="/" >home</Link></li>
+                <li><Link className="link" to="/test">test</Link></li>
+                <li><Link className="link" to="/register">register</Link></li>
+                <li><Link className="link" to="/login">login</Link></li>
+            </ul>
+            <div className="user-state">
+                {UserLogStatebody}
+            </div>
+
         </div>
     );
 }

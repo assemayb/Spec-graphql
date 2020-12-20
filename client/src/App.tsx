@@ -1,36 +1,37 @@
-import React, { useState, useEffect } from 'react';
-import './App.css';
-import { BrowserRouter, Link } from "react-router-dom"
-import { BaseRouter } from "./routes"
-import { useHelloQuery, useUsersListQuery } from './generated/graphql';
+import React, { useState, useEffect, useRef } from 'react';
+import { BrowserRouter } from 'react-router-dom';
 import { setAccessToken } from './accessToken';
-import jwtDecode from 'jwt-decode';
+import { Header } from './components/Header';
+import { BaseRouter } from './routes';
 
 function App() {
-  // const { data, loading, error } = useHelloQuery()
-  const [loading, setLoading] = useState(true)
+  const [appLoading, setAppLoading] = useState(true)
+
+
   useEffect(() => {
-    console.log("app effect")
     fetch("http://localhost:8000/refresh_token", {
       credentials: "include",
       method: "POST",
-    }).then(async x => {
-     
-      const resposne  = await x.json();
+        }).then(  async x => {
+      const resposne = await x.json();
       setAccessToken(resposne.accessToken)
-      setLoading(false);
+      setAppLoading(false);
     })
   }, [])
+
   return (
     <div className="app">
-      <BrowserRouter>
-        <Link to="/">home</Link>
-        <Link to="/test">test</Link>
-        <Link to="/register">register</Link>
-        <Link to="/login">login</Link>
+      {appLoading ? (
+        <div>app is loading.....</div>
+      ) : (
+        <>
+          <BrowserRouter>
+          <Header />
+            <BaseRouter />
+          </BrowserRouter>
+        </>
+        )}
 
-        <BaseRouter />
-      </BrowserRouter>
     </div>
   );
 }

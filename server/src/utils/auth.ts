@@ -13,3 +13,4 @@ export const createRefreshToken = (user: UserAttributes) => {
         expiresIn: "10d"
     })
 }
+

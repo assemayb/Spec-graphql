@@ -1,59 +1,74 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect, useMemo, useCallback } from 'react'
 import { RouteComponentProps } from "react-router-dom"
 import { setAccessToken } from '../accessToken'
-import { MeDocument, MeQuery, useLoginMutation } from '../generated/graphql'
+import { Message } from '../components/Message'
+import { IsUserLoggedInDocument, IsUserLoggedInQuery, MeDocument, MeQuery, useLoginMutation } from '../generated/graphql'
+import { ApolloError } from "@apollo/client/errors"
 
 
-
-export const Login: React.FC<RouteComponentProps> = ({ }) => {
+export const Login: React.FC<RouteComponentProps> = ({ history }) => {
     const [username, setUsername] = useState("")
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
+    const [showMessage, setShowMessage] = useState({
+        show: false,
+        value: ""
+    })
+    const [login, { data, client }] = useLoginMutation()
 
-    const [login] = useLoginMutation()
+    const logged = useMemo(() => client.readQuery<IsUserLoggedInQuery>({
+        query: IsUserLoggedInDocument
+    }), [data])
 
+
+    useEffect(() => {
+        if (logged?.isUserLoggedIn) {
+            history.push("/")
+        }
+    }, [])
     const loginUser = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         e.preventDefault()
-        console.log(e.currentTarget.textContent)
-        const response = await login({
-            variables: {
-                username,
-                password
-            },
-            update: (store, { data }) => {
-                if (!data) {
-                    return null;
-                }
-                store.writeQuery<MeQuery>({
-                    query: MeDocument,
-                    data: {
-                        me: data.loginUser?.user
-                    }
-                })
-            }
+        try {
 
-        })
-        if (response && response.data) {
-            setAccessToken(response.data.loginUser?.accessToken!)
+            const response = await login({
+                variables: {
+                    username,
+                    password
+                },
+                update: (cache, { data }) => {
+                    if (!data) {
+                        return null;
+                    }
+                    cache.writeQuery<MeQuery>({
+                        query: MeDocument,
+                        data: {
+                            me: data.loginUser?.user
+                        }
+                    })
+                },
+            })
+            if (response && response.data) {
+                setAccessToken(response.data.loginUser?.accessToken!)
+                history.push("/")
+                setUsername("")
+                setPassword("")
+            }
+        } catch (error) {
+            setShowMessage({ show: true, value: error.message })
+            console.log(error)
         }
-        console.log(response.data)
     }
+
     return (
         <div>
-            <form
-                style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    padding: "3rem"
-                }}>
+            <form className="login-form">
+                {showMessage.show && (
+                    <Message message={showMessage.value} />
+                )}
                 <label htmlFor="username">username: </label>
                 <input id="username" type="text" value={username} onChange={e => setUsername(e.target.value)} />
                 <label htmlFor="password">password: </label>
                 <input id="password" type="password" value={password} onChange={e => setPassword(e.target.value)} />
-                {/* <label htmlFor="email">email: </label>
-                <input type="email" value={email} onChange={e => setEmail(e.target.value)} /> */}
                 <button onClick={e => loginUser(e)}>Login</button>
             </form>
         </div>
