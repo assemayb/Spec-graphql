@@ -2,11 +2,12 @@ import React, { useState, useEffect, useMemo, useCallback } from 'react'
 import { RouteComponentProps } from "react-router-dom"
 import { setAccessToken } from '../accessToken'
 import { Message } from '../components/Message'
-import { IsUserLoggedInDocument, IsUserLoggedInQuery, MeDocument, MeQuery, useLoginMutation } from '../generated/graphql'
+import { IsUserLoggedInDocument, IsUserLoggedInQuery, MeDocument, MeQuery, useIsUserLoggedInQuery, useLoginMutation } from '../generated/graphql'
 import { ApolloError } from "@apollo/client/errors"
 
 
 export const Login: React.FC<RouteComponentProps> = ({ history }) => {
+
     const [username, setUsername] = useState("")
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
@@ -16,16 +17,6 @@ export const Login: React.FC<RouteComponentProps> = ({ history }) => {
     })
     const [login, { data, client }] = useLoginMutation()
 
-    const logged = useMemo(() => client.readQuery<IsUserLoggedInQuery>({
-        query: IsUserLoggedInDocument
-    }), [data])
-
-
-    useEffect(() => {
-        if (logged?.isUserLoggedIn) {
-            history.push("/")
-        }
-    }, [])
     const loginUser = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         e.preventDefault()
         try {
@@ -45,6 +36,13 @@ export const Login: React.FC<RouteComponentProps> = ({ history }) => {
                             me: data.loginUser?.user
                         }
                     })
+                    cache.writeQuery<IsUserLoggedInQuery>({
+                        query: IsUserLoggedInDocument,
+                        data: {
+                            isUserLoggedIn: true
+                        }
+                    })
+
                 },
             })
             if (response && response.data) {

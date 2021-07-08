@@ -1,5 +1,5 @@
 import { sign } from "jsonwebtoken"
-import { UserAttributes, UserCreationAttributes,  } from "../models/User"
+import { UserAttributes, UserCreationAttributes, } from "../models/User"
 
 
 export const createAccessToken = (user: UserAttributes) => {
@@ -9,7 +9,7 @@ export const createAccessToken = (user: UserAttributes) => {
 }
 
 export const createRefreshToken = (user: UserAttributes) => {
-    return sign({userId: user.id }, process.env.REFRESH_TOKEN_SECRET!, {
+    return sign({ userId: user.id }, process.env.REFRESH_TOKEN_SECRET!, {
         expiresIn: "10d"
     })
 }

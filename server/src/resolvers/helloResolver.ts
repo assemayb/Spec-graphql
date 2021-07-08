@@ -7,3 +7,12 @@ export class HelloResolver {
         return "hello world"
     }
 }
+
+
+@Resolver()
+export class SecondHelloResolver {
+    @Query(() => String)
+    helloAgain() {
+        return "hello again"
+    }
+}

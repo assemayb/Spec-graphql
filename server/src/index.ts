@@ -17,11 +17,14 @@ import { ThreadResolver } from "./resolvers/threadResolver"
 import { User } from "./models/User"
 import { sendRefreshToken } from "./utils/sendRefreshToken"
 import { createRefreshToken, createAccessToken } from "./utils/auth"
+
+
 (async () => {
     const app = experss()
     dotenv.config({
         path: `${__dirname}/config/.env`
     })
+    
     // express server middlewares
     app.use(cookieParser())
     app.use(morgan("dev"))
@@ -33,7 +36,7 @@ import { createRefreshToken, createAccessToken } from "./utils/auth"
     
     app.post("/refresh_token", async (req, res) => {
         const token = req.cookies["jid"]
-        console.log("the refresh token endpoint", token)
+
         if (!token) {
             res.json({ ok: false, accessToken: "" })
         }
@@ -52,8 +55,7 @@ import { createRefreshToken, createAccessToken } from "./utils/auth"
         }
         sendRefreshToken(res, createRefreshToken(user as any))
         return res.json({ ok: true, accessToken: createAccessToken(user as any) })
-    }
-    )
+    })
 
     // connection the database
     dbConfig.authenticate()
@@ -75,3 +77,5 @@ import { createRefreshToken, createAccessToken } from "./utils/auth"
         console.log(`server is running at port ${PORT}`)
     })
 })()
+
+

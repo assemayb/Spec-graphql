@@ -1,22 +1,27 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import "./index.css";
+import App from "./App";
+import React from "react";
+import ReactDOM from "react-dom";
+import reportWebVitals from "./reportWebVitals";
+import { ChakraProvider } from "@chakra-ui/react";
 
 import {
-
-  ApolloProvider, ApolloClient, InMemoryCache, gql, createHttpLink,
-  HttpLink, ApolloLink, Observable
-} from '@apollo/client';
-import { onError } from '@apollo/client/link/error';
-import { TokenRefreshLink } from "apollo-link-token-refresh"
+  ApolloProvider,
+  ApolloClient,
+  InMemoryCache,
+  gql,
+  createHttpLink,
+  HttpLink,
+  ApolloLink,
+  Observable,
+} from "@apollo/client";
+import { onError } from "@apollo/client/link/error";
+import { TokenRefreshLink } from "apollo-link-token-refresh";
 import jwtDecode from "jwt-decode";
 
-import { getAccessToken, setAccessToken } from './accessToken';
+import { getAccessToken, setAccessToken } from "./accessToken";
 
 // import { onError } from '@apollo/client/link/error';
-
 
 // const authMiddlewareLink = new ApolloLink((operation, forward) => {
 //   const accessToken = getAccessToken()
@@ -28,24 +33,24 @@ import { getAccessToken, setAccessToken } from './accessToken';
 //   return forward(operation);
 // });
 
-const cache = new InMemoryCache()
+const cache = new InMemoryCache();
 const httpLink = new HttpLink({
-  uri: 'http://localhost:8000/graphql',
-  credentials: 'include'
-})
+  uri: "http://localhost:8000/graphql",
+  credentials: "include",
+});
 
 const requestLink = new ApolloLink(
   (operation, forward) =>
-    new Observable(observer => {
+    new Observable((observer) => {
       let handle: any;
       Promise.resolve(operation)
-        .then(operation => {
+        .then((operation) => {
           const accessToken = getAccessToken();
           if (accessToken) {
             operation.setContext({
               headers: {
-                authorization: `Bearer ${accessToken}`
-              }
+                authorization: `Bearer ${accessToken}`,
+              },
             });
           }
         })
@@ -53,7 +58,7 @@ const requestLink = new ApolloLink(
           handle = forward(operation).subscribe({
             next: observer.next.bind(observer),
             error: observer.error.bind(observer),
-            complete: observer.complete.bind(observer)
+            complete: observer.complete.bind(observer),
           });
         })
         .catch(observer.error.bind(observer));
@@ -64,7 +69,6 @@ const requestLink = new ApolloLink(
     })
 );
 
-
 const tokenRefreshLink = new TokenRefreshLink({
   accessTokenField: "accessToken",
   isTokenValidOrUndefined: () => {
@@ -74,7 +78,7 @@ const tokenRefreshLink = new TokenRefreshLink({
     }
     try {
       const tokenDecoded: any = jwtDecode(token);
-      const expDate: number = tokenDecoded.exp
+      const expDate: number = tokenDecoded.exp;
       if (Date.now() >= expDate * 1000) {
         return false;
       } else {
@@ -87,55 +91,51 @@ const tokenRefreshLink = new TokenRefreshLink({
   fetchAccessToken: () => {
     return fetch("http://localhost:8000/refresh_token", {
       method: "POST",
-      credentials: "include"
+      credentials: "include",
     });
   },
-  handleFetch: accessToken => {
+  handleFetch: (accessToken) => {
     setAccessToken(accessToken);
   },
-  handleError: err => {
+  handleError: (err) => {
     console.warn("Your refresh token is invalid. Try to relogin");
     console.error(err);
-  }
-})
+  },
+});
 
+export const client = new ApolloClient({
+  cache,
 
-export const client = new ApolloClient(
-  {
-    cache,
+  link: ApolloLink.from([
+    onError(({ graphQLErrors, networkError }) => {
+      if (graphQLErrors) {
+        graphQLErrors.map(({ message, locations, path }) =>
+          console.log(
+            `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`
+          )
+        );
+      }
 
-    link: ApolloLink.from([
-      onError(({ graphQLErrors, networkError }) => {
-        if (graphQLErrors) {
-          graphQLErrors.map(({ message, locations, path }) =>
-            console.log(
-              `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`,
-            ),
-          );
-
-        }
-
-        if (networkError) {
-          console.log(`[Network error]: ${networkError}`);
-        }
-      }),
-      tokenRefreshLink,
-      requestLink,
-      httpLink,
-    ]),
-
-  });
-
+      if (networkError) {
+        console.log(`[Network error]: ${networkError}`);
+      }
+    }),
+    tokenRefreshLink,
+    requestLink,
+    httpLink,
+  ]),
+});
 
 ReactDOM.render(
   <React.StrictMode>
-    <ApolloProvider client={client}>
-      <App />
-    </ApolloProvider>
+    <ChakraProvider >
+      <ApolloProvider client={client}>
+        <App />
+      </ApolloProvider>
+    </ChakraProvider>
   </React.StrictMode>,
-  document.getElementById('root')
+  document.getElementById("root")
 );
-
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))

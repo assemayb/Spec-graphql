@@ -35,6 +35,7 @@ export class UserResolver {
             throw new Error(error)
         }
     }
+    
     @Query(() => [UserType], { nullable: true })
     async getAllUsers(
         @Ctx() { req }: MyContext
@@ -48,6 +49,7 @@ export class UserResolver {
         }
         return users
     }
+
     @Query(() => Boolean)
     isUserLoggedIn(
         @Ctx() { req }: MyContext
@@ -72,6 +74,7 @@ export class UserResolver {
         @Ctx() { req }: MyContext,
     ) {
 
+        console.log(username, password, email);
         const hashedPassword = await hash(password, 12)
         try {
             await User.create({
@@ -80,7 +83,7 @@ export class UserResolver {
                 email
             })
         } catch (err) {
-            console.error(err)
+            console.error(err.message)
             return false
         }
         return true

@@ -1,13 +1,11 @@
-import React from 'react'
+import React, { useEffect, useState } from "react";
 
-interface DummieProps {
-    
-}
+interface LoginProps {}
 
-export const Dummie: React.FC<DummieProps> = ({}) => {
-        return (
-            <h1>
-                asfsafms
-            </h1>
-        );
-}
+export const NewLoginComponent: React.FC<LoginProps> = ({}) => {
+  const [loginInfo, setLoginInfo] = useState<{
+    username: string;
+    passord: string;
+  }>({ username: "", passord: "" });
+  return <h1>asfsafms</h1>;
+};

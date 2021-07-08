@@ -69,7 +69,7 @@ export class ThreadResolver {
 
     }
 
-    // List a the logged-in User Threads
+    // List the logged-in User Threads
     @Query(() => [ThreadType], { nullable: true })
     @UseMiddleware(isAuthenticated)
     async listMyThreads(

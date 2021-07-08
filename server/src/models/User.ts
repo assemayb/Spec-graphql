@@ -3,8 +3,6 @@ import { dbConfig } from '../config/database'
 
 import { Thread } from "./Thread"
 
-
-
 export interface UserAttributes {
     id: number
     username: string
