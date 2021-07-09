@@ -1,34 +1,30 @@
-import React from 'react'
-import { getAccessToken } from '../accessToken';
-import { useUsersListQuery } from '../generated/graphql';
+import React from "react";
+import { getAccessToken } from "../accessToken";
+import { useUsersListQuery } from "../generated/graphql";
+import { Box, Container, Flex, VStack, Button } from "@chakra-ui/react";
 
-interface TestProps {
 
-}
+interface TestProps {}
 
 export const Test: React.FC<TestProps> = () => {
-    const { data, error, loading } = useUsersListQuery({
-        fetchPolicy: "cache-first"
-    })
+  const { data, error, loading } = useUsersListQuery({
+    fetchPolicy: "cache-first",
+  });
 
-    if (loading) {
-        return (<div>loading......</div>)
-    }
+  if (loading) {
+    return <div>loading......</div>;
+  }
 
-    return (
-
-        <div>
-            <h1>
-                Current Users:
-            </h1>
-            <ul>
-                {data?.getAllUsers?.map((user, idx) =>
-                (
-                    <li key={idx}>{user.email}, {user.username}</li>
-                )
-                )}
-            </ul>
-
-        </div>
-    );
-}
+  return (
+    <Container p="2rem" m="1rem">
+      <h1>Current Users:</h1>
+      <ul>
+        {data?.getAllUsers?.map((user, idx) => (
+          <li key={idx}>
+            {user.email}, {user.username}
+          </li>
+        ))}
+      </ul>
+    </Container>
+  );
+};
