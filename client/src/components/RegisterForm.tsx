@@ -24,9 +24,9 @@ export const RegisterFrom: React.FC<RegisterFrom> = () => {
         
     }
     return (
-        <VStack padding="0.4rem" shadow="base" color="green.600">
+        <Container padding="0.4rem" shadow="base" color="green.600">
         <form onSubmit={() => submitRegisterForm()}>
-          <FormControl id="username" isRequired my="5px">
+          <FormControl id="username" isRequired my="5px" mx="2px">
             <FormLabel>username</FormLabel>
             <Input placeholder="username" />
           </FormControl>
@@ -45,6 +45,6 @@ export const RegisterFrom: React.FC<RegisterFrom> = () => {
         </Center>
           
         </form>
-      </VStack>
+      </Container>
     )
 }

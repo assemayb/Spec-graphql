@@ -10,11 +10,9 @@ interface HomeProps {}
 export const Home: React.FC<RouteComponentProps> = ({ history, location }) => {
   const [date, setDate] = useState("2018-07-22");
   return (
-    <Container padding="2rem" margin="1rem">
-      <div>home page stuff here comp.</div>
+    <>
       <LoginFrom />
       <hr />
-      <RegisterFrom />
-    </Container>
+    </>
   );
 };

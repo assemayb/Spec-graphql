@@ -1,8 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
 import { BrowserRouter } from "react-router-dom";
 import { setAccessToken } from "./accessToken";
-import { Header } from "./components/Header";
+
 import { Header2 } from "./components/Header2";
+import {Footer} from "./components/Footer"
+import { Skeleton } from "./smallComps/Skeleton";
+
 import { useIsUserLoggedInQuery } from "./generated/graphql";
 import { BaseRouter } from "./routes";
 
@@ -27,9 +30,12 @@ function App() {
       ) : (
         <>
           <BrowserRouter>
-            <Header />
-            <Header2></Header2>
-            <BaseRouter />
+            {/* <Header /> */}
+            <Header2 />
+            <Skeleton>
+              <BaseRouter />
+            </Skeleton>
+            <Footer />
           </BrowserRouter>
         </>
       )}
