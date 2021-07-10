@@ -47,8 +47,7 @@ const ProfileButton: React.FC<ProfileButtonProps> = ({ isUserLogged }) => {
       <ModalComponent showModal={showModal} onClose={onClose}/>
       <Button
         onClick={() => handleProfileClick()}
-        height="70%"
-        width="70%"
+        height="50%"
         fontSize="medium"
         fontWeight="bold"
         bgColor="green.400"
@@ -79,8 +78,7 @@ const LogoutButton: React.FC<LogoutButtonProps> = ({ isUserLogged }) => {
   return (
     <Button
       onClick={() => handleLogout()}
-      height="70%"
-      width="70%"
+      height="50%"
       fontSize="medium"
       fontWeight="bold"
       bgColor="green.400"
@@ -109,7 +107,8 @@ export const Header2: React.FC<Header2Props> = ({}) => {
       justifyContent="center"
       alignItems="center"
       bgColor="green.300"
-      fontSize="2xl"
+      height="80px"
+      fontSize="xl"
       fontWeight="bold"
       color="white"
     >
@@ -125,7 +124,7 @@ export const Header2: React.FC<Header2Props> = ({}) => {
           _hover={{
             bgColor: "green.500",
           }}
-          height="70%"
+          height="50%"
         >
           {currentMode.colorMode === "light" ? <MoonIcon /> : <SunIcon />}
         </Button>
