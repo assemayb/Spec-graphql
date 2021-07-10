@@ -1,9 +1,10 @@
-body {
+html, body {
   margin: 0;
-  font-family: 'Mukta', sans-serif;
+  
+  font-family: 'Rubik', sans-serif;
   /* font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
-    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", */
-    /* sans-serif; */
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif; */
+
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -16,52 +17,4 @@ code {
 li,
 .link {
   text-decoration: none;
-}
-
-.header {
-  position: relative;
-  background-color: rgb(83, 220, 111);
-  width: 100%;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-}
-.header ul li {
-  font-size: 18px;
-  margin-right: 10px;
-  font-weight: 500;
-  list-style: none;
-  text-decoration: none;
-  padding: 0.7rem;
-  transition: 0.2s;
-}
-
-.app-menu {
-  list-style: none;
-  display: flex;
-  flex-direction: row;
-}
-
-.home-page {
-  padding: 2rem;
-  margin-top: 15px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.user-state {
-  position: absolute;
-  display: flex;
-  align-self: center;
-  justify-self: center;
-  right: 10px;
-}
-
-.login-form,
-.signup-form {
-  display: flex;
-  flex-direction: column;
-  padding: 10px;
-  align-items: center;
 }

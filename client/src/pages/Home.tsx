@@ -9,6 +9,7 @@ interface HomeProps {}
 
 export const Home: React.FC<RouteComponentProps> = ({ history, location }) => {
   const [date, setDate] = useState("2018-07-22");
+  
   return (
     <>
       <LoginFrom />

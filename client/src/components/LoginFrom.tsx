@@ -2,15 +2,11 @@ import React, { useState, useEffect } from "react";
 import {
   FormControl,
   FormLabel,
-  FormErrorMessage,
-  FormHelperText,
   Input,
-  Box,
-  Container,
-  Flex,
   VStack,
   Button,
   Center,
+  Heading,
 } from "@chakra-ui/react";
 
 export const LoginFrom = () => {
@@ -19,8 +15,8 @@ export const LoginFrom = () => {
   };
   return (
     <VStack padding="0.4rem" color="green.400" shadow="base">
-      <form onSubmit={() => submitLoginForm()} >
-        <FormControl id="username" isRequired  my="5px">
+      <form onSubmit={() => submitLoginForm()}>
+        <FormControl id="username" isRequired my="5px">
           <FormLabel>Username</FormLabel>
           <Input placeholder="username" />
         </FormControl>
