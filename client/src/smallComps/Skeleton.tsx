@@ -1,10 +1,10 @@
 import React from "react";
-import { Container } from "@chakra-ui/react";
+import { Box, Container } from "@chakra-ui/react";
 
 export const Skeleton: React.FC = ({ children }) => {
   return (
-    <Container padding="2rem" margin="1rem">
+    <Box padding="0.5rem" height="100vh" width="100%">
       {children}
-    </Container>
+    </Box>
   );
 };

@@ -17,7 +17,7 @@ import {
 
 import { setAccessToken } from "../accessToken";
 import { AiFillHome, AiOutlineUser } from "react-icons/ai";
-import { BiBookContent  } from "react-icons/bi";
+import { BiBookContent } from "react-icons/bi";
 
 import { ModalComponent } from "../components/Modal";
 import { LinkBox } from "../smallComps/LinkBox";
@@ -44,7 +44,7 @@ const ProfileButton: React.FC<ProfileButtonProps> = ({ isUserLogged }) => {
   };
   return (
     <>
-      <ModalComponent showModal={showModal} onClose={onClose}/>
+      <ModalComponent showModal={showModal} onClose={onClose} />
       <Button
         onClick={() => handleProfileClick()}
         height="50%"
@@ -56,9 +56,9 @@ const ProfileButton: React.FC<ProfileButtonProps> = ({ isUserLogged }) => {
         }}
         mx="0.4rem"
       >
-        <AiOutlineUser width="40px"/>
-        
-        <span style={{marginLeft: "4px"}}>profile</span>
+        <AiOutlineUser width="40px" />
+
+        <span style={{ marginLeft: "4px" }}>profile</span>
       </Button>
     </>
   );
@@ -106,19 +106,29 @@ export const Header2: React.FC<Header2Props> = ({}) => {
     <Flex
       justifyContent="center"
       alignItems="center"
-      bgColor="green.300"
+      bgColor="green.200"
       height="80px"
       fontSize="xl"
       fontWeight="bold"
       color="white"
+      position="relative"
+      width="100%"
     >
-      <Flex ml="1rem" flex="9">
+      <Flex ml="1rem" position="absolute" left="2px">
         <LinkBox route="Home" icon={<AiFillHome width="20px" />} />
         <LinkBox route="topics" icon={<BiBookContent width="20px" />} />
         <LinkBox route="test" />
       </Flex>
 
-      <Flex flex="3" height="100px" alignItems="center" justifyContent="center">
+      <Flex
+        marginRight="8px"
+        // flex="3"
+        height="100px"
+        alignItems="center"
+        justifyContent="center"
+        position="absolute"
+        right="8px"
+      >
         <Button
           onClick={() => currentMode.toggleColorMode()}
           bgColor="green.400"

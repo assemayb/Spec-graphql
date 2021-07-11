@@ -99,7 +99,6 @@ export class ThreadResolver {
     ) {
         let userThreads;
         try {
-
             userThreads = await Thread.findAll({
                 where: {
                     threadCreator: id
