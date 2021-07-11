@@ -26,39 +26,51 @@ export const Home: React.FC<RouteComponentProps> = ({ history, location }) => {
           justifyContent="center"
           flexDirection="column"
           alignItems="center"
-          flex="5"
+          flex="4"
           bgColor="whiteAlpha.200"
           shadow="base"
           p="0.5rem"
         >
-          <Box width="100%" p="5px" my="5px" shadow="lg">
+          <Box width="100%" p="1rem" my="5px" shadow="base">
             <h4>the question form section</h4>
           </Box>
-          <Box width="100%" p="5px" my="5px" shadow="lg">
+          <Box width="100%" p="1rem" my="5px" shadow="base">
             <h4>the question form section</h4>
           </Box>
-          <Box width="100%" p="5px" my="5px" shadow="lg">
+          <Box width="100%" p="1rem" my="5px" shadow="base">
             <h4>the question form section</h4>
           </Box>
-          <Box width="100%" p="5px" my="5px" shadow="lg">
+          <Box width="100%" p="1rem" my="5px" shadow="base">
             <h4>the question form section</h4>
           </Box>
-          <Box width="100%" p="5px" my="5px" shadow="lg">
+          <Box width="100%" p="1rem" my="5px" shadow="base">
             <h4>the question form section</h4>
           </Box>
-          <Box width="100%" p="5px" my="5px" shadow="lg">
+          <Box width="100%" p="1rem" my="5px" shadow="base">
             <h4>the question form section</h4>
           </Box>
-          <Box width="100%" p="5px" my="5px" shadow="lg">
+          <Box width="100%" p="1rem" my="5px" shadow="base">
             <h4>the question form section</h4>
           </Box>
-          <Box width="100%" p="5px" my="5px" shadow="lg">
+          <Box width="100%" p="1rem" my="5px" shadow="base">
             <h4>the question form section</h4>
           </Box>
-          <Box width="100%" p="5px" my="5px" shadow="lg">
+          <Box width="100%" p="1rem" my="5px" shadow="base">
             <h4>the question form section</h4>
           </Box>
-          <Box width="100%" p="5px" my="5px" shadow="lg">
+          <Box width="100%" p="1rem" my="5px" shadow="base">
+            <h4>the question form section</h4>
+          </Box>
+          <Box width="100%" p="1rem" my="5px" shadow="base">
+            <h4>the question form section</h4>
+          </Box>
+          <Box width="100%" p="1rem" my="5px" shadow="base">
+            <h4>the question form section</h4>
+          </Box>
+          <Box width="100%" p="1rem" my="5px" shadow="base">
+            <h4>the question form section</h4>
+          </Box>
+          <Box width="100%" p="1rem" my="5px" shadow="base">
             <h4>the question form section</h4>
           </Box>
         </Flex>

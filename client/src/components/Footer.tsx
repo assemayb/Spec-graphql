@@ -10,9 +10,9 @@ export const Footer = () => {
       bgColor="green.300"
       fontSize="medium"
       fontWeight="bold"
-      position="relative"
+      // pos="relative"
       width="100%"
-      bottom="1px"
+      // bottom="1px"
     >
         This is the footer
     </Flex>
