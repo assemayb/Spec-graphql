@@ -13,8 +13,7 @@ export const Register: React.FC<RouteComponentProps> = ({}) => {
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
     e.preventDefault();
-    console.log(username, email, password);
-
+    
     if (!username || !email || !password) {
       return console.log("enter some data");
     }

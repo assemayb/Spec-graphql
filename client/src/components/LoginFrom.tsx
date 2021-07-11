@@ -55,7 +55,7 @@ export const LoginFrom = () => {
       });
       if (response && response.data) {
         console.log(response.data);
-        
+
         setAccessToken(response.data.loginUser?.accessToken!);
         history.push("/");
         setUsername("");
@@ -72,7 +72,6 @@ export const LoginFrom = () => {
         <FormControl id="username" isRequired my="5px">
           <FormLabel>Username</FormLabel>
           <Input
-            placeholder="username"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
           />
@@ -81,7 +80,7 @@ export const LoginFrom = () => {
         <FormControl id="password" isRequired my="5px">
           <FormLabel>Password</FormLabel>
           <Input
-            placeholder="password"
+            type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />

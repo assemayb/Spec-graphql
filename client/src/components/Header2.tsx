@@ -16,7 +16,8 @@ import {
 } from "../generated/graphql";
 
 import { setAccessToken } from "../accessToken";
-import { AiFillHome } from "react-icons/ai";
+import { AiFillHome, AiOutlineUser } from "react-icons/ai";
+import { BiBookContent  } from "react-icons/bi";
 
 import { ModalComponent } from "../components/Modal";
 import { LinkBox } from "../smallComps/LinkBox";
@@ -38,7 +39,6 @@ const ProfileButton: React.FC<ProfileButtonProps> = ({ isUserLogged }) => {
     if (isUserLogged === true) {
       router.push("/profile");
     } else {
-      console.log("user is not logged in");
       setShowModal(true);
     }
   };
@@ -56,7 +56,9 @@ const ProfileButton: React.FC<ProfileButtonProps> = ({ isUserLogged }) => {
         }}
         mx="0.4rem"
       >
-        profile
+        <AiOutlineUser width="40px"/>
+        
+        <span style={{marginLeft: "4px"}}>profile</span>
       </Button>
     </>
   );
@@ -112,6 +114,7 @@ export const Header2: React.FC<Header2Props> = ({}) => {
     >
       <Flex ml="1rem" flex="9">
         <LinkBox route="Home" icon={<AiFillHome width="20px" />} />
+        <LinkBox route="topics" icon={<BiBookContent width="20px" />} />
         <LinkBox route="test" />
       </Flex>
 

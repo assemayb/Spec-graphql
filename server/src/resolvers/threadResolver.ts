@@ -19,11 +19,13 @@ export class ThreadResolver {
     ) {
         // the threadCreator is implicitly added from the payload data
         const { question, specialization, threadCreator } = options
+        console.log({ question, specialization, threadCreator });
+
         try {
             await Thread.create({
                 question,
                 specialization,
-                threadCreator: payload?.userId
+                threadCreator: payload?.userName
             })
         } catch (error) {
             console.log(error)
@@ -46,12 +48,13 @@ export class ThreadResolver {
         const threadCreatorID = thread?.getDataValue("threadCreator")
 
         const requestUserID = payload?.userId
-        if (threadCreatorID == requestUserID) {
+        const requestUserName = payload?.userName
+        if (threadCreatorID == requestUserID || threadCreatorID == requestUserName) {
             try {
                 await Thread.update(options, {
                     where: {
                         id
-                    }, 
+                    },
                     transaction
                 })
                 await transaction.commit()

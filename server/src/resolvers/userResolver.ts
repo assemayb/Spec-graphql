@@ -35,7 +35,7 @@ export class UserResolver {
             throw new Error(error)
         }
     }
-    
+
     @Query(() => [UserType], { nullable: true })
     async getAllUsers(
         @Ctx() { req }: MyContext
@@ -74,8 +74,10 @@ export class UserResolver {
         @Ctx() { req }: MyContext,
     ) {
 
-        console.log(username, password, email);
-        const hashedPassword = await hash(password, 12)
+        console.log("raw data", username, password, email);
+        const hashedPassword = await hash(password, 6)
+        console.log("hashedPassword", hashedPassword);
+
         try {
             await User.create({
                 username,
@@ -126,13 +128,16 @@ export class UserResolver {
         return true
     }
 
+
     @Query(() => String)
     @UseMiddleware(isAuthenticated)
     test(
         @Ctx() { payload }: MyContext
-    ) {
-        return `your id is ${payload?.userId}`
+        ) {
+        const name =`${payload?.userName! + payload?.userId }`
+        return name;
     }
+
 
     @Mutation(() => Boolean)
     async deleteUser(@Arg("id", () => Int) id: number) {
