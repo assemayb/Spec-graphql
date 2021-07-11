@@ -71,8 +71,6 @@ const LogoutButton: React.FC<LogoutButtonProps> = ({ isUserLogged }) => {
       await logoutUser();
       setAccessToken("");
       await client.resetStore();
-    } else {
-      console.log("No logged in User");
     }
   };
   return (

@@ -6,7 +6,6 @@ import {
   VStack,
   Button,
   Center,
-  Heading,
 } from "@chakra-ui/react";
 import {
   IsUserLoggedInDocument,
@@ -68,7 +67,7 @@ export const LoginFrom = () => {
     }
   };
   return (
-    <VStack padding="0.4rem" color="green.400" shadow="base">
+    <VStack padding="0.4rem" color="green.400" shadow="xl">
       <form onSubmit={(e) => submitLoginForm(e)}>
         <FormControl id="username" isRequired my="5px">
           <FormLabel>Username</FormLabel>

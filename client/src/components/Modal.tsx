@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Button,
   Modal,
@@ -9,9 +9,11 @@ import {
   ModalHeader,
   ModalFooter,
   useDisclosure,
+  Heading,
 } from "@chakra-ui/react";
 
 import { LoginFrom } from "./LoginFrom";
+import { RegisterFrom } from "./RegisterForm";
 interface ModalComponentProps {
   showModal: boolean;
   onClose: () => void;
@@ -21,22 +23,34 @@ export const ModalComponent: React.FC<ModalComponentProps> = ({
   showModal,
   onClose,
 }) => {
+  const [displayedForm, setDisplayedForm] = useState("loginForm");
   return (
     <>
       <Modal isOpen={showModal} onClose={onClose}>
         <ModalOverlay />
-        <ModalContent>
+        <ModalContent marginTop="8rem">
           <ModalCloseButton />
-          <ModalBody marginTop="2rem" padding="1rem">
-            <LoginFrom />
+
+          <ModalBody margin="2rem" padding="1rem">
+            {displayedForm === "loginForm" ? <LoginFrom /> : <RegisterFrom />}
           </ModalBody>
 
-          <ModalFooter>
-          create an acount here
-            {/* <Button colorScheme="blue" mr={3} onClick={onClose}>
-              Close
-            </Button> */}
-            {/* <Button variant="ghost">Secondary Action</Button> */}
+          <ModalFooter display="flex" justifyContent="center">
+            <Button
+              bgColor="blue.200"
+              textAlign="center"
+              onClick={() => {
+                if (displayedForm === "loginForm") {
+                  setDisplayedForm("signupForm");
+                } else {
+                  setDisplayedForm("loginForm");
+                }
+              }}
+            >
+              {displayedForm === "loginForm"
+                ? "create an account"
+                : "login to your acccount"}
+            </Button>
           </ModalFooter>
         </ModalContent>
       </Modal>

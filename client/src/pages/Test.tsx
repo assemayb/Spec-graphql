@@ -8,7 +8,7 @@ interface TestProps {}
 
 export const Test: React.FC<TestProps> = () => {
   const { data, error, loading } = useUsersListQuery({
-    fetchPolicy: "cache-first",
+    fetchPolicy: "network-only",
   });
 
   if (loading) {
