@@ -67,12 +67,11 @@ export const Home: React.FC<RouteComponentProps> = ({ history, location }) => {
           flex="1"
           p="0.5rem"
           bgColor="whiteAlpha.400"
-          shadow="base"
           flexDirection="column"
           maxH="auto"
           marginX="8px"
         >
-          <Box p="8px" shadow="base" bgColor="whiteAlpha.600">
+          <Box p="8px" shadow="base" bgColor="whiteAlpha.600" >
             <Box>the filtering and display btns</Box>
             <Box>the filtering and display btns</Box>
           </Box>
