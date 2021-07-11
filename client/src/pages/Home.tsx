@@ -26,7 +26,7 @@ export const Home: React.FC<RouteComponentProps> = ({ history, location }) => {
           justifyContent="center"
           flexDirection="column"
           alignItems="center"
-          flex="6"
+          flex="5"
           bgColor="whiteAlpha.200"
           shadow="base"
           p="0.5rem"

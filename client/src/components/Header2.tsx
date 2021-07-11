@@ -5,11 +5,14 @@ import {
   Button,
   useColorMode,
   useDisclosure,
+  Center,
+  Box,
 } from "@chakra-ui/react";
 import { MoonIcon, SunIcon } from "@chakra-ui/icons";
 import { useHistory } from "react-router-dom";
 import {
   IsUserLoggedInDocument,
+  IsUserLoggedInQuery,
   useIsUserLoggedInQuery,
   useLogoutMutation,
   useMeQuery,
@@ -70,11 +73,21 @@ const LogoutButton: React.FC<LogoutButtonProps> = ({ isUserLogged }) => {
 
   const handleLogout = async () => {
     if (isUserLogged) {
-      await logoutUser();
+      await logoutUser({
+        update: (cache, _) => {
+          cache.writeQuery<IsUserLoggedInQuery>({
+            query: IsUserLoggedInDocument,
+            data: {
+              isUserLoggedIn: false,
+            },
+          });
+        },
+      });
       setAccessToken("");
-      await client.resetStore();
+      // await client.resetStore();
     }
   };
+
   return (
     <Button
       onClick={() => handleLogout()}
@@ -94,13 +107,18 @@ const LogoutButton: React.FC<LogoutButtonProps> = ({ isUserLogged }) => {
 
 interface Header2Props {}
 export const Header2: React.FC<Header2Props> = ({}) => {
-  const { data, loading, error } = useMeQuery();
+  // const { data, loading, error } = useMeQuery();
 
   const currentMode = useColorMode();
-
   const loginState = useIsUserLoggedInQuery({
     fetchPolicy: "network-only",
   });
+
+  // useEffect(() => {
+  //   const { called, stopPolling } = loginState;
+  //   console.log(called);
+  //   console.log(loginState.data?.isUserLoggedIn);
+  // }, [loginState]);
 
   return (
     <Flex
@@ -122,7 +140,6 @@ export const Header2: React.FC<Header2Props> = ({}) => {
 
       <Flex
         marginRight="8px"
-        // flex="3"
         height="100px"
         alignItems="center"
         justifyContent="center"
@@ -139,11 +156,19 @@ export const Header2: React.FC<Header2Props> = ({}) => {
         >
           {currentMode.colorMode === "light" ? <MoonIcon /> : <SunIcon />}
         </Button>
-        {loginState && loginState.loading && <SmallSpinner />}
+
+        {loginState && loginState.loading && (
+          <Box marginLeft="5px">
+            <SmallSpinner />
+          </Box>
+        )}
         {loginState && !loginState.data?.isUserLoggedIn ? (
           <ProfileButton isUserLogged={loginState.data?.isUserLoggedIn!} />
         ) : (
-          <LogoutButton isUserLogged={loginState.data?.isUserLoggedIn!} />
+          <>
+            <ProfileButton isUserLogged={loginState.data?.isUserLoggedIn!} />
+            <LogoutButton isUserLogged={loginState.data?.isUserLoggedIn!} />
+          </>
         )}
       </Flex>
     </Flex>
