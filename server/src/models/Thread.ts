@@ -2,6 +2,7 @@ import { DataTypes, ModelDefined } from "sequelize";
 import { dbConfig } from "../config/database"
 
 import { Reply } from './Reply'
+import { User } from "./User";
 
 
 export interface ThreadAttributes {
@@ -26,7 +27,7 @@ export const Thread: ModelDefined<ThreadAttributes, {}> = dbConfig.define("threa
         allowNull: false
     },
     threadCreator: {
-        type: DataTypes.STRING(100),
+        type: DataTypes.INTEGER(),
         allowNull: false
     }
 }, {
@@ -36,4 +37,5 @@ export const Thread: ModelDefined<ThreadAttributes, {}> = dbConfig.define("threa
 Thread.hasMany(Reply, {
     foreignKey: "replyThread"
 })
+
 

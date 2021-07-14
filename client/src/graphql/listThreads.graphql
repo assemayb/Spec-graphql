@@ -1,0 +1,7 @@
+query listThreads {
+  listThreads {
+    question
+    specialization
+    threadCreator
+  }
+}

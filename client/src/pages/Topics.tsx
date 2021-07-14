@@ -16,7 +16,7 @@ import {
 
 interface TopicBoxProps {}
 const TopicBox: FC<TopicBoxProps> = () => {
-    return <Box w="100%" h="40" bg="cyan.100" />;
+    return <Box w="100%" h="40" bg="gray.300" borderRadius="4px" shadow="inner" />;
 };
 
 export const Topics: React.FC<RouteComponentProps> = () => {

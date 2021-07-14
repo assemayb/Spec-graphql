@@ -1,0 +1,3 @@
+mutation createThread($question: String!, $spec: String!) {
+  createThread(options: { question: $question, specialization: $spec })
+}

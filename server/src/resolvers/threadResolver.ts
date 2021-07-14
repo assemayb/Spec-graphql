@@ -18,14 +18,14 @@ export class ThreadResolver {
         @Ctx() { payload }: MyContext
     ) {
         // the threadCreator is implicitly added from the payload data
-        const { question, specialization, threadCreator } = options
-        console.log({ question, specialization, threadCreator });
+        const { question, specialization } = options
+        // console.log({ question, specialization, threadCreator });
 
         try {
             await Thread.create({
                 question,
                 specialization,
-                threadCreator: payload?.userName
+                threadCreator: payload?.userId
             })
         } catch (error) {
             console.log(error)
@@ -115,7 +115,11 @@ export class ThreadResolver {
     async listThreads() {
         let threads;
         try {
-            threads = await Thread.findAll()
+            threads = await Thread.findAll(
+             {
+                 include: "threadCreator"
+             }
+            )
         } catch (error) {
             console.log(error)
             return null
