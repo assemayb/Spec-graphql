@@ -6,6 +6,7 @@ import { MyContext } from "../utils/context";
 
 import { isAuthenticated } from "../utils/isAuth"
 import { dbConfig } from "../config/database";
+import { User } from "../models/User";
 
 
 export class ThreadResolver {
@@ -115,11 +116,20 @@ export class ThreadResolver {
     async listThreads() {
         let threads;
         try {
-            threads = await Thread.findAll(
-             {
-                 include: "threadCreator"
-             }
-            )
+            threads = await Thread.findAll()
+            let idx = 0
+            for (let x of threads) {
+                let creator = await User.findOne({
+                    where: {
+                        id: x.getDataValue("threadCreator")
+                    }
+                })
+                x.setDataValue("threadCreator", creator!.getDataValue("username")!)
+                threads[idx] = x
+                idx += 1;
+            }
+
+
         } catch (error) {
             console.log(error)
             return null
