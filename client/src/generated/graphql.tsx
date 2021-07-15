@@ -11,6 +11,8 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
+  /** The javascript `Date` as string. Type represents date and time as the ISO Date string. */
+  DateTime: any;
 };
 
 export type Query = {
@@ -44,7 +46,9 @@ export type ThreadType = {
   question: Scalars['String'];
   specialization: Scalars['String'];
   threadCreator: Scalars['String'];
+  createdAt: Scalars['DateTime'];
 };
+
 
 export type Mutation = {
   __typename?: 'Mutation';
@@ -155,7 +159,7 @@ export type ListThreadsQuery = (
   { __typename?: 'Query' }
   & { listThreads?: Maybe<Array<(
     { __typename?: 'ThreadType' }
-    & Pick<ThreadType, 'question' | 'specialization' | 'threadCreator'>
+    & Pick<ThreadType, 'question' | 'specialization' | 'threadCreator' | 'createdAt'>
   )>> }
 );
 
@@ -317,6 +321,7 @@ export const ListThreadsDocument = gql`
     question
     specialization
     threadCreator
+    createdAt
   }
 }
     `;

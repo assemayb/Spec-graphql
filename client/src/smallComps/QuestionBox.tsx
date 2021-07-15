@@ -7,11 +7,13 @@ import { FiUser } from "react-icons/fi";
 interface QuestionBoxProps {
   username: string;
   question: string;
-  specializtion?: string;
+  specializtion?: string
+  createdAt?: string
 }
 export const QuestionBox: React.FC<QuestionBoxProps> = ({
   question,
   username,
+  createdAt
 }) => {
   return (
     <Box
@@ -47,7 +49,7 @@ export const QuestionBox: React.FC<QuestionBoxProps> = ({
         color="gray.200"
         fontSize="12px"
       >
-        12-2-2021
+        {createdAt?.substr(0, 10)}
       </Heading>
     </Box>
   );

@@ -119,6 +119,7 @@ export class ThreadResolver {
 
             // x.setDataValue("createdAt", JSON.stringify(x.toJSON()['createdAt']))
             // x.setDataValue("createdAt", JSON.stringify(x.toJSON()['createdAt']))
+            
             console.log(typeof(threads[0].getDataValue("createdAt")));
             
             let idx = 0

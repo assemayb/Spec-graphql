@@ -27,6 +27,7 @@ export const Home: React.FC<RouteComponentProps> = ({ history, location }) => {
               key={idx}
               question={thread.question}
               username={thread.threadCreator}
+              createdAt={thread.createdAt}
             />
           );
         })}

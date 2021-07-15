@@ -3,5 +3,6 @@ query listThreads {
     question
     specialization
     threadCreator
+    createdAt
   }
 }
