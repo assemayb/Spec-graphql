@@ -146,7 +146,7 @@ export const Header2: React.FC<Header2Props> = ({}) => {
         position="absolute"
         right="8px"
       >
-        <Button
+        {/* <Button
           onClick={() => currentMode.toggleColorMode()}
           bgColor="green.400"
           _hover={{
@@ -155,7 +155,7 @@ export const Header2: React.FC<Header2Props> = ({}) => {
           height="50%"
         >
           {currentMode.colorMode === "light" ? <MoonIcon /> : <SunIcon />}
-        </Button>
+        </Button> */}
 
         {loginState && loginState.loading && (
           <Box marginLeft="5px">

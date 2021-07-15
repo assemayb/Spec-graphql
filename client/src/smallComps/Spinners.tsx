@@ -8,9 +8,8 @@ export const SmallSpinner = () => {
 export const FastBigSpinner = () => {
   return (
     <Spinner
-      border="1px solid black"
-      thickness="4px"
-      speed="0.65s"
+      thickness="8px"
+      speed="0.8s"
       emptyColor="gray.200"
       color="green.500"
       size="xl"
