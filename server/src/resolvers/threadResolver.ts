@@ -114,9 +114,13 @@ export class ThreadResolver {
     // List all Threads
     @Query(() => [ThreadType], { nullable: true })
     async listThreads() {
-        let threads;
         try {
-            threads = await Thread.findAll()
+            let threads = await Thread.findAll()
+
+            // x.setDataValue("createdAt", JSON.stringify(x.toJSON()['createdAt']))
+            // x.setDataValue("createdAt", JSON.stringify(x.toJSON()['createdAt']))
+            console.log(typeof(threads[0].getDataValue("createdAt")));
+            
             let idx = 0
             for (let x of threads) {
                 let creator = await User.findOne({
@@ -124,17 +128,17 @@ export class ThreadResolver {
                         id: x.getDataValue("threadCreator")
                     }
                 })
+
                 x.setDataValue("threadCreator", creator!.getDataValue("username")!)
                 threads[idx] = x
                 idx += 1;
             }
-
+            return threads
 
         } catch (error) {
             console.log(error)
             return null
         }
-        return threads
     }
 
     // Delete a thread

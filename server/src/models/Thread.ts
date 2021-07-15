@@ -10,6 +10,7 @@ export interface ThreadAttributes {
     question: string
     specialization: string
     threadCreator: string
+    createdAt: string
 }
 
 export const Thread: ModelDefined<ThreadAttributes, {}> = dbConfig.define("thread", {
@@ -28,6 +29,10 @@ export const Thread: ModelDefined<ThreadAttributes, {}> = dbConfig.define("threa
     },
     threadCreator: {
         type: DataTypes.INTEGER(),
+        allowNull: false
+    },
+    createdAt: {
+        type: DataTypes.DATE(),
         allowNull: false
     }
 }, {

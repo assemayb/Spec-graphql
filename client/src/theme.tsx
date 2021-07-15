@@ -3,8 +3,8 @@ import "@fontsource/raleway";
 
 export const theme = extendTheme({
     // fonts: {
-    //   heading: "Raleway",
-    //   body: "Raleway",
+      heading: "Raleway",
+      body: "Raleway",
     // },
   });
   

@@ -1,4 +1,4 @@
-import { ObjectType, Field, Int, InputType } from "type-graphql"
+import { ObjectType, Field, Int, InputType, } from "type-graphql"
 @ObjectType()
 export class ReplyType {
     @Field(() => Int)
@@ -26,6 +26,9 @@ export class ThreadType {
 
     @Field(() => String)
     threadCreator?: string
+
+    @Field(() => Date)
+    createdAt?: string
 }
 @InputType()
 export class CreateThreadInput {
@@ -47,4 +50,4 @@ export class UpdateThreadInput {
     @Field(() => String, { nullable: true })
     specialization?: string
 
-} 
+}
