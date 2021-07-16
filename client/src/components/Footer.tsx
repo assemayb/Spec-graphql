@@ -1,5 +1,5 @@
 import React from "react";
-import { Container, Flex } from "@chakra-ui/react";
+import { Flex } from "@chakra-ui/react";
 export const Footer = () => {
   return (
     <Flex
@@ -18,3 +18,4 @@ export const Footer = () => {
     </Flex>
   );
 };
+ 

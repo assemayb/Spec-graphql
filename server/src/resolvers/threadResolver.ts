@@ -116,10 +116,6 @@ export class ThreadResolver {
     async listThreads() {
         try {
             let threads = await Thread.findAll()
-
-            // x.setDataValue("createdAt", JSON.stringify(x.toJSON()['createdAt']))
-            // x.setDataValue("createdAt", JSON.stringify(x.toJSON()['createdAt']))
-            
             console.log(typeof(threads[0].getDataValue("createdAt")));
             
             let idx = 0

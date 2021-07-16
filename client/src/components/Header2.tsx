@@ -150,7 +150,7 @@ export const Header2: React.FC<Header2Props> = ({}) => {
           onClick={() => currentMode.toggleColorMode()}
           bgColor="green.400"
           _hover={{
-            bgColor: "green.500",
+            bgColorome: "green.500",
           }}
           height="50%"
         >

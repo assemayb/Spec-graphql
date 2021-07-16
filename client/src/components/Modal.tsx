@@ -31,13 +31,13 @@ export const ModalComponent: React.FC<ModalComponentProps> = ({
         <ModalContent marginTop="8rem">
           <ModalCloseButton />
 
-          <ModalBody margin="2rem" padding="1rem">
+          <ModalBody margin="1rem">
             {displayedForm === "loginForm" ? <LoginFrom /> : <RegisterFrom />}
           </ModalBody>
 
-          <ModalFooter display="flex" justifyContent="center">
+          {/* <ModalFooter display="flex" justifyContent="center"> */}
             <Button
-              bgColor="blue.200"
+              bgColor="green.200"
               textAlign="center"
               onClick={() => {
                 if (displayedForm === "loginForm") {
@@ -51,7 +51,7 @@ export const ModalComponent: React.FC<ModalComponentProps> = ({
                 ? "create an account"
                 : "login to your acccount"}
             </Button>
-          </ModalFooter>
+          {/* </ModalFooter> */}
         </ModalContent>
       </Modal>
     </>

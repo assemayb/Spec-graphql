@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-import { Box, Heading } from "@chakra-ui/react";
+import { Box, Heading, Divider } from "@chakra-ui/react";
 
 import { FiUser } from "react-icons/fi";
 
@@ -22,7 +22,10 @@ export const QuestionBox: React.FC<QuestionBoxProps> = ({
       p="1rem"
       my="5px"
       shadow="inner"
-      _hover={{ bgColor: "gray.50" }}
+      bgColor="gray.50"
+      _hover={{ bgColor: "gray.100" }}
+      borderRadius="6px"
+      borderLeft= "5px solid green.200"
     >
       <Heading as="h5" size="xs" color="gray.300" display="flex">
         <FiUser size="15px" />

@@ -38,7 +38,7 @@ export const RegisterFrom: React.FC<RegisterFromProps> = () => {
     setPassword("");
   };
   return (
-    <Container padding="0.4rem" shadow="base" color="green.600">
+    <Container padding="0.4rem" color="green.600">
       <form onSubmit={(e) => submitRegisterForm(e)}>
         <FormControl id="username" isRequired my="5px" mx="2px">
           <FormLabel>username</FormLabel>
