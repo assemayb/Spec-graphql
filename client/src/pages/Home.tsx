@@ -31,9 +31,7 @@ export const SortBtn: React.FC = ({ children }) => {
 };
 interface HomeProps {}
 export const Home: React.FC<RouteComponentProps> = ({ history, location }) => {
-  const { data, loading, error } = useListThreadsQuery({
-    // pollInterval: 300
-  });
+  const { data, loading, error, refetch } = useListThreadsQuery();
 
   let ThreadsComp: any = null;
   if (loading) {
@@ -81,7 +79,7 @@ export const Home: React.FC<RouteComponentProps> = ({ history, location }) => {
             <SortBtn>most recent</SortBtn>
           </Box>
 
-          <QuestionForm />
+          <QuestionForm  refetch={refetch}/>
         </Flex>
       </Flex>
     </>

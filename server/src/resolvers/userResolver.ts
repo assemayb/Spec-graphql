@@ -25,9 +25,7 @@ export class UserResolver {
             const token = authorization.split(" ")[1]
             const payload: any = verify(token, process.env.ACCESS_TOKEN_SECRET!)
 
-            let me;
-            let transaction = await dbConfig.transaction();
-            me = await User.findOne({ where: { id: payload.userId }, transaction })
+            let me = await User.findOne({ where: { id: payload.userId } })
             return me
 
         } catch (error) {
@@ -133,8 +131,8 @@ export class UserResolver {
     @UseMiddleware(isAuthenticated)
     test(
         @Ctx() { payload }: MyContext
-        ) {
-        const name =`${payload?.userName! + payload?.userId }`
+    ) {
+        const name = `${payload?.userName! + payload?.userId}`
         return name;
     }
 

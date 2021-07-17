@@ -1,13 +1,19 @@
 import React, { useState, useEffect } from "react";
 import {
+  ListThreadsQuery,
   useCreateThreadMutation,
   useIsUserLoggedInQuery,
 } from "../generated/graphql";
 
 import { Box, Button, FormControl, FormLabel, Input } from "@chakra-ui/react";
+import { ApolloQueryResult } from "@apollo/client";
 
-interface QuestionFormProps {}
-export const QuestionForm: React.FC<QuestionFormProps> = () => {
+interface QuestionFormProps {
+  refetch: () => Promise<ApolloQueryResult<ListThreadsQuery>>
+}
+export const QuestionForm: React.FC<QuestionFormProps> = ({
+  refetch
+}) => {
   const [question, setQuestion] = useState("");
   const [specilization, setSpecilization] = useState("");
 
@@ -25,6 +31,7 @@ export const QuestionForm: React.FC<QuestionFormProps> = () => {
           spec: specilization,
         },
       });
+      refetch()
     } catch (error) {
       console.log(error.messge);
     }

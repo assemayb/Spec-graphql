@@ -24,7 +24,7 @@ import { createRefreshToken, createAccessToken } from "./utils/auth"
     dotenv.config({
         path: `${__dirname}/config/.env`
     })
-    
+
     // express server middlewares
     app.use(cookieParser())
     app.use(morgan("dev"))
@@ -33,28 +33,29 @@ import { createRefreshToken, createAccessToken } from "./utils/auth"
         credentials: true
     }
     app.use(cors(corsOptions))
-    
+
     app.post("/refresh_token", async (req, res) => {
         const token = req.cookies["jid"]
 
         if (!token) {
             res.json({ ok: false, accessToken: "" })
         }
-        let payload: any = null;
+
         try {
-            payload = verify(token, process.env.REFRESH_TOKEN_SECRET!)
+            let payload: any = verify(token, process.env.REFRESH_TOKEN_SECRET!)
+            console.log("================>");
+            console.log(payload);
+            // let transaction = await dbConfig.transaction();
+            let user = await User.findOne({ where: { id: payload.userId } })
+            if (!user) {
+                res.json({ ok: false, accessToken: "" })
+            }
+            sendRefreshToken(res, createRefreshToken(user as any))
+            return res.json({ ok: true, accessToken: createAccessToken(user as any) })
         } catch (error) {
             console.log(error)
             return res.json({ ok: false, accessToken: "" })
         }
-
-        let transaction = await dbConfig.transaction();
-        let user = await User.findOne({ where: { id: payload.userId }, transaction })
-        if (!user) {
-            res.json({ ok: false, accessToken: "" })
-        }
-        sendRefreshToken(res, createRefreshToken(user as any))
-        return res.json({ ok: true, accessToken: createAccessToken(user as any) })
     })
 
     // connection the database
