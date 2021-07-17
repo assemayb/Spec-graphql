@@ -31,7 +31,9 @@ export const SortBtn: React.FC = ({ children }) => {
 };
 interface HomeProps {}
 export const Home: React.FC<RouteComponentProps> = ({ history, location }) => {
-  const { data, loading, error } = useListThreadsQuery();
+  const { data, loading, error } = useListThreadsQuery({
+    // pollInterval: 300
+  });
 
   let ThreadsComp: any = null;
   if (loading) {

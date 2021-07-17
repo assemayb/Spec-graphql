@@ -10,13 +10,11 @@ export const isAuthenticated: MiddlewareFn<MyContext> = async ({ context }, next
     }
     try {
         const token = authorization.split(" ")[1]
-        const paylaod = verify(token, process.env.ACCESS_TOKEN_SECRET!)
-        console.log("paylaod is : ", paylaod);
-        
+        const paylaod = verify(token, process.env.ACCESS_TOKEN_SECRET!)        
         context.payload = paylaod as any
 
     } catch (error) {
-        
+        console.log(error.message);
         throw new Error(error)
     }
     return next()

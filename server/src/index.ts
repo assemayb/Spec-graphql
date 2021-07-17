@@ -45,7 +45,7 @@ import { createRefreshToken, createAccessToken } from "./utils/auth"
             payload = verify(token, process.env.REFRESH_TOKEN_SECRET!)
         } catch (error) {
             console.log(error)
-            res.json({ ok: false, accessToken: "" })
+            return res.json({ ok: false, accessToken: "" })
         }
 
         let transaction = await dbConfig.transaction();
@@ -61,6 +61,7 @@ import { createRefreshToken, createAccessToken } from "./utils/auth"
     dbConfig.authenticate()
         .then(() => console.log("Database connection is successful"))
         .then(() => dbConfig.sync( /*    { force: true }  */))
+        // .then(() => dbConfig.sync( { force: true }  ))
         .catch((err) => console.log(err));
 
     // graphql apollo server
@@ -73,6 +74,7 @@ import { createRefreshToken, createAccessToken } from "./utils/auth"
     apolloServer.applyMiddleware({ app, cors: false })
 
     const PORT = 8000
+    // const PORT = 8200
     app.listen(PORT, () => {
         console.log(`server is running at port ${PORT}`)
     })

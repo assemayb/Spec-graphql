@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { useCreateThreadMutation } from "../generated/graphql";
+import {
+  useCreateThreadMutation,
+  useIsUserLoggedInQuery,
+} from "../generated/graphql";
 
 import { Box, Button, FormControl, FormLabel, Input } from "@chakra-ui/react";
 
@@ -10,7 +13,7 @@ export const QuestionForm: React.FC<QuestionFormProps> = () => {
 
   const [createQuestion, { client, data, error, loading }] =
     useCreateThreadMutation();
-
+  const userLogginData = useIsUserLoggedInQuery();
   const submitQuestion = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log("sbmmmmiit");
@@ -50,7 +53,12 @@ export const QuestionForm: React.FC<QuestionFormProps> = () => {
             onChange={(e) => setSpecilization(e.target.value)}
           />
         </FormControl>
-        <Button type="submit" marginTop="12px" marginX="auto">
+        <Button
+          isDisabled={!userLogginData.data?.isUserLoggedIn}
+          type="submit"
+          marginTop="12px"
+          marginX="auto"
+        >
           submit
         </Button>
       </form>

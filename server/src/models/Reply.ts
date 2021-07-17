@@ -28,26 +28,28 @@ export const Reply: ModelDefined<ReplyAttributes, {}> = dbConfig.define("reply",
         allowNull: false,
         defaultValue: 0
     },
-    replyThread: {
-        type: DataTypes.STRING(100),
-        allowNull: false
-    },
-    replySpecialist: {
-        type: DataTypes.STRING(100),
-        allowNull: false
-    }
+    // replyThread: {
+    //     type: DataTypes.STRING(100),
+    //     allowNull: false
+    // },
+    // replySpecialist: {
+    //     type: DataTypes.STRING(100),
+    //     allowNull: false
+    // }
 }, {
     tableName: 'replies'
 })
 
-// M : 1  relation with Thread 
-
-// Reply.belongsTo(Thread, {
-//     foreignKey: "replyThread"
-// })
 
 
 // 1 : M  relation with Specialist 
 Specialist.hasMany(Reply, {
     foreignKey: "replySpecialist",
+
 })
+
+
+// M : 1  relation with Thread 
+// Reply.belongsTo(Thread, {
+//     foreignKey: "replyThread"
+// })

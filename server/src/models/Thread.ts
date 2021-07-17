@@ -39,6 +39,7 @@ export const Thread: ModelDefined<ThreadAttributes, {}> = dbConfig.define("threa
     tableName: "threads"
 })
 
+
 Thread.hasMany(Reply, {
     foreignKey: "replyThread"
 })

@@ -26,7 +26,7 @@ export const User: ModelDefined<UserAttributes, UserCreationAttributes> = dbConf
         type: DataTypes.STRING(120)
     },
     password: {
-        type: DataTypes.STRING(50),
+        type: DataTypes.STRING(300),
         allowNull: false
     }
 }, {
