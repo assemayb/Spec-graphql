@@ -11,7 +11,6 @@ import { User } from "../models/User";
 
 export class ThreadResolver {
 
-    // creating a new thread
     @Mutation(() => Boolean)
     @UseMiddleware(isAuthenticated)
     async createThread(
@@ -73,7 +72,9 @@ export class ThreadResolver {
 
     }
 
+    
     // List the logged-in User Threads
+    // used is the profile section of the app
     @Query(() => [ThreadType], { nullable: true })
     @UseMiddleware(isAuthenticated)
     async listMyThreads(
@@ -116,8 +117,6 @@ export class ThreadResolver {
     async listThreads() {
         try {
             let threads = await Thread.findAll()
-            console.log(typeof(threads[0].getDataValue("createdAt")));
-            
             let idx = 0
             for (let x of threads) {
                 let creator = await User.findOne({
@@ -125,7 +124,6 @@ export class ThreadResolver {
                         id: x.getDataValue("threadCreator")
                     }
                 })
-
                 x.setDataValue("threadCreator", creator!.getDataValue("username")!)
                 threads[idx] = x
                 idx += 1;
@@ -146,12 +144,11 @@ export class ThreadResolver {
         @Ctx() { payload }: MyContext
     ) {
 
-        let transaction = await dbConfig.transaction();
+        // let transaction = await dbConfig.transaction();
         let thread = await Thread.findOne({
             where: {
                 id,
-            },
-            transaction
+            }
         })
         const threadCreator = thread!.getDataValue("threadCreator")
         if (threadCreator == payload?.userId) {
@@ -160,12 +157,13 @@ export class ThreadResolver {
                     where: {
                         id
                     },
-                    transaction
+
                 })
-                await transaction.commit();
+                // await transaction.commit();
                 return true
             } catch (error) {
-                await transaction.rollback()
+                ``
+                // await transaction.rollback()
                 console.log(error)
                 return false
             }

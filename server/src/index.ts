@@ -13,6 +13,7 @@ import { verify } from "jsonwebtoken"
 import { HelloResolver } from "./resolvers/helloResolver"
 import { UserResolver } from "./resolvers/userResolver"
 import { ThreadResolver } from "./resolvers/threadResolver"
+import { ReplyResolver } from "./resolvers/replyResolver"
 
 import { User } from "./models/User"
 import { sendRefreshToken } from "./utils/sendRefreshToken"
@@ -68,7 +69,7 @@ import { createRefreshToken, createAccessToken } from "./utils/auth"
     // graphql apollo server
     const apolloServer = new ApolloServer({
         schema: await buildSchema({
-            resolvers: [HelloResolver, UserResolver, ThreadResolver]
+            resolvers: [HelloResolver, UserResolver, ThreadResolver, ReplyResolver]
         }),
         context: ({ req, res }) => ({ req, res })
     })

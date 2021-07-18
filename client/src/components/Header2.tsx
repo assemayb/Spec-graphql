@@ -70,14 +70,21 @@ const ProfileButton: React.FC<ProfileButtonProps> = ({ isUserLogged }) => {
 interface LogoutButtonProps extends ProfileButtonProps {}
 const LogoutButton: React.FC<LogoutButtonProps> = ({ isUserLogged }) => {
   const [logoutUser, { client }] = useLogoutMutation();
-  
+
   useEffect(() => {
-    console.log(isUserLogged);
-    
-  }, [isUserLogged])
+    let isMounted = false;
+    return () => {
+      console.log("unmounting");
+      
+      if (isMounted === false) {
+        isMounted = true;
+      }
+    };
+  }, []);
 
   const handleLogout = async () => {
     if (isUserLogged) {
+      setAccessToken("");
       await logoutUser({
         update: async (cache, _) => {
           cache.writeQuery<IsUserLoggedInQuery>({
@@ -88,7 +95,6 @@ const LogoutButton: React.FC<LogoutButtonProps> = ({ isUserLogged }) => {
           });
         },
       });
-      setAccessToken("");
       // await client.resetStore();
     }
   };
@@ -112,16 +118,12 @@ const LogoutButton: React.FC<LogoutButtonProps> = ({ isUserLogged }) => {
 
 interface Header2Props {}
 export const Header2: React.FC<Header2Props> = ({}) => {
-  const { data, loading, error } = useMeQuery();
+  // const { data, loading, error } = useMeQuery();
 
   const currentMode = useColorMode();
   const loginState = useIsUserLoggedInQuery({
     fetchPolicy: "network-only",
   });
-   
-  useEffect(() => {
-    console.log(data?.me);    
-  })
 
   return (
     <Flex

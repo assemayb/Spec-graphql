@@ -5,7 +5,7 @@ import { Thread } from "./Thread"
 
 import { dbConfig } from "../config/database"
 
-interface ReplyAttributes {
+export interface ReplyAttributes {
     id: number
     text: string
     upvotes: number,
