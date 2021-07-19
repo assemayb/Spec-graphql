@@ -4,15 +4,25 @@ import { ObjectType, Int, Field, Resolver, Mutation, Arg, Query, InputType } fro
 
 @ObjectType()
 export class UserInputsType {
-    @Field(() => String, { nullable: true })
+    @Field(() => String, { nullable: false })
     username?: string
 
-    @Field(() => String, { nullable: true })
+    @Field(() => String, { nullable: false })
     password?: string
 
     @Field(() => String, { nullable: true })
     email?: string
+
+
+    @Field(() => Boolean, { nullable: false })
+    isSpec?: boolean
+
+    @Field(() => String, { nullable: true })
+    spec?: string
+
+
 }
+
 
 @InputType()
 export class UserUpdateInputType {
@@ -24,6 +34,12 @@ export class UserUpdateInputType {
 
     @Field(() => String, { nullable: true })
     email?: string
+
+    @Field(() => Boolean, { nullable: true })
+    isSpec?: boolean
+
+    @Field(() => String, { nullable: true })
+    spec?: string
 
 }
 @ObjectType()

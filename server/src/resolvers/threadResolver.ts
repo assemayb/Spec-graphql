@@ -27,6 +27,7 @@ export class ThreadResolver {
                 specialization,
                 threadCreator: payload?.userId
             })
+            
         } catch (error) {
             console.log(error)
             return false

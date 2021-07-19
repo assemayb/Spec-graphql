@@ -1,17 +1,17 @@
 import { ObjectType, Field, Int, InputType, } from "type-graphql"
-@ObjectType()
-export class ReplyType {
-    @Field(() => Int)
-    id?: number
-    @Field(() => String)
-    text?: string
-    @Field(() => String)
-    upvotes?: number
-    @Field(() => String)
-    replySpecialist?: string;
-    @Field(() => String)
-    replyThread?: string
-}
+// @ObjectType()
+// export class ReplyType {
+//     @Field(() => Int)
+//     id?: number
+//     @Field(() => String)
+//     text?: string
+//     @Field(() => String)
+//     upvotes?: number
+//     @Field(() => String)
+//     replySpecialist?: Int;
+//     @Field(() => String)
+//     replyThread?: string
+// }
 
 @ObjectType()
 export class ThreadType {

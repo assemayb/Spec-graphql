@@ -69,18 +69,26 @@ export class UserResolver {
         @Arg("username", () => String) username: string,
         @Arg("password", () => String) password: string,
         @Arg("email", () => String) email: string,
+        @Arg("isSpec", () => Boolean) isSpec: boolean,
+        @Arg("spec", () => String, {nullable: true}) spec: string, 
         @Ctx() { req }: MyContext,
     ) {
 
         console.log("raw data", username, password, email);
         const hashedPassword = await hash(password, 6)
-        console.log("hashedPassword", hashedPassword);
+        console.log(username,
+            hashedPassword,
+            email,
+            isSpec,
+            spec)
 
         try {
             await User.create({
                 username,
                 password: hashedPassword,
-                email
+                email,
+                isSpec,
+                spec
             })
         } catch (err) {
             console.error(err.message)
