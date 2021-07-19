@@ -13,14 +13,37 @@ import {
   Grid,
   Spinner,
   Skeleton,
+  Divider,
 } from "@chakra-ui/react";
 import { gql, useQuery } from "@apollo/client";
 
-interface TopicBoxProps {}
-const TopicBox: FC<TopicBoxProps> = () => {
-  return <Box w="100%" h="90px" bg="green.100" borderRadius="5px">
-
-  </Box>;
+interface TopicBoxProps {
+  topic: string;
+}
+const TopicBox: FC<TopicBoxProps> = ({ topic }) => {
+  return (
+    <Box
+      w="100%"
+      h="100px"
+      bg="green.100"
+      borderRadius="-10px"
+      _hover={{
+        color: "white",
+        bg: "green.200",
+      }}
+    >
+      <Box
+        shadow="md"
+        textAlign="center"
+        p="0.2rem"
+        fontSize="20px"
+        fontWeight="bold"
+        textShadow="md"
+      >
+        {topic}
+      </Box>
+    </Box>
+  );
 };
 
 const topicsQuery = gql`
@@ -42,16 +65,31 @@ export const Topics: React.FC<RouteComponentProps> = () => {
   }, [data]);
 
   return (
-    <Box p="1rem" marginTop="2rem">
-      <Grid templateColumns="repeat(4, 1fr)" gap={6}>
-        <>
-          {topcis.length < 1
-            ? dummieArr.map((item, idx) => {
-                return <Skeleton color="green.100" key={idx} height="80px" />;
-              })
-            : topcis.map((item, idx) => <TopicBox key={idx} />)}
-        </>
-      </Grid>
-    </Box>
+    <>
+      <Box
+        marginLeft="1rem"
+        marginTop="1rem"
+        fontSize="30px"
+        fontFamily="fantasy"
+        fontWeight="bold"
+        color="gray.500"
+        textShadow="lg"
+      >
+        Health Topics
+        <Divider />
+      </Box>
+        
+      <Box p="2rem" marginTop="2rem" shadow="base">
+        <Grid templateColumns="repeat(5, 1fr)" gap={5}>
+          <>
+            {topcis.length < 1
+              ? dummieArr.map((item, idx) => {
+                  return <Skeleton color="green.100" key={idx} height="80px" />;
+                })
+              : topcis.map((item, idx) => <TopicBox key={idx} topic={item} />)}
+          </>
+        </Grid>
+      </Box>
+    </>
   );
 };

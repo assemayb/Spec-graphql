@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 
 import { Box, Heading, Divider } from "@chakra-ui/react";
 
@@ -18,7 +18,6 @@ export const QuestionBox: React.FC<QuestionBoxProps> = ({
 }) => {
   // const currentUser = useMeQuery();
 
-  
   return (
     <Box
       pos="relative"
@@ -26,9 +25,8 @@ export const QuestionBox: React.FC<QuestionBoxProps> = ({
       p="1rem"
       my="5px"
       shadow="md"
-      // bgColor="gray.50"
-      bgColor="blackAlpha.50"
-      _hover={{ bgColor: "gray.200" }}
+      bgColor="gray.50"
+      _hover={{ bgColor: "gray.200", borderRadius: "-30px" }}
       borderRadius="-20px"
       borderLeft="5px solid green.200"
     >
@@ -60,7 +58,7 @@ export const QuestionBox: React.FC<QuestionBoxProps> = ({
         pos="absolute"
         right="20px"
         bottom="1px"
-        color="gray.200"
+        color="gray.400"
         fontSize="12px"
       >
         {createdAt?.substr(0, 10)}
