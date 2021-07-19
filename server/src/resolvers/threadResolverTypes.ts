@@ -1,17 +1,4 @@
 import { ObjectType, Field, Int, InputType, } from "type-graphql"
-// @ObjectType()
-// export class ReplyType {
-//     @Field(() => Int)
-//     id?: number
-//     @Field(() => String)
-//     text?: string
-//     @Field(() => String)
-//     upvotes?: number
-//     @Field(() => String)
-//     replySpecialist?: Int;
-//     @Field(() => String)
-//     replyThread?: string
-// }
 
 @ObjectType()
 export class ThreadType {
@@ -50,4 +37,14 @@ export class UpdateThreadInput {
     @Field(() => String, { nullable: true })
     specialization?: string
 
+}
+
+
+@ObjectType() 
+export class TopicType {
+    @Field(() => String)
+    specializtion?: string 
+
+    @Field(() => Int)
+    threadsNum?: number 
 }

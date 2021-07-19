@@ -1,5 +1,5 @@
 import { Ctx, ObjectType, Int, InputType, Mutation, Arg, Query, UseMiddleware } from "type-graphql"
-import { CreateThreadInput, ThreadType, UpdateThreadInput } from "./threadResolverTypes"
+import { CreateThreadInput, ThreadType, TopicType, UpdateThreadInput } from "./threadResolverTypes"
 
 import { Thread, ThreadAttributes } from "../models/Thread"
 import { MyContext } from "../utils/context";
@@ -27,7 +27,7 @@ export class ThreadResolver {
                 specialization,
                 threadCreator: payload?.userId
             })
-            
+
         } catch (error) {
             console.log(error)
             return false
@@ -73,7 +73,7 @@ export class ThreadResolver {
 
     }
 
-    
+
     // List the logged-in User Threads
     // used is the profile section of the app
     @Query(() => [ThreadType], { nullable: true })
@@ -137,6 +137,29 @@ export class ThreadResolver {
         }
     }
 
+    // list all specs
+    @Query(() => [String])
+    async listTopics() {
+        try {
+            let imported = await import("../utils/constnats")
+            let topics = imported.specs
+            return topics
+        } catch (error) {
+            throw new Error(error.message)
+        }
+    }
+    // list all specializations and topics
+    // @Query(() => [TopicType], { nullable: true })
+    // async listAllTopics() {
+    //     let topics = []
+    //     try {
+    //         let threads = await Thread.findAll()
+
+    //     } catch (error) {
+    //         console.log(error.message)
+    //         throw new Error(error.message)
+    //     }
+    // }
     // Delete a thread
     @Mutation(() => Boolean, { nullable: true })
     @UseMiddleware(isAuthenticated)

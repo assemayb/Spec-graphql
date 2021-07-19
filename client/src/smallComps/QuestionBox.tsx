@@ -25,10 +25,10 @@ export const QuestionBox: React.FC<QuestionBoxProps> = ({
       width="100%"
       p="1rem"
       my="5px"
-      shadow="inner"
+      shadow="md"
       bgColor="gray.50"
       _hover={{ bgColor: "gray.100" }}
-      borderRadius="6px"
+      borderRadius="-20px"
       borderLeft="5px solid green.200"
     >
       <Heading as="h5" size="xs" color="gray.300" display="flex">

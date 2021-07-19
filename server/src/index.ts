@@ -62,8 +62,8 @@ import { createRefreshToken, createAccessToken } from "./utils/auth"
     // connection the database
     dbConfig.authenticate()
         .then(() => console.log("Database connection is successful"))
-        // .then(() => dbConfig.sync( /*    { force: true }  */))
-        .then(() => dbConfig.sync( { force: true }  ))
+        .then(() => dbConfig.sync( /*    { force: true }  */))
+        // .then(() => dbConfig.sync( { force: true }  ))
         .catch((err) => console.log(err));
 
     // graphql apollo server

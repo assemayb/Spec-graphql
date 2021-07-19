@@ -62,7 +62,7 @@ export const Home: React.FC<RouteComponentProps> = ({ history, location }) => {
           alignItems="center"
           flex="4"
           shadow="base"
-          p="0.5rem"
+          p="1rem"
         >
           {ThreadsComp}
         </Flex>
