@@ -14,7 +14,7 @@ import {
   Input,
 } from "@chakra-ui/react";
 import { ApolloQueryResult } from "@apollo/client";
-import {AiFillEdit} from "react-icons/ai"
+import { AiFillEdit } from "react-icons/ai";
 
 interface QuestionFormProps {
   refetch: () => Promise<ApolloQueryResult<ListThreadsQuery>>;
@@ -52,7 +52,7 @@ export const QuestionForm: React.FC<QuestionFormProps> = ({ refetch }) => {
         marginBottom="4px"
       >
         {/* <AiFillEdit size="15px"/> */}
-        Add a Question
+        Create Thread
       </Heading>
       <Box
         display="flex"
@@ -69,6 +69,7 @@ export const QuestionForm: React.FC<QuestionFormProps> = ({ refetch }) => {
               question
             </FormLabel>
             <Input
+              borderRadius="-10px"
               type="text"
               value={question}
               onChange={(e) => setQuestion(e.target.value)}
@@ -79,6 +80,7 @@ export const QuestionForm: React.FC<QuestionFormProps> = ({ refetch }) => {
               specilization
             </FormLabel>
             <Input
+              borderRadius="-10px"
               type="text"
               value={specilization}
               onChange={(e) => setSpecilization(e.target.value)}

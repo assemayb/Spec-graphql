@@ -25,6 +25,7 @@ export type Query = {
   listMyThreads?: Maybe<Array<ThreadType>>;
   listUserThread?: Maybe<Array<ThreadType>>;
   listThreads?: Maybe<Array<ThreadType>>;
+  listTopics: Array<Scalars['String']>;
   listThreadReplies?: Maybe<Array<ReplyType>>;
 };
 
@@ -192,7 +193,7 @@ export type ListThreadsQuery = (
   { __typename?: 'Query' }
   & { listThreads?: Maybe<Array<(
     { __typename?: 'ThreadType' }
-    & Pick<ThreadType, 'question' | 'specialization' | 'threadCreator' | 'createdAt'>
+    & Pick<ThreadType, 'id' | 'question' | 'specialization' | 'threadCreator' | 'createdAt'>
   )>> }
 );
 
@@ -353,6 +354,7 @@ export type IsUserLoggedInQueryResult = Apollo.QueryResult<IsUserLoggedInQuery, 
 export const ListThreadsDocument = gql`
     query listThreads {
   listThreads {
+    id
     question
     specialization
     threadCreator

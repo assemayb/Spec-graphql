@@ -17,13 +17,13 @@ export const SortBtn: React.FC = ({ children }) => {
       p="0.8rem"
       bgColor="green.300"
       color="Window"
+      borderRadius="-10px"
       fontWeight="bold"
       cursor="pointer"
       _hover={{
         bgColor: "green.500",
       }}
       marginY="3px"
-      borderRadius="5px"
     >
       {children}
     </Box>

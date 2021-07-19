@@ -26,8 +26,9 @@ export const QuestionBox: React.FC<QuestionBoxProps> = ({
       p="1rem"
       my="5px"
       shadow="md"
-      bgColor="gray.50"
-      _hover={{ bgColor: "gray.100" }}
+      // bgColor="gray.50"
+      bgColor="blackAlpha.50"
+      _hover={{ bgColor: "gray.200" }}
       borderRadius="-20px"
       borderLeft="5px solid green.200"
     >
@@ -43,11 +44,14 @@ export const QuestionBox: React.FC<QuestionBoxProps> = ({
         boxShadow="sm"
         size="md"
         my="5px"
+        marginLeft="10px"
         p="10px"
-        fontWeight="bold"
+        // fontWeight="bold"
         cursor="pointer"
+        color="blackAlpha.700"
+        fontSize="2xl"
         _hover={{
-          color: "green.500",
+          color: "green.600",
         }}
       >
         {question}

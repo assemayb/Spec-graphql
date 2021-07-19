@@ -54,6 +54,7 @@ const ProfileButton: React.FC<ProfileButtonProps> = ({ isUserLogged }) => {
         fontSize="medium"
         fontWeight="bold"
         bgColor="green.400"
+        borderRadius= "-10px"
         _hover={{
           bgColor: "green.500",
         }}
@@ -106,6 +107,7 @@ const LogoutButton: React.FC<LogoutButtonProps> = ({ isUserLogged }) => {
       fontSize="medium"
       fontWeight="bold"
       bgColor="green.400"
+      borderRadius="-10px"
       _hover={{
         bgColor: "green.500",
       }}

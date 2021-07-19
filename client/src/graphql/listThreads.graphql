@@ -1,5 +1,6 @@
 query listThreads {
   listThreads {
+    id
     question
     specialization
     threadCreator
