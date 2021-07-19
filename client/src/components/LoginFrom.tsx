@@ -24,7 +24,8 @@ export const LoginFrom = () => {
     show: false,
     value: "",
   });
-  const [login, { data, client }] = useLoginMutation();
+
+  const [login] = useLoginMutation();
 
   const history = useHistory();
   const submitLoginForm = async (e: React.FormEvent) => {

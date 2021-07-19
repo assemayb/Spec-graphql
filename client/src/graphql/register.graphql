@@ -1,3 +1,15 @@
-mutation Register($username: String!, $email: String!, $password: String!) {
-  register(username: $username, email: $email, password: $password)
+mutation Register(
+  $username: String!
+  $email: String!
+  $password: String!
+  $isSpec: Boolean!
+  $spec: String!
+) {
+  register(
+    username: $username
+    email: $email
+    password: $password
+    isSpec: $isSpec
+    spec: $spec
+  )
 }

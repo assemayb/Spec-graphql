@@ -25,6 +25,7 @@ export type Query = {
   listMyThreads?: Maybe<Array<ThreadType>>;
   listUserThread?: Maybe<Array<ThreadType>>;
   listThreads?: Maybe<Array<ThreadType>>;
+  listThreadReplies?: Maybe<Array<ReplyType>>;
 };
 
 
@@ -32,11 +33,18 @@ export type QueryListUserThreadArgs = {
   id: Scalars['Int'];
 };
 
+
+export type QueryListThreadRepliesArgs = {
+  threadId: Scalars['Int'];
+};
+
 export type UserType = {
   __typename?: 'UserType';
-  username?: Maybe<Scalars['String']>;
-  password?: Maybe<Scalars['String']>;
+  username: Scalars['String'];
+  password: Scalars['String'];
   email?: Maybe<Scalars['String']>;
+  isSpec: Scalars['Boolean'];
+  spec?: Maybe<Scalars['String']>;
   id?: Maybe<Scalars['Int']>;
 };
 
@@ -50,6 +58,15 @@ export type ThreadType = {
 };
 
 
+export type ReplyType = {
+  __typename?: 'ReplyType';
+  id: Scalars['Int'];
+  upvotes: Scalars['Int'];
+  text: Scalars['String'];
+  replyThread: Scalars['Int'];
+  replySpecialist: Scalars['Int'];
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   register: Scalars['Boolean'];
@@ -60,10 +77,13 @@ export type Mutation = {
   createThread: Scalars['Boolean'];
   updateThread: Scalars['Boolean'];
   deleteThread?: Maybe<Scalars['Boolean']>;
+  addReply: Scalars['Boolean'];
 };
 
 
 export type MutationRegisterArgs = {
+  spec?: Maybe<Scalars['String']>;
+  isSpec: Scalars['Boolean'];
   email: Scalars['String'];
   password: Scalars['String'];
   username: Scalars['String'];
@@ -102,6 +122,11 @@ export type MutationDeleteThreadArgs = {
   id: Scalars['Int'];
 };
 
+
+export type MutationAddReplyArgs = {
+  options: ReplyCreateType;
+};
+
 export type LoginResponse = {
   __typename?: 'LoginResponse';
   accessToken: Scalars['String'];
@@ -112,6 +137,8 @@ export type UserUpdateInputType = {
   username?: Maybe<Scalars['String']>;
   password?: Maybe<Scalars['String']>;
   email?: Maybe<Scalars['String']>;
+  isSpec?: Maybe<Scalars['Boolean']>;
+  spec?: Maybe<Scalars['String']>;
 };
 
 export type CreateThreadInput = {
@@ -123,6 +150,12 @@ export type CreateThreadInput = {
 export type UpdateThreadInput = {
   question?: Maybe<Scalars['String']>;
   specialization?: Maybe<Scalars['String']>;
+};
+
+export type ReplyCreateType = {
+  text: Scalars['String'];
+  replyThread: Scalars['Int'];
+  replySpecialist: Scalars['Int'];
 };
 
 export type CreateThreadMutationVariables = Exact<{
@@ -204,6 +237,8 @@ export type RegisterMutationVariables = Exact<{
   username: Scalars['String'];
   email: Scalars['String'];
   password: Scalars['String'];
+  isSpec: Scalars['Boolean'];
+  spec: Scalars['String'];
 }>;
 
 
@@ -452,8 +487,14 @@ export type MeQueryHookResult = ReturnType<typeof useMeQuery>;
 export type MeLazyQueryHookResult = ReturnType<typeof useMeLazyQuery>;
 export type MeQueryResult = Apollo.QueryResult<MeQuery, MeQueryVariables>;
 export const RegisterDocument = gql`
-    mutation Register($username: String!, $email: String!, $password: String!) {
-  register(username: $username, email: $email, password: $password)
+    mutation Register($username: String!, $email: String!, $password: String!, $isSpec: Boolean!, $spec: String!) {
+  register(
+    username: $username
+    email: $email
+    password: $password
+    isSpec: $isSpec
+    spec: $spec
+  )
 }
     `;
 export type RegisterMutationFn = Apollo.MutationFunction<RegisterMutation, RegisterMutationVariables>;
@@ -474,6 +515,8 @@ export type RegisterMutationFn = Apollo.MutationFunction<RegisterMutation, Regis
  *      username: // value for 'username'
  *      email: // value for 'email'
  *      password: // value for 'password'
+ *      isSpec: // value for 'isSpec'
+ *      spec: // value for 'spec'
  *   },
  * });
  */

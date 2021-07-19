@@ -6,6 +6,7 @@ import {
   Container,
   Button,
   Center,
+  Switch,
 } from "@chakra-ui/react";
 import { useRegisterMutation } from "../generated/graphql";
 
@@ -16,6 +17,11 @@ export const RegisterFrom: React.FC<RegisterFromProps> = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  const [specOptions, setSpecOptions] = useState({
+    showField: false,
+    fieldValue: "",
+  });
+
   const [register] = useRegisterMutation();
 
   const submitRegisterForm = (e: React.FormEvent<HTMLFormElement>) => {
@@ -24,11 +30,15 @@ export const RegisterFrom: React.FC<RegisterFromProps> = () => {
     if (!username || !email || !password) {
       return console.log("enter some data");
     }
+    const isSpec = specOptions.showField;
+    const spec = specOptions.fieldValue;
     register({
       variables: {
-        username,
-        email,
-        password,
+        username: username,
+        email: email,
+        password: password,
+        isSpec: isSpec,
+        spec: spec,
       },
     }).then((response) => {
       console.log(response);
@@ -66,6 +76,35 @@ export const RegisterFrom: React.FC<RegisterFromProps> = () => {
             onChange={(e) => setPassword(e.target.value)}
           />
         </FormControl>
+        {specOptions.showField === true && (
+          <FormControl id="spec-value" isRequired my="5px">
+            <FormLabel>specialization</FormLabel>
+            <Input
+              value={specOptions.fieldValue}
+              onChange={(e) =>
+                setSpecOptions((value) => {
+                  return {
+                    ...value,
+                    fieldValue: e.target.value,
+                  };
+                })
+              }
+            />
+          </FormControl>
+        )}
+        <FormControl display="flex" alignItems="center" my="5px">
+          <FormLabel htmlFor="email-alerts" mb="0">
+            Creating a specialist account?
+          </FormLabel>
+          <Switch
+            onChange={(e) =>
+              setSpecOptions((value) => {
+                return { ...value, showField: !value.showField };
+              })
+            }
+          />
+        </FormControl>
+
         <Center>
           <Button my="10px" p="10px" type="submit">
             register
