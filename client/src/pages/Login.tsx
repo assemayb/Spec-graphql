@@ -30,18 +30,18 @@ export const Login: React.FC<RouteComponentProps> = ({ history }) => {
                     if (!data) {
                         return null;
                     }
-                    cache.writeQuery<MeQuery>({
-                        query: MeDocument,
-                        data: {
-                            me: data.loginUser?.user
-                        }
-                    })
-                    cache.writeQuery<IsUserLoggedInQuery>({
-                        query: IsUserLoggedInDocument,
-                        data: {
-                            isUserLoggedIn: true
-                        }
-                    })
+                    // cache.writeQuery<MeQuery>({
+                    //     query: MeDocument,
+                    //     data: {
+                    //         me: data.loginUser?.user
+                    //     }
+                    // })
+                    // cache.writeQuery<IsUserLoggedInQuery>({
+                    //     query: IsUserLoggedInDocument,
+                    //     data: {
+                    //         isUserLoggedIn: true
+                    //     }
+                    // })
 
                 },
             })

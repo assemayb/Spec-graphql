@@ -3,18 +3,22 @@ import React, { useState, useEffect } from "react";
 import { Box, Heading, Divider } from "@chakra-ui/react";
 
 import { FiUser } from "react-icons/fi";
+import { useMeQuery } from "../generated/graphql";
 
 interface QuestionBoxProps {
   username: string;
   question: string;
-  specializtion?: string
-  createdAt?: string
+  specializtion?: string;
+  createdAt?: string;
 }
 export const QuestionBox: React.FC<QuestionBoxProps> = ({
   question,
   username,
-  createdAt
+  createdAt,
 }) => {
+  // const currentUser = useMeQuery();
+
+  
   return (
     <Box
       pos="relative"
@@ -25,10 +29,13 @@ export const QuestionBox: React.FC<QuestionBoxProps> = ({
       bgColor="gray.50"
       _hover={{ bgColor: "gray.100" }}
       borderRadius="6px"
-      borderLeft= "5px solid green.200"
+      borderLeft="5px solid green.200"
     >
       <Heading as="h5" size="xs" color="gray.300" display="flex">
-        <FiUser size="15px" />
+        <FiUser
+          size="15px"
+          // color={currentUser.data?.me?.isSpec === true ? "orange" : ""}
+        />
         <Box ml="4px">{username}</Box>
       </Heading>
       <Heading

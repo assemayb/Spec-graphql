@@ -9,6 +9,7 @@ import {
   Switch,
 } from "@chakra-ui/react";
 import { useRegisterMutation } from "../generated/graphql";
+import { setEmitFlags } from "typescript";
 
 interface RegisterFromProps {}
 
@@ -22,23 +23,22 @@ export const RegisterFrom: React.FC<RegisterFromProps> = () => {
     fieldValue: "",
   });
 
-  const [register] = useRegisterMutation();
-
+  const [register] = useRegisterMutation({});
   const submitRegisterForm = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (!username || !email || !password) {
       return console.log("enter some data");
     }
-    const isSpec = specOptions.showField;
-    const spec = specOptions.fieldValue;
+    const isUserSpec = specOptions.showField!;
+    const spec = specOptions.fieldValue!;
     register({
       variables: {
-        username: username,
-        email: email,
-        password: password,
-        isSpec: isSpec,
-        spec: spec,
+        username,
+        email,
+        password,
+        isSpec: isUserSpec,
+        spec,
       },
     }).then((response) => {
       console.log(response);
@@ -53,7 +53,6 @@ export const RegisterFrom: React.FC<RegisterFromProps> = () => {
         <FormControl id="username" isRequired my="5px" mx="2px">
           <FormLabel>username</FormLabel>
           <Input
-            placeholder="username"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
           />
@@ -61,18 +60,14 @@ export const RegisterFrom: React.FC<RegisterFromProps> = () => {
 
         <FormControl id="email" isRequired my="5px">
           <FormLabel>email</FormLabel>
-          <Input
-            placeholder="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
+          <Input value={email} onChange={(e) => setEmail(e.target.value)} />
         </FormControl>
 
         <FormControl id="password" isRequired my="5px">
           <FormLabel>password</FormLabel>
           <Input
-            placeholder="password"
             value={password}
+            type="password"
             onChange={(e) => setPassword(e.target.value)}
           />
         </FormControl>

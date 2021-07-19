@@ -1,4 +1,4 @@
-import { ObjectType, Int, Field, Resolver, Mutation, Arg, Query, InputType } from 'type-graphql';
+import { ObjectType, Int, Field,  InputType } from 'type-graphql';
 
 
 
@@ -19,8 +19,6 @@ export class UserInputsType {
 
     @Field(() => String, { nullable: true })
     spec?: string
-
-
 }
 
 

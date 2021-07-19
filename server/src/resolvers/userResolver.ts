@@ -69,7 +69,7 @@ export class UserResolver {
         @Arg("username", () => String) username: string,
         @Arg("password", () => String) password: string,
         @Arg("email", () => String) email: string,
-        @Arg("isSpec", () => Boolean) isSpec: boolean,
+        @Arg("isSpec", () => Boolean, {nullable: true}) isSpec: boolean,
         @Arg("spec", () => String, {nullable: true}) spec: string, 
         @Ctx() { req }: MyContext,
     ) {

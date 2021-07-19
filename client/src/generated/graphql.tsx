@@ -83,7 +83,7 @@ export type Mutation = {
 
 export type MutationRegisterArgs = {
   spec?: Maybe<Scalars['String']>;
-  isSpec: Scalars['Boolean'];
+  isSpec?: Maybe<Scalars['Boolean']>;
   email: Scalars['String'];
   password: Scalars['String'];
   username: Scalars['String'];
@@ -229,7 +229,7 @@ export type MeQuery = (
   { __typename?: 'Query' }
   & { me?: Maybe<(
     { __typename?: 'UserType' }
-    & Pick<UserType, 'id' | 'username' | 'email'>
+    & Pick<UserType, 'id' | 'username' | 'email' | 'isSpec' | 'spec'>
   )> }
 );
 
@@ -237,8 +237,8 @@ export type RegisterMutationVariables = Exact<{
   username: Scalars['String'];
   email: Scalars['String'];
   password: Scalars['String'];
-  isSpec: Scalars['Boolean'];
-  spec: Scalars['String'];
+  isSpec?: Maybe<Scalars['Boolean']>;
+  spec?: Maybe<Scalars['String']>;
 }>;
 
 
@@ -458,6 +458,8 @@ export const MeDocument = gql`
     id
     username
     email
+    isSpec
+    spec
   }
 }
     `;
@@ -487,7 +489,7 @@ export type MeQueryHookResult = ReturnType<typeof useMeQuery>;
 export type MeLazyQueryHookResult = ReturnType<typeof useMeLazyQuery>;
 export type MeQueryResult = Apollo.QueryResult<MeQuery, MeQueryVariables>;
 export const RegisterDocument = gql`
-    mutation Register($username: String!, $email: String!, $password: String!, $isSpec: Boolean!, $spec: String!) {
+    mutation Register($username: String!, $email: String!, $password: String!, $isSpec: Boolean, $spec: String) {
   register(
     username: $username
     email: $email

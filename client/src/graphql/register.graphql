@@ -2,8 +2,8 @@ mutation Register(
   $username: String!
   $email: String!
   $password: String!
-  $isSpec: Boolean!
-  $spec: String!
+  $isSpec: Boolean
+  $spec: String
 ) {
   register(
     username: $username
