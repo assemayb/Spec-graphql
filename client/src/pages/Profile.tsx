@@ -3,16 +3,22 @@ import {
   useIsUserLoggedInQuery,
   useListThreadsQuery,
 } from "../generated/graphql";
-import { RouteComponentProps } from "react-router-dom";
-import { Box, Divider, Flex } from "@chakra-ui/react";
+
+import { Box, Divider, Flex, useDisclosure } from "@chakra-ui/react";
 
 import { QuestionForm } from "../smallComps/QuestionForm";
 import { QuestionBox } from "../smallComps/QuestionBox";
 import { FastBigSpinner } from "../smallComps/Spinners";
-import { SortBtn } from "../smallComps/SortBtn";
 import { useListUserThreadsQuery } from "../generated/graphql";
+import {ProfileModal} from "../components/ProfileModal"
 
 export const Profile = () => {
+    const [showModal, setShowModal] = useState(false);
+    const { isOpen, onOpen, onClose } = useDisclosure({
+      onClose: () => setShowModal(false),
+      onOpen: () => console.log("Modal is Open"),
+    });
+  
   const { data, error, loading } = useListUserThreadsQuery({
     fetchPolicy: "cache-first",
   });
@@ -23,7 +29,9 @@ export const Profile = () => {
 
   function createNewThread() {
     console.log("create new");
+
     // TODO: import the modal here
+    setShowModal(true)
   }
 
   let ThreadSection: any = null;
@@ -46,6 +54,7 @@ export const Profile = () => {
   }
   return (
     <>
+    <ProfileModal showModal={showModal} onClose={onClose}/>
       <Box
         marginLeft="1rem"
         marginY="1rem"

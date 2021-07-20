@@ -17,19 +17,17 @@ import { ApolloQueryResult } from "@apollo/client";
 import { AiFillEdit } from "react-icons/ai";
 
 interface QuestionFormProps {
-  refetch: () => Promise<ApolloQueryResult<ListThreadsQuery>>;
+  refetch?: () => Promise<ApolloQueryResult<ListThreadsQuery>>;
 }
 export const QuestionForm: React.FC<QuestionFormProps> = ({ refetch }) => {
   const [question, setQuestion] = useState("");
   const [specilization, setSpecilization] = useState("");
 
-  const [createQuestion, { client, data, error, loading }] =
+  const [createQuestion ] =
     useCreateThreadMutation();
   const userLogginData = useIsUserLoggedInQuery();
   const submitQuestion = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log("sbmmmmiit");
-
     try {
       await createQuestion({
         variables: {
@@ -37,7 +35,9 @@ export const QuestionForm: React.FC<QuestionFormProps> = ({ refetch }) => {
           spec: specilization,
         },
       });
-      refetch();
+      if(refetch !== undefined) {
+        refetch()
+      }
     } catch (error) {
       console.log(error.messge);
     }

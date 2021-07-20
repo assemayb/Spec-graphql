@@ -55,7 +55,7 @@ const topicsQuery = gql`
   }
 `;
 export const Topics: React.FC<RouteComponentProps> = () => {
-  const { data, loading, error } = useQuery(topicsQuery);
+  const { data } = useQuery(topicsQuery);
   const [topcis, setTopics] = useState([]);
   const [dummieArr] = useState(new Array(12).fill(""));
 
@@ -63,24 +63,24 @@ export const Topics: React.FC<RouteComponentProps> = () => {
     if (data) {
       setTimeout(() => {
         setTopics(data.listTopics);
-      }, 600);
+      }, 300);
     }
   }, [data]);
 
   return (
     <>
-      <Box
-        marginLeft="1rem"
-        marginTop="1rem"
-        fontSize="30px"
-        fontFamily="fantasy"
-        fontWeight="bold"
-        color="gray.500"
-        textShadow="lg"
-      >
-        Health Topics
-        <Divider />
-      </Box>
+    <Box
+      marginLeft="1rem"
+      marginTop="1rem"
+      fontSize="30px"
+      fontFamily="fantasy"
+      fontWeight="bold"
+      color="gray.500"
+      textShadow="lg"
+    >
+      Health Topics
+      <Divider />
+    </Box>
 
       <Box p="2rem" marginTop="2rem" shadow="base">
         <Grid templateColumns="repeat(5, 1fr)" gap={5}>
