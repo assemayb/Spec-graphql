@@ -14,13 +14,12 @@ import { useListUserThreadsQuery } from "../generated/graphql";
 
 export const Profile = () => {
   const { data, error, loading } = useListUserThreadsQuery({
-    fetchPolicy: "network-only",
+    fetchPolicy: "cache-first",
   });
 
   useEffect(() => {
     console.log(data?.listUserThreads);
-    
-  }, [data])
+  }, [data]);
 
   function createNewThread() {
     console.log("create new");
@@ -47,6 +46,18 @@ export const Profile = () => {
   }
   return (
     <>
+      <Box
+        marginLeft="1rem"
+        marginY="1rem"
+        fontSize="30px"
+        fontFamily="fantasy"
+        fontWeight="bold"
+        color="gray.500"
+        textShadow="lg"
+      >
+        Threads created by you
+        <Divider mt="0.5rem" w="350px"/>
+      </Box>
       <Flex marginRight="auto" marginLeft="auto" marginTop="2rem">
         <Flex
           justifyContent="center"

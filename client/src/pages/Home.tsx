@@ -15,7 +15,9 @@ import { SortBtn } from "../smallComps/SortBtn"
 
 interface HomeProps {}
 export const Home: React.FC<RouteComponentProps> = ({ history, location }) => {
-  const { data, loading, error, refetch } = useListThreadsQuery();
+  const { data, loading, error, refetch } = useListThreadsQuery({
+    fetchPolicy : "cache-first"
+  });
 
   let ThreadsComp: any = null;
   if (loading) {

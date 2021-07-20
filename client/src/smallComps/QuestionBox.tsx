@@ -22,20 +22,19 @@ export const QuestionBox: React.FC<QuestionBoxProps> = ({
     <Box
       pos="relative"
       width="100%"
-      p={username ? "1rem" : "10px"  }
+      p={username ? "1rem" : "12px"  }
       // p="1rem"
       my="5px"
-      shadow="md"
+      shadow={username ? "md" : "inner"  }
       bgColor="gray.100"
       _hover={{ bgColor: "gray.300", borderRadius: "-30px" }}
       borderRadius="-20px"
       borderLeft="5px solid green.200"
     >
       {username && (
-        <Heading as="h5" size="xs" color="gray.300" display="flex">
+        <Heading as="h5" size="xs" color="gray.400" display="flex">
           <FiUser
             size="15px"
-            color="gray.500"
             // color={currentUser.data?.me?.isSpec === true ? "orange" : ""}
           />
           <Box ml="4px">{username}</Box>
@@ -51,7 +50,7 @@ export const QuestionBox: React.FC<QuestionBoxProps> = ({
         // fontWeight="bold"
         cursor="pointer"
         color="blackAlpha.700"
-        fontSize="2xl"
+        fontSize="xl"
         _hover={{
           color: "green.600",
         }}
