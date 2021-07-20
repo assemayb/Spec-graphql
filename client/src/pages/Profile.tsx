@@ -38,6 +38,7 @@ export const Profile = () => {
             <QuestionBox
               key={idx}
               question={thread.question}
+              createdAt={thread.createdAt}
             />
           );
         })}

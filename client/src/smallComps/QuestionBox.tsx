@@ -22,7 +22,8 @@ export const QuestionBox: React.FC<QuestionBoxProps> = ({
     <Box
       pos="relative"
       width="100%"
-      p="1rem"
+      p={username ? "1rem" : "10px"  }
+      // p="1rem"
       my="5px"
       shadow="md"
       bgColor="gray.100"
@@ -30,14 +31,16 @@ export const QuestionBox: React.FC<QuestionBoxProps> = ({
       borderRadius="-20px"
       borderLeft="5px solid green.200"
     >
-      <Heading as="h5" size="xs" color="gray.300" display="flex">
-        <FiUser
-          size="15px"
-          // color={currentUser.data?.me?.isSpec === true ? "orange" : ""}
-        />
-        {username !== null && <Box ml="4px">{username}</Box>}
-        
-      </Heading>
+      {username && (
+        <Heading as="h5" size="xs" color="gray.300" display="flex">
+          <FiUser
+            size="15px"
+            color="gray.500"
+            // color={currentUser.data?.me?.isSpec === true ? "orange" : ""}
+          />
+          <Box ml="4px">{username}</Box>
+        </Heading>
+      )}
       <Heading
         as="h3"
         boxShadow="sm"
