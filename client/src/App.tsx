@@ -3,11 +3,14 @@ import { BrowserRouter } from "react-router-dom";
 import { setAccessToken } from "./accessToken";
 
 import { Header2 } from "./components/Header2";
-import {Footer} from "./components/Footer"
+import { Footer } from "./components/Footer";
 import { Skeleton } from "./smallComps/Skeleton";
 
 import { useIsUserLoggedInQuery } from "./generated/graphql";
 import { BaseRouter } from "./routes";
+import { Container, Spinner } from "@chakra-ui/react";
+
+import {FastBigSpinner} from "./smallComps/Spinners"
 
 function App() {
   const [appLoading, setAppLoading] = useState(true);
@@ -27,7 +30,9 @@ function App() {
   return (
     <div className="app">
       {appLoading ? (
-        <div>app is loading.....</div>
+        <Container marginLeft="auto" marginRight="auto" marginTop="10rem">
+          <FastBigSpinner />
+        </Container>
       ) : (
         <>
           <BrowserRouter>

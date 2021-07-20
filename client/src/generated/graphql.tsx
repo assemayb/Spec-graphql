@@ -23,15 +23,10 @@ export type Query = {
   isUserLoggedIn: Scalars['Boolean'];
   test: Scalars['String'];
   listMyThreads?: Maybe<Array<ThreadType>>;
-  listUserThread?: Maybe<Array<ThreadType>>;
+  listUserThreads?: Maybe<Array<ThreadType>>;
   listThreads?: Maybe<Array<ThreadType>>;
   listTopics: Array<Scalars['String']>;
   listThreadReplies?: Maybe<Array<ReplyType>>;
-};
-
-
-export type QueryListUserThreadArgs = {
-  id: Scalars['Int'];
 };
 
 
@@ -170,6 +165,16 @@ export type CreateThreadMutation = (
   & Pick<Mutation, 'createThread'>
 );
 
+export type DeleteThreadMutationVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type DeleteThreadMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'deleteThread'>
+);
+
 export type HelloQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -192,6 +197,17 @@ export type ListThreadsQueryVariables = Exact<{ [key: string]: never; }>;
 export type ListThreadsQuery = (
   { __typename?: 'Query' }
   & { listThreads?: Maybe<Array<(
+    { __typename?: 'ThreadType' }
+    & Pick<ThreadType, 'id' | 'question' | 'specialization' | 'threadCreator' | 'createdAt'>
+  )>> }
+);
+
+export type ListUserThreadsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type ListUserThreadsQuery = (
+  { __typename?: 'Query' }
+  & { listUserThreads?: Maybe<Array<(
     { __typename?: 'ThreadType' }
     & Pick<ThreadType, 'id' | 'question' | 'specialization' | 'threadCreator' | 'createdAt'>
   )>> }
@@ -291,6 +307,36 @@ export function useCreateThreadMutation(baseOptions?: Apollo.MutationHookOptions
 export type CreateThreadMutationHookResult = ReturnType<typeof useCreateThreadMutation>;
 export type CreateThreadMutationResult = Apollo.MutationResult<CreateThreadMutation>;
 export type CreateThreadMutationOptions = Apollo.BaseMutationOptions<CreateThreadMutation, CreateThreadMutationVariables>;
+export const DeleteThreadDocument = gql`
+    mutation deleteThread($id: Int!) {
+  deleteThread(id: $id)
+}
+    `;
+export type DeleteThreadMutationFn = Apollo.MutationFunction<DeleteThreadMutation, DeleteThreadMutationVariables>;
+
+/**
+ * __useDeleteThreadMutation__
+ *
+ * To run a mutation, you first call `useDeleteThreadMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteThreadMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteThreadMutation, { data, loading, error }] = useDeleteThreadMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useDeleteThreadMutation(baseOptions?: Apollo.MutationHookOptions<DeleteThreadMutation, DeleteThreadMutationVariables>) {
+        return Apollo.useMutation<DeleteThreadMutation, DeleteThreadMutationVariables>(DeleteThreadDocument, baseOptions);
+      }
+export type DeleteThreadMutationHookResult = ReturnType<typeof useDeleteThreadMutation>;
+export type DeleteThreadMutationResult = Apollo.MutationResult<DeleteThreadMutation>;
+export type DeleteThreadMutationOptions = Apollo.BaseMutationOptions<DeleteThreadMutation, DeleteThreadMutationVariables>;
 export const HelloDocument = gql`
     query Hello {
   hello
@@ -387,6 +433,42 @@ export function useListThreadsLazyQuery(baseOptions?: Apollo.LazyQueryHookOption
 export type ListThreadsQueryHookResult = ReturnType<typeof useListThreadsQuery>;
 export type ListThreadsLazyQueryHookResult = ReturnType<typeof useListThreadsLazyQuery>;
 export type ListThreadsQueryResult = Apollo.QueryResult<ListThreadsQuery, ListThreadsQueryVariables>;
+export const ListUserThreadsDocument = gql`
+    query listUserThreads {
+  listUserThreads {
+    id
+    question
+    specialization
+    threadCreator
+    createdAt
+  }
+}
+    `;
+
+/**
+ * __useListUserThreadsQuery__
+ *
+ * To run a query within a React component, call `useListUserThreadsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useListUserThreadsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useListUserThreadsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useListUserThreadsQuery(baseOptions?: Apollo.QueryHookOptions<ListUserThreadsQuery, ListUserThreadsQueryVariables>) {
+        return Apollo.useQuery<ListUserThreadsQuery, ListUserThreadsQueryVariables>(ListUserThreadsDocument, baseOptions);
+      }
+export function useListUserThreadsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ListUserThreadsQuery, ListUserThreadsQueryVariables>) {
+          return Apollo.useLazyQuery<ListUserThreadsQuery, ListUserThreadsQueryVariables>(ListUserThreadsDocument, baseOptions);
+        }
+export type ListUserThreadsQueryHookResult = ReturnType<typeof useListUserThreadsQuery>;
+export type ListUserThreadsLazyQueryHookResult = ReturnType<typeof useListUserThreadsLazyQuery>;
+export type ListUserThreadsQueryResult = Apollo.QueryResult<ListUserThreadsQuery, ListUserThreadsQueryVariables>;
 export const LoginDocument = gql`
     mutation Login($username: String!, $password: String!) {
   loginUser(username: $username, password: $password) {

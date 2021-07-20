@@ -97,18 +97,19 @@ export class ThreadResolver {
 
     // List a User threads
     @Query(() => [ThreadType], { nullable: true })
-    async listUserThread(
-        @Arg("id", () => Int) id: string,
+    async listUserThreads(
+        @Ctx() {req, payload}: MyContext 
     ) {
         let userThreads;
+        const loggedUserId = payload?.userId 
         try {
             userThreads = await Thread.findAll({
                 where: {
-                    threadCreator: id
+                    threadCreator: loggedUserId
                 }
             })
         } catch (error) {
-            throw new Error(error)
+            throw new Error(error.message)
         }
         return userThreads
     }
@@ -148,19 +149,8 @@ export class ThreadResolver {
             throw new Error(error.message)
         }
     }
-    // list all specializations and topics
-    // @Query(() => [TopicType], { nullable: true })
-    // async listAllTopics() {
-    //     let topics = []
-    //     try {
-    //         let threads = await Thread.findAll()
-
-    //     } catch (error) {
-    //         console.log(error.message)
-    //         throw new Error(error.message)
-    //     }
-    // }
-    // Delete a thread
+   
+    
     @Mutation(() => Boolean, { nullable: true })
     @UseMiddleware(isAuthenticated)
     async deleteThread(
@@ -168,7 +158,6 @@ export class ThreadResolver {
         @Ctx() { payload }: MyContext
     ) {
 
-        // let transaction = await dbConfig.transaction();
         let thread = await Thread.findOne({
             where: {
                 id,
@@ -181,13 +170,9 @@ export class ThreadResolver {
                     where: {
                         id
                     },
-
                 })
-                // await transaction.commit();
                 return true
-            } catch (error) {
-                ``
-                // await transaction.rollback()
+            } catch (error) {                
                 console.log(error)
                 return false
             }

@@ -23,22 +23,25 @@ interface TopicBoxProps {
 const TopicBox: FC<TopicBoxProps> = ({ topic }) => {
   return (
     <Box
+      cursor="pointer"
       w="100%"
       h="100px"
-      bg="green.100"
+      bg="gray.100"
+      shadow="md"
       borderRadius="-10px"
       _hover={{
-        color: "white",
-        bg: "green.200",
+        color: "green.400",
+        bg: "gray.300",
+        shadow: "lg",
       }}
     >
       <Box
-        shadow="md"
         textAlign="center"
         p="0.2rem"
         fontSize="20px"
         fontWeight="bold"
         textShadow="md"
+        marginTop="5px"
       >
         {topic}
       </Box>
@@ -78,7 +81,7 @@ export const Topics: React.FC<RouteComponentProps> = () => {
         Health Topics
         <Divider />
       </Box>
-        
+
       <Box p="2rem" marginTop="2rem" shadow="base">
         <Grid templateColumns="repeat(5, 1fr)" gap={5}>
           <>

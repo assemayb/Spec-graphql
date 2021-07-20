@@ -1,0 +1,9 @@
+query listUserThreads {
+    listUserThreads {
+        id
+        question
+        specialization
+        threadCreator
+        createdAt
+    }
+}

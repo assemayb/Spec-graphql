@@ -54,6 +54,7 @@ export const QuestionForm: React.FC<QuestionFormProps> = ({ refetch }) => {
         {/* <AiFillEdit size="15px"/> */}
         Create Thread
       </Heading>
+      
       <Box
         display="flex"
         flexDirection="column"

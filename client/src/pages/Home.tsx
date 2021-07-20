@@ -4,7 +4,7 @@ import {
   useListThreadsQuery,
 } from "../generated/graphql";
 import { RouteComponentProps } from "react-router-dom";
-import { Box, Flex } from "@chakra-ui/react";
+import { Box, Divider, Flex } from "@chakra-ui/react";
 
 import { QuestionForm } from "../smallComps/QuestionForm";
 import { QuestionBox } from "../smallComps/QuestionBox";
@@ -64,6 +64,8 @@ export const Home: React.FC<RouteComponentProps> = ({ history, location }) => {
           shadow="base"
           p="1rem"
         >
+          
+          <Divider />
           {ThreadsComp}
         </Flex>
 
@@ -79,7 +81,7 @@ export const Home: React.FC<RouteComponentProps> = ({ history, location }) => {
             <SortBtn>most recent</SortBtn>
           </Box>
 
-          <QuestionForm  refetch={refetch}/>
+          <QuestionForm refetch={refetch} />
         </Flex>
       </Flex>
     </>
