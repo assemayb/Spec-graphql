@@ -6,7 +6,7 @@ import { FiUser } from "react-icons/fi";
 import { useMeQuery } from "../generated/graphql";
 
 interface QuestionBoxProps {
-  username: string;
+  username?: string;
   question: string;
   specializtion?: string;
   createdAt?: string;
@@ -25,8 +25,8 @@ export const QuestionBox: React.FC<QuestionBoxProps> = ({
       p="1rem"
       my="5px"
       shadow="md"
-      bgColor="gray.50"
-      _hover={{ bgColor: "gray.200", borderRadius: "-30px" }}
+      bgColor="gray.100"
+      _hover={{ bgColor: "gray.300", borderRadius: "-30px" }}
       borderRadius="-20px"
       borderLeft="5px solid green.200"
     >
@@ -35,7 +35,8 @@ export const QuestionBox: React.FC<QuestionBoxProps> = ({
           size="15px"
           // color={currentUser.data?.me?.isSpec === true ? "orange" : ""}
         />
-        <Box ml="4px">{username}</Box>
+        {username !== null && <Box ml="4px">{username}</Box>}
+        
       </Heading>
       <Heading
         as="h3"
@@ -61,7 +62,7 @@ export const QuestionBox: React.FC<QuestionBoxProps> = ({
         color="gray.400"
         fontSize="12px"
       >
-        {createdAt?.substr(0, 10)}
+        {createdAt !== null && createdAt?.substr(0, 10)}
       </Heading>
     </Box>
   );

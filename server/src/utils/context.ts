@@ -4,7 +4,7 @@ export interface MyContext {
     req: Request
     res: Response
     payload?: {
-        userId: string
+        userId: string | number
         userName: string
     }
 }

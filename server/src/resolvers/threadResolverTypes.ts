@@ -17,6 +17,22 @@ export class ThreadType {
     @Field(() => Date)
     createdAt?: string
 }
+
+@ObjectType()
+export class UserThreadType {
+    @Field(() => Int)
+    id?: number
+
+    @Field(() => String)
+    question?: string
+
+    @Field(() => String)
+    specialization?: string
+
+    @Field(() => Date)
+    createdAt?: string
+}
+
 @InputType()
 export class CreateThreadInput {
     @Field(() => String)

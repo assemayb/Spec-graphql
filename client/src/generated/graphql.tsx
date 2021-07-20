@@ -23,7 +23,7 @@ export type Query = {
   isUserLoggedIn: Scalars['Boolean'];
   test: Scalars['String'];
   listMyThreads?: Maybe<Array<ThreadType>>;
-  listUserThreads?: Maybe<Array<ThreadType>>;
+  listUserThreads?: Maybe<Array<UserThreadType>>;
   listThreads?: Maybe<Array<ThreadType>>;
   listTopics: Array<Scalars['String']>;
   listThreadReplies?: Maybe<Array<ReplyType>>;
@@ -53,6 +53,14 @@ export type ThreadType = {
   createdAt: Scalars['DateTime'];
 };
 
+
+export type UserThreadType = {
+  __typename?: 'UserThreadType';
+  id: Scalars['Int'];
+  question: Scalars['String'];
+  specialization: Scalars['String'];
+  createdAt: Scalars['DateTime'];
+};
 
 export type ReplyType = {
   __typename?: 'ReplyType';
@@ -208,8 +216,8 @@ export type ListUserThreadsQueryVariables = Exact<{ [key: string]: never; }>;
 export type ListUserThreadsQuery = (
   { __typename?: 'Query' }
   & { listUserThreads?: Maybe<Array<(
-    { __typename?: 'ThreadType' }
-    & Pick<ThreadType, 'id' | 'question' | 'specialization' | 'threadCreator' | 'createdAt'>
+    { __typename?: 'UserThreadType' }
+    & Pick<UserThreadType, 'id' | 'question' | 'specialization' | 'createdAt'>
   )>> }
 );
 
@@ -439,7 +447,6 @@ export const ListUserThreadsDocument = gql`
     id
     question
     specialization
-    threadCreator
     createdAt
   }
 }

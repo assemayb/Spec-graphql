@@ -1,5 +1,5 @@
 import { Ctx, ObjectType, Int, InputType, Mutation, Arg, Query, UseMiddleware } from "type-graphql"
-import { CreateThreadInput, ThreadType, TopicType, UpdateThreadInput } from "./threadResolverTypes"
+import { CreateThreadInput, ThreadType, TopicType, UpdateThreadInput, UserThreadType } from "./threadResolverTypes"
 
 import { Thread, ThreadAttributes } from "../models/Thread"
 import { MyContext } from "../utils/context";
@@ -74,43 +74,24 @@ export class ThreadResolver {
     }
 
 
-    // List the logged-in User Threads
-    // used is the profile section of the app
-    @Query(() => [ThreadType], { nullable: true })
-    @UseMiddleware(isAuthenticated)
-    async listMyThreads(
-        @Ctx() { req, res, payload }: MyContext
-    ) {
-        let userThreads;
-        try {
-
-            userThreads = await Thread.findAll({
-                where: {
-                    threadCreator: payload?.userId
-                }
-            })
-        } catch (error) {
-            throw new Error(error)
-        }
-        return userThreads
-    }
-
+    
     // List a User threads
     @Query(() => [ThreadType], { nullable: true })
+    @UseMiddleware(isAuthenticated)
     async listUserThreads(
-        @Ctx() {req, payload}: MyContext 
+        @Ctx() { req, payload }: MyContext
     ) {
         let userThreads;
-        const loggedUserId = payload?.userId 
+        const loggedUserId = payload?.userId        
         try {
             userThreads = await Thread.findAll({
                 where: {
-                    threadCreator: loggedUserId
+                    threadCreator: loggedUserId  as number
                 }
             })
         } catch (error) {
             throw new Error(error.message)
-        }
+        }        
         return userThreads
     }
 
@@ -126,7 +107,7 @@ export class ThreadResolver {
                         id: x.getDataValue("threadCreator")
                     }
                 })
-                x.setDataValue("threadCreator", creator!.getDataValue("username")!)
+                x.setDataValue("threadCreator", creator!.getDataValue("username")! as any)
                 threads[idx] = x
                 idx += 1;
             }
@@ -149,8 +130,8 @@ export class ThreadResolver {
             throw new Error(error.message)
         }
     }
-   
-    
+
+
     @Mutation(() => Boolean, { nullable: true })
     @UseMiddleware(isAuthenticated)
     async deleteThread(
@@ -164,7 +145,7 @@ export class ThreadResolver {
             }
         })
         const threadCreator = thread!.getDataValue("threadCreator")
-        if (threadCreator == payload?.userId) {
+        if (threadCreator == payload?.userId as any) {
             try {
                 await Thread.destroy({
                     where: {
@@ -172,7 +153,7 @@ export class ThreadResolver {
                     },
                 })
                 return true
-            } catch (error) {                
+            } catch (error) {
                 console.log(error)
                 return false
             }

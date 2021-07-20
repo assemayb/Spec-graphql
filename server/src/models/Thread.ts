@@ -9,7 +9,7 @@ export interface ThreadAttributes {
     id: number
     question: string
     specialization: string
-    threadCreator: string
+    threadCreator: number
     createdAt: string
 }
 

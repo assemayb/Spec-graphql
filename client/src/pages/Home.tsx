@@ -9,26 +9,10 @@ import { Box, Divider, Flex } from "@chakra-ui/react";
 import { QuestionForm } from "../smallComps/QuestionForm";
 import { QuestionBox } from "../smallComps/QuestionBox";
 import { FastBigSpinner } from "../smallComps/Spinners";
+import { SortBtn } from "../smallComps/SortBtn"
 
-export const SortBtn: React.FC = ({ children }) => {
-  return (
-    <Box
-      textAlign="center"
-      p="0.8rem"
-      bgColor="green.300"
-      color="Window"
-      borderRadius="-10px"
-      fontWeight="bold"
-      cursor="pointer"
-      _hover={{
-        bgColor: "green.500",
-      }}
-      marginY="3px"
-    >
-      {children}
-    </Box>
-  );
-};
+
+
 interface HomeProps {}
 export const Home: React.FC<RouteComponentProps> = ({ history, location }) => {
   const { data, loading, error, refetch } = useListThreadsQuery();
@@ -65,13 +49,12 @@ export const Home: React.FC<RouteComponentProps> = ({ history, location }) => {
           p="1rem"
         >
           
-          <Divider />
           {ThreadsComp}
         </Flex>
 
         <Flex
           flex="1"
-          p="0.5rem"
+          p="1rem"
           flexDirection="column"
           maxH="auto"
           marginX="8px"

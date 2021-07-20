@@ -3,7 +3,6 @@ query listUserThreads {
         id
         question
         specialization
-        threadCreator
         createdAt
     }
 }

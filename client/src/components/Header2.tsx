@@ -131,7 +131,7 @@ export const Header2: React.FC<Header2Props> = ({}) => {
     <Flex
       justifyContent="center"
       alignItems="center"
-      bgColor="green.200"
+      bgColor="green.300"
       height="80px"
       fontSize="xl"
       fontWeight="bold"
