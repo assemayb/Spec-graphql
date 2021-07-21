@@ -44,9 +44,9 @@ export const QuestionBox: React.FC<QuestionBoxProps> = ({
     <Box
       pos="relative"
       width="100%"
-      p={username ? "1rem" : "12px"}
+      p={username ? "1.2rem" : "14px"}
       my="5px"
-      shadow={username ? "md" : "inner"}
+      shadow={username ? "md" : "sm"}
       bgColor="gray.100"
       _hover={{ bgColor: "gray.300", borderRadius: "-30px" }}
       borderRadius="-20px"

@@ -49,7 +49,7 @@ const TopicBox: FC<TopicBoxProps> = ({ topic }) => {
   );
 };
 
-const topicsQuery = gql`
+export const topicsQuery = gql`
   query listTopics {
     listTopics
   }

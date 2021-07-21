@@ -12,20 +12,30 @@ import {
   FormLabel,
   Heading,
   Input,
+  Select,
 } from "@chakra-ui/react";
 import { ApolloQueryResult } from "@apollo/client";
 import { AiFillEdit } from "react-icons/ai";
-
+import { useQuery } from "@apollo/client";
+import { topicsQuery } from "../pages/Topics";
 interface QuestionFormProps {
   refetch?: () => Promise<ApolloQueryResult<ListThreadsQuery>>;
-  clickedFromProfilePage?: boolean
+  clickedFromProfilePage?: boolean;
 }
-export const QuestionForm: React.FC<QuestionFormProps> = ({ refetch , clickedFromProfilePage }) => {
+export const QuestionForm: React.FC<QuestionFormProps> = ({
+  refetch,
+  clickedFromProfilePage,
+}) => {
   const [question, setQuestion] = useState("");
   const [specilization, setSpecilization] = useState("");
 
-  const [createQuestion ] =
-    useCreateThreadMutation();
+  const { data } = useQuery(topicsQuery);
+  const [topicsArr, setTopicsArr] = useState([]);
+  useEffect(() => {
+    setTopicsArr(data?.listTopics);
+  }, [data]);
+
+  const [createQuestion] = useCreateThreadMutation();
   const userLogginData = useIsUserLoggedInQuery();
   const submitQuestion = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -36,15 +46,15 @@ export const QuestionForm: React.FC<QuestionFormProps> = ({ refetch , clickedFro
           spec: specilization,
         },
       });
-      if(refetch !== undefined) {
-        refetch()
+      if (refetch !== undefined) {
+        refetch();
       }
     } catch (error) {
       console.log(error.messge);
     }
   };
   return (
-    <>
+    <Box>
       <Heading
         as="h3"
         fontSize="20px"
@@ -55,13 +65,15 @@ export const QuestionForm: React.FC<QuestionFormProps> = ({ refetch , clickedFro
         {/* <AiFillEdit size="15px"/> */}
         Create Thread
       </Heading>
-      
+
       <Box
         display="flex"
         flexDirection="column"
-        p="8px"
+        p="1rem"
         my="10px"
-        shadow={clickedFromProfilePage ? "" : "md" }        
+        // bgColor="gray.50"
+
+        shadow={clickedFromProfilePage ? "" : "md"}
         textAlign="center"
       >
         <form onSubmit={(e) => submitQuestion(e)}>
@@ -81,12 +93,28 @@ export const QuestionForm: React.FC<QuestionFormProps> = ({ refetch , clickedFro
             <FormLabel color="green.400" fontWeight="bold">
               specilization
             </FormLabel>
-            <Input
+            <Select
+              onChange={(e) => setSpecilization(e.target.value)}
+              fontSize="16px"
+              defaultValue={"disabled"}
+              name="topic"
+              variant="flushed"
+            >
+              <option value="disabled" disabled>
+                choose a topic
+              </option>
+              {topicsArr && topicsArr.map((topic, idx) => (
+                <option key={idx} value={topic} >
+                  {topic}
+                </option>
+              ))}
+            </Select>
+            {/* <Input
               borderRadius="-10px"
               type="text"
               value={specilization}
               onChange={(e) => setSpecilization(e.target.value)}
-            />
+            /> */}
           </FormControl>
           <Button
             isDisabled={!userLogginData.data?.isUserLoggedIn}
@@ -99,6 +127,6 @@ export const QuestionForm: React.FC<QuestionFormProps> = ({ refetch , clickedFro
           </Button>
         </form>
       </Box>
-    </>
+    </Box>
   );
 };
