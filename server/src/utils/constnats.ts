@@ -3,14 +3,11 @@ export const specs: string[] = [
     "Cancer",
     "Lung Disease",
     "Mental Health",
-    "Anxiety",
-    "Depression",
-    "PTSD",
-    "ADHD",
     "Allergies",
+    "Teeth",
     "Eye Problems",
     "Covid",
     "Arthritis",
     "Sexual Health",
-    "Diabetes"
+    "Diabetes",
 ]

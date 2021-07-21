@@ -14,6 +14,7 @@ import {
   Spinner,
   Skeleton,
   Divider,
+  Center,
 } from "@chakra-ui/react";
 import { gql, useQuery } from "@apollo/client";
 
@@ -44,6 +45,13 @@ const TopicBox: FC<TopicBoxProps> = ({ topic }) => {
         marginTop="5px"
       >
         {topic}
+        <Center marginTop="5px">
+          <img
+            src={topic === "Cancer" ? `${topic}.png` : `${topic}.svg`}
+            width={topic === "Cancer" ? "35px" : ""}
+            alt=""
+          />
+        </Center>
       </Box>
     </Box>
   );
@@ -69,18 +77,18 @@ export const Topics: React.FC<RouteComponentProps> = () => {
 
   return (
     <>
-    <Box
-      marginLeft="1rem"
-      marginTop="1rem"
-      fontSize="30px"
-      fontFamily="fantasy"
-      fontWeight="bold"
-      color="gray.500"
-      textShadow="lg"
-    >
-      Health Topics
-      <Divider />
-    </Box>
+      <Box
+        marginLeft="1rem"
+        marginTop="1rem"
+        fontSize="30px"
+        fontFamily="fantasy"
+        fontWeight="bold"
+        color="gray.500"
+        textShadow="lg"
+      >
+        Health Topics
+        <Divider />
+      </Box>
 
       <Box p="2rem" marginTop="2rem" shadow="base">
         <Grid templateColumns="repeat(5, 1fr)" gap={5}>
