@@ -32,7 +32,7 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({
           <ModalCloseButton />
 
           <ModalBody margin="1rem">
-                <QuestionForm />
+                <QuestionForm clickedFromProfilePage={true}/>
           </ModalBody>
         </ModalContent>
       </Modal>

@@ -1,9 +1,31 @@
 import React, { useState, useEffect, useRef } from "react";
 
-import { Box, Heading, Divider } from "@chakra-ui/react";
+import { Box, Heading, Divider, Flex } from "@chakra-ui/react";
 
 import { FiUser } from "react-icons/fi";
 import { useMeQuery } from "../generated/graphql";
+import {BiCommentDetail} from "react-icons/bi"
+
+interface InteractionsSectionProps {}
+export const InteractionsSection = () => {
+  return (
+    <Flex
+      p="0.2rem"
+      justiy="center"
+      align="center"
+      pos="absolute"
+      left="25px"
+      bottom="1px"
+      color="gray.400"
+      fontSize="10px"
+      marginTop="4px"
+      fontWeight="bold"
+    >
+      <BiCommentDetail  style={{marginRight: "3px"}}/>
+      12 replies
+    </Flex>
+  );
+};
 
 interface QuestionBoxProps {
   username?: string;
@@ -22,10 +44,9 @@ export const QuestionBox: React.FC<QuestionBoxProps> = ({
     <Box
       pos="relative"
       width="100%"
-      p={username ? "1rem" : "12px"  }
-      // p="1rem"
+      p={username ? "1rem" : "12px"}
       my="5px"
-      shadow={username ? "md" : "inner"  }
+      shadow={username ? "md" : "inner"}
       bgColor="gray.100"
       _hover={{ bgColor: "gray.300", borderRadius: "-30px" }}
       borderRadius="-20px"
@@ -57,6 +78,7 @@ export const QuestionBox: React.FC<QuestionBoxProps> = ({
       >
         {question}
       </Heading>
+      <InteractionsSection />
       <Heading
         pos="absolute"
         right="20px"

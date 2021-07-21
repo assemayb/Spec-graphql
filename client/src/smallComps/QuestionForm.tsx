@@ -18,8 +18,9 @@ import { AiFillEdit } from "react-icons/ai";
 
 interface QuestionFormProps {
   refetch?: () => Promise<ApolloQueryResult<ListThreadsQuery>>;
+  clickedFromProfilePage?: boolean
 }
-export const QuestionForm: React.FC<QuestionFormProps> = ({ refetch }) => {
+export const QuestionForm: React.FC<QuestionFormProps> = ({ refetch , clickedFromProfilePage }) => {
   const [question, setQuestion] = useState("");
   const [specilization, setSpecilization] = useState("");
 
@@ -60,7 +61,7 @@ export const QuestionForm: React.FC<QuestionFormProps> = ({ refetch }) => {
         flexDirection="column"
         p="8px"
         my="10px"
-        shadow="md"
+        shadow={clickedFromProfilePage ? "" : "md" }        
         textAlign="center"
       >
         <form onSubmit={(e) => submitQuestion(e)}>

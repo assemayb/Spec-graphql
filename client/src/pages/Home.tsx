@@ -10,6 +10,8 @@ import { QuestionForm } from "../smallComps/QuestionForm";
 import { QuestionBox } from "../smallComps/QuestionBox";
 import { FastBigSpinner } from "../smallComps/Spinners";
 import { SortBtn } from "../smallComps/SortBtn"
+import {BiBarChartAlt} from "react-icons/bi"
+import {FiClock} from "react-icons/fi"
 
 
 
@@ -62,8 +64,19 @@ export const Home: React.FC<RouteComponentProps> = ({ history, location }) => {
           marginX="8px"
         >
           <Box p="1rem" shadow="base" marginBottom="2rem">
-            <SortBtn>most answered</SortBtn>
-            <SortBtn>most recent</SortBtn>
+            <SortBtn>
+              <Flex justify="center" align="center">
+              <BiBarChartAlt size="25px" style={{marginRight:"5px"}}/>
+              most answered
+              </Flex>
+            </SortBtn>
+
+            <SortBtn>
+              <Flex justify="center" align="center">  
+              <FiClock size="25px" style={{marginRight:"5px"}}/>
+              most recent
+              </Flex>
+            </SortBtn>
           </Box>
 
           <QuestionForm refetch={refetch} />
