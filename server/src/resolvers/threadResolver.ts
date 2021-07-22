@@ -6,6 +6,7 @@ import { MyContext } from "../utils/context";
 
 import { isAuthenticated } from "../utils/isAuth"
 import { dbConfig } from "../config/database";
+import sequelize from "sequelize"
 import { User } from "../models/User";
 
 
@@ -87,18 +88,20 @@ export class ThreadResolver {
 
     // List all Threads
     @Query(() => [ThreadType], { nullable: true })
-    async listThreads() {
-        let sortingBy = 'most recent'
+    async listThreads(
+        @Arg("sortBy", () => String) sortBy: string
+    ) {
         let threads;
         try {
-            if (sortingBy == "most recent") {
+            if (sortBy == "recent") {
                 threads = await Thread.findAll({
                     include: "replies",
-                    order: [["id", "DESC"]]
+                    order: [["id", "DESC"]],
                 })
             } else {
                 threads = await Thread.findAll({
                     include: "replies",
+                    // order: [[sequelize.fn('COUNT', sequelize.col('relies')), 'replies_count']]
                 })
             }
             console.log("============>");

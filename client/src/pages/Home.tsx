@@ -15,9 +15,12 @@ import { FiClock } from "react-icons/fi";
 
 interface HomeProps {}
 export const Home: React.FC<RouteComponentProps> = ({ history, location }) => {
-  const [threadsHeader, setThreadsHeader] = useState("Famous and trendy threads")
+  const [threadsHeader, setThreadsHeader] = useState("most trendy threads");
   const { data, loading, error, refetch } = useListThreadsQuery({
     fetchPolicy: "cache-first",
+    variables: {
+       sortBy: threadsHeader.split(" ")[1]
+    }
   });
 
   let ThreadsComp: any = null;
@@ -76,19 +79,45 @@ export const Home: React.FC<RouteComponentProps> = ({ history, location }) => {
           marginX="8px"
         >
           <Box p="1rem" shadow="base" marginBottom="2rem">
-            <SortBtn>
+            <Box
+              onClick={() => setThreadsHeader("most trendy threads")}
+              textAlign="center"
+              p="0.8rem"
+              bgColor="green.300"
+              color="Window"
+              borderRadius="-10px"
+              fontWeight="bold"
+              cursor="pointer"
+              _hover={{
+                bgColor: "green.500",
+              }}
+              marginY="3px"
+            >
               <Flex justify="center" align="center">
                 <BiBarChartAlt size="25px" style={{ marginRight: "5px" }} />
                 most answered
               </Flex>
-            </SortBtn>
+            </Box>
 
-            <SortBtn>
+            <Box
+              onClick={() => setThreadsHeader("most recent threads")}
+              textAlign="center"
+              p="0.8rem"
+              bgColor="green.300"
+              color="Window"
+              borderRadius="-10px"
+              fontWeight="bold"
+              cursor="pointer"
+              _hover={{
+                bgColor: "green.500",
+              }}
+              marginY="3px"
+            >
               <Flex justify="center" align="center">
                 <FiClock size="25px" style={{ marginRight: "5px" }} />
                 most recent
               </Flex>
-            </SortBtn>
+            </Box>
           </Box>
 
           <QuestionForm refetch={refetch} />

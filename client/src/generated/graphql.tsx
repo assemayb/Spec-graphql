@@ -29,6 +29,11 @@ export type Query = {
 };
 
 
+export type QueryListThreadsArgs = {
+  sortBy: Scalars['String'];
+};
+
+
 export type QueryListThreadRepliesArgs = {
   threadId: Scalars['Int'];
 };
@@ -191,7 +196,9 @@ export type IsUserLoggedInQuery = (
   & Pick<Query, 'isUserLoggedIn'>
 );
 
-export type ListThreadsQueryVariables = Exact<{ [key: string]: never; }>;
+export type ListThreadsQueryVariables = Exact<{
+  sortBy: Scalars['String'];
+}>;
 
 
 export type ListThreadsQuery = (
@@ -402,8 +409,8 @@ export type IsUserLoggedInQueryHookResult = ReturnType<typeof useIsUserLoggedInQ
 export type IsUserLoggedInLazyQueryHookResult = ReturnType<typeof useIsUserLoggedInLazyQuery>;
 export type IsUserLoggedInQueryResult = Apollo.QueryResult<IsUserLoggedInQuery, IsUserLoggedInQueryVariables>;
 export const ListThreadsDocument = gql`
-    query listThreads {
-  listThreads {
+    query listThreads($sortBy: String!) {
+  listThreads(sortBy: $sortBy) {
     id
     question
     specialization
@@ -432,10 +439,11 @@ export const ListThreadsDocument = gql`
  * @example
  * const { data, loading, error } = useListThreadsQuery({
  *   variables: {
+ *      sortBy: // value for 'sortBy'
  *   },
  * });
  */
-export function useListThreadsQuery(baseOptions?: Apollo.QueryHookOptions<ListThreadsQuery, ListThreadsQueryVariables>) {
+export function useListThreadsQuery(baseOptions: Apollo.QueryHookOptions<ListThreadsQuery, ListThreadsQueryVariables>) {
         return Apollo.useQuery<ListThreadsQuery, ListThreadsQueryVariables>(ListThreadsDocument, baseOptions);
       }
 export function useListThreadsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ListThreadsQuery, ListThreadsQueryVariables>) {
