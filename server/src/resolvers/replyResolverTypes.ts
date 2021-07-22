@@ -8,11 +8,18 @@ export class ReplyCreateType {
     @Field(() => Int, { nullable: false })
     replyThread?: number
 
-    @Field(() => Int, { nullable: false })
+    @Field(() => Int, { nullable: true })
     replySpecialist?: number
 }
 
 
+export interface reply {
+    id: number
+    text: string
+    upvotes: number
+    replyThread: number
+    replySpecialist?: number
+}
 @ObjectType()
 export class ReplyType {
     @Field(() => Int)
@@ -26,6 +33,6 @@ export class ReplyType {
     @Field(() => Int)
     replyThread?: number
 
-    @Field(() => Int)
+    @Field(() => Int, {nullable: true})
     replySpecialist?: number
 }

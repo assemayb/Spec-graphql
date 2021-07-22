@@ -43,11 +43,8 @@ export class ThreadResolver {
         @Arg("options", () => UpdateThreadInput) options: UpdateThreadInput,
         @Ctx() { req, res, payload }: MyContext
     ) {
-
-        let transaction = await dbConfig.transaction()
-        let thread = await Thread.findOne({ where: { id }, transaction })
+        let thread = await Thread.findOne({ where: { id } })
         const threadCreatorID = thread?.getDataValue("threadCreator")
-
         const requestUserID = payload?.userId
         const requestUserName = payload?.userName
         if (threadCreatorID == requestUserID || threadCreatorID == requestUserName) {
@@ -56,25 +53,18 @@ export class ThreadResolver {
                     where: {
                         id
                     },
-                    transaction
                 })
-                await transaction.commit()
                 return true
             } catch (err) {
-                console.error(err)
-                await transaction.rollback()
+                console.error(err.message)
                 return false
             }
-
         } else {
             throw new Error("Not Authenticated to perform this action")
         }
-
-
     }
 
 
-    
     // List a User threads
     @Query(() => [ThreadType], { nullable: true })
     @UseMiddleware(isAuthenticated)
@@ -82,24 +72,38 @@ export class ThreadResolver {
         @Ctx() { req, payload }: MyContext
     ) {
         let userThreads;
-        const loggedUserId = payload?.userId        
+        const loggedUserId = payload?.userId
         try {
             userThreads = await Thread.findAll({
                 where: {
-                    threadCreator: loggedUserId  as number
+                    threadCreator: loggedUserId as number
                 }
             })
         } catch (error) {
             throw new Error(error.message)
-        }        
+        }
         return userThreads
     }
 
     // List all Threads
     @Query(() => [ThreadType], { nullable: true })
     async listThreads() {
+        let sortingBy = 'most recent'
+        let threads;
         try {
-            let threads = await Thread.findAll()
+            if (sortingBy == "most recent") {
+                threads = await Thread.findAll({
+                    include: "replies",
+                    order: [["id", "DESC"]]
+                })
+            } else {
+                threads = await Thread.findAll({
+                    include: "replies",
+                })
+            }
+            console.log("============>");
+            console.log(threads);
+
             let idx = 0
             for (let x of threads) {
                 let creator = await User.findOne({
@@ -114,7 +118,7 @@ export class ThreadResolver {
             return threads
 
         } catch (error) {
-            console.log(error)
+            console.error(error.message)
             return null
         }
     }

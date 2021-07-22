@@ -1,6 +1,6 @@
 import { DataTypes, ModelDefined, Optional } from "sequelize"
 import { dbConfig } from "../config/database"
-import {User} from "./User"
+
 export interface ReplyAttributes {
     id: number
     text: string
@@ -10,7 +10,6 @@ export interface ReplyAttributes {
 }
 
 // export interface ReplyCreationAttributes extends Optional<ReplyAttributes> { }
-
 export const Reply: ModelDefined<ReplyAttributes, {}> = dbConfig.define("reply", {
     id: {
         type: DataTypes.INTEGER(),
@@ -30,10 +29,6 @@ export const Reply: ModelDefined<ReplyAttributes, {}> = dbConfig.define("reply",
 }, {
     tableName: 'replies'
 })
-
-
-
-// 1 : M  relation with Specialist 
 
 
 

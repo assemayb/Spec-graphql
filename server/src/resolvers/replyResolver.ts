@@ -21,11 +21,15 @@ export class ReplyResolver {
         @Ctx() { req, payload }: MyContext
     ) {
         try {
+            const replySpecialistID = payload?.userId
+            console.log("replySpecialistID", replySpecialistID);
+            
             const { text, replySpecialist, replyThread } = options
             await Reply.create({
                 text, 
-                replySpecialist,
-                replyThread
+                replySpecialist: replySpecialistID as number,
+                replyThread,
+
             })
             return true
         } catch (error) {

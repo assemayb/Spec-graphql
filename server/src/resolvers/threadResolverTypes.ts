@@ -1,4 +1,5 @@
 import { ObjectType, Field, Int, InputType, } from "type-graphql"
+import {ReplyType, reply} from "./replyResolverTypes"
 
 @ObjectType()
 export class ThreadType {
@@ -16,6 +17,9 @@ export class ThreadType {
 
     @Field(() => Date)
     createdAt?: string
+
+    @Field(() => [ReplyType])
+    replies? : reply[]
 }
 
 @ObjectType()
