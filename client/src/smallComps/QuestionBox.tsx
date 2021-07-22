@@ -1,15 +1,17 @@
 import React, { useState, useEffect, useRef } from "react";
 
-import { Box, Heading, Divider, Flex } from "@chakra-ui/react";
+import { Box, Heading, Divider, Flex, Badge } from "@chakra-ui/react";
 
 import { FiUser } from "react-icons/fi";
 import { useMeQuery } from "../generated/graphql";
-import {BiCommentDetail} from "react-icons/bi"
+import { BiCommentDetail } from "react-icons/bi";
 
 interface InteractionsSectionProps {
-  repliesCount:  number
+  repliesCount: number;
 }
-export const InteractionsSection: React.FC<InteractionsSectionProps> = ({repliesCount}) => {
+export const InteractionsSection: React.FC<InteractionsSectionProps> = ({
+  repliesCount,
+}) => {
   return (
     <Flex
       p="0.2rem"
@@ -23,7 +25,7 @@ export const InteractionsSection: React.FC<InteractionsSectionProps> = ({replies
       marginTop="4px"
       fontWeight="bold"
     >
-      <BiCommentDetail  style={{marginRight: "3px"}}/>
+      <BiCommentDetail style={{ marginRight: "3px" }} />
       <Box>{repliesCount} replies</Box>
     </Flex>
   );
@@ -34,13 +36,15 @@ interface QuestionBoxProps {
   question: string;
   specializtion?: string;
   createdAt?: string;
-  repliesCount? : number
+  repliesCount?: number;
+  
 }
 export const QuestionBox: React.FC<QuestionBoxProps> = ({
   question,
   username,
   createdAt,
-  repliesCount
+  repliesCount,
+  specializtion
 }) => {
   // const currentUser = useMeQuery();
 
@@ -70,9 +74,9 @@ export const QuestionBox: React.FC<QuestionBoxProps> = ({
         boxShadow="sm"
         size="md"
         my="5px"
-        marginLeft="10px"
+        marginLeft="2rem"
         p="10px"
-        // fontWeight="bold"
+        pos="relative"
         cursor="pointer"
         color="blackAlpha.700"
         fontSize="xl"
@@ -81,8 +85,24 @@ export const QuestionBox: React.FC<QuestionBoxProps> = ({
         }}
       >
         {question}
+
+        <Badge
+        
+          variant="subtle"
+          colorScheme="green"
+          pos="absolute"
+          p="0.3rem"
+          right="2px"
+          top="0.1rem"
+          fontSize="0.8rem"
+          // fontFamily="cursive"
+          opacity="0.7"
+        >
+          {specializtion}
+        </Badge>
       </Heading>
-      <InteractionsSection repliesCount={repliesCount!}/>
+
+      <InteractionsSection repliesCount={repliesCount!} />
       <Heading
         pos="absolute"
         right="20px"

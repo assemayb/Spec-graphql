@@ -15,7 +15,7 @@ import { FiClock } from "react-icons/fi";
 
 interface HomeProps {}
 export const Home: React.FC<RouteComponentProps> = ({ history, location }) => {
-  const [threadsHeader, setThreadsHeader] = useState("most trendy threads");
+  const [threadsHeader, setThreadsHeader] = useState("Most trendy threads");
   const { data, loading, error, refetch } = useListThreadsQuery({
     fetchPolicy: "cache-first",
     variables: {
@@ -37,6 +37,7 @@ export const Home: React.FC<RouteComponentProps> = ({ history, location }) => {
               username={thread.threadCreator}
               createdAt={thread.createdAt}
               repliesCount={thread.replies.length}
+              specializtion={thread.specialization}
             />
           );
         })}
@@ -80,7 +81,7 @@ export const Home: React.FC<RouteComponentProps> = ({ history, location }) => {
         >
           <Box p="1rem" shadow="base" marginBottom="2rem">
             <Box
-              onClick={() => setThreadsHeader("most trendy threads")}
+              onClick={() => setThreadsHeader("Most trendy threads")}
               textAlign="center"
               p="0.8rem"
               bgColor="green.300"
@@ -100,7 +101,7 @@ export const Home: React.FC<RouteComponentProps> = ({ history, location }) => {
             </Box>
 
             <Box
-              onClick={() => setThreadsHeader("most recent threads")}
+              onClick={() => setThreadsHeader("Most recent threads")}
               textAlign="center"
               p="0.8rem"
               bgColor="green.300"

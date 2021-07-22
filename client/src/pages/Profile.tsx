@@ -46,6 +46,7 @@ export const Profile = () => {
               key={idx}
               question={thread.question}
               createdAt={thread.createdAt}
+              specializtion={thread.specialization}
             />
           );
         })}
