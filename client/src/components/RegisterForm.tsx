@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useQuery } from "@apollo/client";
 import {
   FormControl,
   FormLabel,
@@ -7,13 +8,15 @@ import {
   Button,
   Center,
   Switch,
+  Select,
 } from "@chakra-ui/react";
 import { useRegisterMutation } from "../generated/graphql";
-import { setEmitFlags } from "typescript";
+import { topicsQuery } from "../pages/Topics";
 
 interface RegisterFromProps {}
 
 export const RegisterFrom: React.FC<RegisterFromProps> = () => {
+  const { data } = useQuery(topicsQuery);
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -74,7 +77,30 @@ export const RegisterFrom: React.FC<RegisterFromProps> = () => {
         {specOptions.showField === true && (
           <FormControl id="spec-value" isRequired my="5px">
             <FormLabel>specialization</FormLabel>
-            <Input
+            <Select
+              onChange={(e) =>
+                setSpecOptions((value) => {
+                  return {
+                    ...value,
+                    fieldValue: e.target.value,
+                  };
+                })}
+              fontSize="16px"
+              defaultValue={"disabled"}
+              name="topic"
+              variant="flushed"
+            >
+              <option value="disabled" disabled>
+                choose a topic
+              </option>
+              {data.listTopics &&
+                data.listTopics.map((topic: string, idx: number) => (
+                  <option key={idx} value={topic}>
+                    {topic}
+                  </option>
+                ))}
+            </Select>
+            {/* <Input
               value={specOptions.fieldValue}
               onChange={(e) =>
                 setSpecOptions((value) => {
@@ -84,7 +110,7 @@ export const RegisterFrom: React.FC<RegisterFromProps> = () => {
                   };
                 })
               }
-            />
+            /> */}
           </FormControl>
         )}
         <FormControl display="flex" alignItems="center" my="5px">

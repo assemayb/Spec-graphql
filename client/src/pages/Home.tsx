@@ -9,16 +9,15 @@ import { Box, Divider, Flex } from "@chakra-ui/react";
 import { QuestionForm } from "../smallComps/QuestionForm";
 import { QuestionBox } from "../smallComps/QuestionBox";
 import { FastBigSpinner } from "../smallComps/Spinners";
-import { SortBtn } from "../smallComps/SortBtn"
-import {BiBarChartAlt} from "react-icons/bi"
-import {FiClock} from "react-icons/fi"
-
-
+import { SortBtn } from "../smallComps/SortBtn";
+import { BiBarChartAlt } from "react-icons/bi";
+import { FiClock } from "react-icons/fi";
 
 interface HomeProps {}
 export const Home: React.FC<RouteComponentProps> = ({ history, location }) => {
+  const [threadsHeader, setThreadsHeader] = useState("Famous and trendy threads")
   const { data, loading, error, refetch } = useListThreadsQuery({
-    fetchPolicy : "cache-first"
+    fetchPolicy: "cache-first",
   });
 
   let ThreadsComp: any = null;
@@ -34,6 +33,7 @@ export const Home: React.FC<RouteComponentProps> = ({ history, location }) => {
               question={thread.question}
               username={thread.threadCreator}
               createdAt={thread.createdAt}
+              repliesCount={thread.replies.length}
             />
           );
         })}
@@ -43,6 +43,19 @@ export const Home: React.FC<RouteComponentProps> = ({ history, location }) => {
 
   return (
     <>
+      <Box
+        marginLeft="1rem"
+        marginTop="1rem"
+        fontSize="30px"
+        fontFamily="fantasy"
+        fontWeight="bold"
+        color="gray.500"
+        textShadow="lg"
+        width="500px"
+      >
+        {threadsHeader}
+        <Divider />
+      </Box>
       <Flex marginRight="auto" marginLeft="auto" marginTop="2rem">
         <Flex
           justifyContent="center"
@@ -52,7 +65,6 @@ export const Home: React.FC<RouteComponentProps> = ({ history, location }) => {
           shadow="base"
           p="1rem"
         >
-          
           {ThreadsComp}
         </Flex>
 
@@ -66,15 +78,15 @@ export const Home: React.FC<RouteComponentProps> = ({ history, location }) => {
           <Box p="1rem" shadow="base" marginBottom="2rem">
             <SortBtn>
               <Flex justify="center" align="center">
-              <BiBarChartAlt size="25px" style={{marginRight:"5px"}}/>
-              most answered
+                <BiBarChartAlt size="25px" style={{ marginRight: "5px" }} />
+                most answered
               </Flex>
             </SortBtn>
 
             <SortBtn>
-              <Flex justify="center" align="center">  
-              <FiClock size="25px" style={{marginRight:"5px"}}/>
-              most recent
+              <Flex justify="center" align="center">
+                <FiClock size="25px" style={{ marginRight: "5px" }} />
+                most recent
               </Flex>
             </SortBtn>
           </Box>

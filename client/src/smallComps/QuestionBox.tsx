@@ -6,8 +6,10 @@ import { FiUser } from "react-icons/fi";
 import { useMeQuery } from "../generated/graphql";
 import {BiCommentDetail} from "react-icons/bi"
 
-interface InteractionsSectionProps {}
-export const InteractionsSection = () => {
+interface InteractionsSectionProps {
+  repliesCount:  number
+}
+export const InteractionsSection: React.FC<InteractionsSectionProps> = ({repliesCount}) => {
   return (
     <Flex
       p="0.2rem"
@@ -22,7 +24,7 @@ export const InteractionsSection = () => {
       fontWeight="bold"
     >
       <BiCommentDetail  style={{marginRight: "3px"}}/>
-      12 replies
+      <Box>{repliesCount} replies</Box>
     </Flex>
   );
 };
@@ -32,11 +34,13 @@ interface QuestionBoxProps {
   question: string;
   specializtion?: string;
   createdAt?: string;
+  repliesCount? : number
 }
 export const QuestionBox: React.FC<QuestionBoxProps> = ({
   question,
   username,
   createdAt,
+  repliesCount
 }) => {
   // const currentUser = useMeQuery();
 
@@ -78,7 +82,7 @@ export const QuestionBox: React.FC<QuestionBoxProps> = ({
       >
         {question}
       </Heading>
-      <InteractionsSection />
+      <InteractionsSection repliesCount={repliesCount!}/>
       <Heading
         pos="absolute"
         right="20px"

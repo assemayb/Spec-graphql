@@ -5,5 +5,12 @@ query listThreads {
     specialization
     threadCreator
     createdAt
+    replies {
+      id
+      upvotes
+      text
+      replyThread
+      replySpecialist
+    }
   }
 }

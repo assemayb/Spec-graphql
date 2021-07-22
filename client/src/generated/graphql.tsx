@@ -22,8 +22,7 @@ export type Query = {
   getAllUsers?: Maybe<Array<UserType>>;
   isUserLoggedIn: Scalars['Boolean'];
   test: Scalars['String'];
-  listMyThreads?: Maybe<Array<ThreadType>>;
-  listUserThreads?: Maybe<Array<UserThreadType>>;
+  listUserThreads?: Maybe<Array<ThreadType>>;
   listThreads?: Maybe<Array<ThreadType>>;
   listTopics: Array<Scalars['String']>;
   listThreadReplies?: Maybe<Array<ReplyType>>;
@@ -51,16 +50,9 @@ export type ThreadType = {
   specialization: Scalars['String'];
   threadCreator: Scalars['String'];
   createdAt: Scalars['DateTime'];
+  replies: Array<ReplyType>;
 };
 
-
-export type UserThreadType = {
-  __typename?: 'UserThreadType';
-  id: Scalars['Int'];
-  question: Scalars['String'];
-  specialization: Scalars['String'];
-  createdAt: Scalars['DateTime'];
-};
 
 export type ReplyType = {
   __typename?: 'ReplyType';
@@ -68,7 +60,7 @@ export type ReplyType = {
   upvotes: Scalars['Int'];
   text: Scalars['String'];
   replyThread: Scalars['Int'];
-  replySpecialist: Scalars['Int'];
+  replySpecialist?: Maybe<Scalars['Int']>;
 };
 
 export type Mutation = {
@@ -159,7 +151,7 @@ export type UpdateThreadInput = {
 export type ReplyCreateType = {
   text: Scalars['String'];
   replyThread: Scalars['Int'];
-  replySpecialist: Scalars['Int'];
+  replySpecialist?: Maybe<Scalars['Int']>;
 };
 
 export type CreateThreadMutationVariables = Exact<{
@@ -207,6 +199,10 @@ export type ListThreadsQuery = (
   & { listThreads?: Maybe<Array<(
     { __typename?: 'ThreadType' }
     & Pick<ThreadType, 'id' | 'question' | 'specialization' | 'threadCreator' | 'createdAt'>
+    & { replies: Array<(
+      { __typename?: 'ReplyType' }
+      & Pick<ReplyType, 'id' | 'upvotes' | 'text' | 'replyThread' | 'replySpecialist'>
+    )> }
   )>> }
 );
 
@@ -216,8 +212,8 @@ export type ListUserThreadsQueryVariables = Exact<{ [key: string]: never; }>;
 export type ListUserThreadsQuery = (
   { __typename?: 'Query' }
   & { listUserThreads?: Maybe<Array<(
-    { __typename?: 'UserThreadType' }
-    & Pick<UserThreadType, 'id' | 'question' | 'specialization' | 'createdAt'>
+    { __typename?: 'ThreadType' }
+    & Pick<ThreadType, 'id' | 'question' | 'specialization' | 'createdAt'>
   )>> }
 );
 
@@ -413,6 +409,13 @@ export const ListThreadsDocument = gql`
     specialization
     threadCreator
     createdAt
+    replies {
+      id
+      upvotes
+      text
+      replyThread
+      replySpecialist
+    }
   }
 }
     `;
