@@ -99,14 +99,26 @@ export class ThreadResolver {
                     order: [["id", "DESC"]],
                 })
             } else {
-                threads = await Thread.findAll({
-                    include: "replies",
-                    // order: [[sequelize.fn('COUNT', sequelize.col('relies')), 'replies_count']]
-                })
-            }
-            console.log("============>");
-            console.log(threads);
+                threads = await Thread.findAll({ include: "replies" })
+                // threads.map((thread) => {
+                //     const repliesCount = thread.getDataValue("replies").length
+                //     console.log(repliesCount);
 
+                // })
+                const repliesCount = (thread: any): number => {
+                    return thread.getDataValue("replies").length
+                }
+                let sortedByReplies: typeof threads = threads.sort((a, b) => {
+                    return repliesCount(b) - repliesCount(a)
+                })
+
+                sortedByReplies.map((thread) => {
+                    console.log(thread.getDataValue("replies").length);
+
+                })
+
+
+            }
             let idx = 0
             for (let x of threads) {
                 let creator = await User.findOne({

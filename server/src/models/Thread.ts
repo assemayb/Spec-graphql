@@ -1,8 +1,8 @@
 import { DataTypes, ModelDefined } from "sequelize";
 import { dbConfig } from "../config/database"
 
-import { Reply } from './Reply'
-import { User } from "./User";
+import { Reply, ReplyAttributes } from './Reply'
+
 
 
 export interface ThreadAttributes {
@@ -11,6 +11,7 @@ export interface ThreadAttributes {
     specialization: string
     threadCreator: number
     createdAt: string
+    replies: ReplyAttributes[]
 }
 
 export const Thread: ModelDefined<ThreadAttributes, {}> = dbConfig.define("thread", {
