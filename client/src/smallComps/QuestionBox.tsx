@@ -1,94 +1,13 @@
-import React, { useState, useEffect, useRef } from "react";
+import React from "react";
 
-import {
-  Box,
-  Heading,
-  Divider,
-  Flex,
-  Badge,
-  Tooltip,
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
-  PopoverHeader,
-  PopoverBody,
-  PopoverFooter,
-  PopoverArrow,
-  PopoverCloseButton,
-  Button,
-} from "@chakra-ui/react";
+import { Box, Heading, Badge, Tooltip } from "@chakra-ui/react";
 
 import { FiUser } from "react-icons/fi";
-import { BiCommentDetail, BiDotsHorizontal } from "react-icons/bi";
-import { ListUserThreadsQuery, useDeleteThreadMutation } from "../generated/graphql";
+import { BiDotsHorizontal } from "react-icons/bi";
+import { ListUserThreadsQuery } from "../generated/graphql";
 import { ApolloQueryResult } from "@apollo/client";
-
-interface InteractionsSectionProps {
-  repliesCount: number;
-}
-export const InteractionsSection: React.FC<InteractionsSectionProps> = ({
-  repliesCount,
-}) => {
-  return (
-    <Flex
-      p="0.2rem"
-      justiy="center"
-      align="center"
-      pos="absolute"
-      left="25px"
-      bottom="1px"
-      color="gray.400"
-      fontSize="10px"
-      marginTop="4px"
-      fontWeight="bold"
-    >
-      <BiCommentDetail style={{ marginRight: "3px" }} />
-      <Box>{repliesCount} replies</Box>
-    </Flex>
-  );
-};
-
-interface OptionsPopoverProps {
-  threadId: number;
-  refetch: () => Promise<ApolloQueryResult<ListUserThreadsQuery>>
-}
-export const OptionsPopover: React.FC<OptionsPopoverProps> = ({
-  children,
-  threadId,
-  refetch
-}) => {
-  const [deleteReq] = useDeleteThreadMutation({
-    update: ()  => refetch()
-  });
-  const deleteThread = () => {
-    deleteReq({
-      variables: {
-        id: threadId,
-      },
-    });
-  };
-
-  const editThread = () => {};
-
-  return (
-    <Popover>
-      <PopoverTrigger>
-        {children}
-        {/* <Button>Trigger</Button> */}
-      </PopoverTrigger>
-      <PopoverContent maxW="120px">
-        <PopoverArrow />
-        {/* <PopoverCloseButton /> */}
-        <PopoverBody>
-          <Flex justify="center" direction="column">
-            <Button onClick={() => deleteThread()}>delete</Button>
-            <Button marginTop="6px">edit</Button>
-          </Flex>
-        </PopoverBody>
-      </PopoverContent>
-    </Popover>
-  );
-};
+import { OptionsPopover } from "../smallComps/OptionsPopover";
+import { InteractionsSection } from "../smallComps/InteractionsSection";
 
 interface QuestionBoxProps {
   threadId?: number;
@@ -99,7 +18,9 @@ interface QuestionBoxProps {
   repliesCount?: number;
   showThreadOptions?: boolean;
   setShowThreadOptions?: React.Dispatch<React.SetStateAction<boolean>>;
-  refetchProfileThreads?: () => Promise<ApolloQueryResult<ListUserThreadsQuery>>
+  refetchProfileThreads?: () => Promise<
+    ApolloQueryResult<ListUserThreadsQuery>
+  >;
 }
 export const QuestionBox: React.FC<QuestionBoxProps> = ({
   threadId,
@@ -110,7 +31,7 @@ export const QuestionBox: React.FC<QuestionBoxProps> = ({
   specializtion,
   showThreadOptions,
   setShowThreadOptions,
-  refetchProfileThreads
+  refetchProfileThreads,
 }) => {
   // const currentUser = useMeQuery();
 
@@ -167,9 +88,7 @@ export const QuestionBox: React.FC<QuestionBoxProps> = ({
       </Heading>
       {!username && (
         <Tooltip label="thread oprtions" aria-label="A tooltip">
-          <OptionsPopover
-          refetch={refetchProfileThreads!}
-           threadId={threadId!}>
+          <OptionsPopover refetch={refetchProfileThreads!} threadId={threadId!}>
             <Box
               as="button"
               onClick={() => {
