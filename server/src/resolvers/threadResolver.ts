@@ -100,24 +100,13 @@ export class ThreadResolver {
                 })
             } else {
                 threads = await Thread.findAll({ include: "replies" })
-                // threads.map((thread) => {
-                //     const repliesCount = thread.getDataValue("replies").length
-                //     console.log(repliesCount);
-
-                // })
                 const repliesCount = (thread: any): number => {
                     return thread.getDataValue("replies").length
                 }
                 let sortedByReplies: typeof threads = threads.sort((a, b) => {
                     return repliesCount(b) - repliesCount(a)
                 })
-
-                sortedByReplies.map((thread) => {
-                    console.log(thread.getDataValue("replies").length);
-
-                })
-
-
+                threads = [...sortedByReplies]
             }
             let idx = 0
             for (let x of threads) {

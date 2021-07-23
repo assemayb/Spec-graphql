@@ -19,10 +19,15 @@ export const Home: React.FC<RouteComponentProps> = ({ history, location }) => {
   const { data, loading, error, refetch } = useListThreadsQuery({
     fetchPolicy: "cache-first",
     variables: {
-       sortBy: threadsHeader.split(" ")[1]
-    }
+      sortBy: threadsHeader.split(" ")[1],
+    },
   });
 
+  useEffect(() => {
+    console.log(data?.listThreads);
+  }, [data]);
+
+  
   let ThreadsComp: any = null;
   if (loading) {
     ThreadsComp = <FastBigSpinner />;
@@ -96,7 +101,7 @@ export const Home: React.FC<RouteComponentProps> = ({ history, location }) => {
             >
               <Flex justify="center" align="center">
                 <BiBarChartAlt size="25px" style={{ marginRight: "5px" }} />
-                most answered
+                most answers
               </Flex>
             </Box>
 
