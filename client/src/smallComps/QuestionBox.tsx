@@ -54,11 +54,17 @@ export const OptionsPopover: React.FC<OptionsPopoverProps> = ({ children }) => {
         {children}
         {/* <Button>Trigger</Button> */}
       </PopoverTrigger>
-      <PopoverContent>
+      <PopoverContent
+        maxW="120px"
+      >
         <PopoverArrow />
-        <PopoverCloseButton />
-        <PopoverHeader>Confirmation!</PopoverHeader>
-        <PopoverBody>Are you sure you want to have that milkshake?</PopoverBody>
+        {/* <PopoverCloseButton /> */}
+        <PopoverBody>
+          <Flex justify="center" direction="column">
+            <Button >delete</Button>
+            <Button marginTop="6px">edit</Button>
+          </Flex>
+        </PopoverBody>
       </PopoverContent>
     </Popover>
   );
