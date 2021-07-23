@@ -20,7 +20,7 @@ export const Profile = () => {
     onOpen: () => console.log("Modal is Open"),
   });
 
-  const { data, error, loading } = useListUserThreadsQuery({
+  const { data, error, loading, refetch } = useListUserThreadsQuery({
     fetchPolicy: "cache-first",
   });
 
@@ -28,12 +28,8 @@ export const Profile = () => {
     console.log(data?.listUserThreads);
   }, [data]);
 
-  function createNewThread() {
-    console.log("create new");
-
-    // TODO: import the modal here
-    setShowModal(true);
-  }
+  const createNewThread = () => setShowModal(true);
+  
 
   let ThreadSection: any = null;
   if (loading) {
@@ -45,11 +41,13 @@ export const Profile = () => {
           return (
             <QuestionBox
               key={idx}
+              threadId={thread.id}
               question={thread.question}
               createdAt={thread.createdAt}
               specializtion={thread.specialization}
               showThreadOptions={showThreadOptions}
               setShowThreadOptions={setShowThreadOptions}
+              refetchProfileThreads={refetch}
             />
           );
         })}

@@ -20,6 +20,8 @@ import {
 
 import { FiUser } from "react-icons/fi";
 import { BiCommentDetail, BiDotsHorizontal } from "react-icons/bi";
+import { ListUserThreadsQuery, useDeleteThreadMutation } from "../generated/graphql";
+import { ApolloQueryResult } from "@apollo/client";
 
 interface InteractionsSectionProps {
   repliesCount: number;
@@ -46,22 +48,40 @@ export const InteractionsSection: React.FC<InteractionsSectionProps> = ({
   );
 };
 
-interface OptionsPopoverProps {}
-export const OptionsPopover: React.FC<OptionsPopoverProps> = ({ children }) => {
+interface OptionsPopoverProps {
+  threadId: number;
+  refetch: () => Promise<ApolloQueryResult<ListUserThreadsQuery>>
+}
+export const OptionsPopover: React.FC<OptionsPopoverProps> = ({
+  children,
+  threadId,
+  refetch
+}) => {
+  const [deleteReq] = useDeleteThreadMutation({
+    update: ()  => refetch()
+  });
+  const deleteThread = () => {
+    deleteReq({
+      variables: {
+        id: threadId,
+      },
+    });
+  };
+
+  const editThread = () => {};
+
   return (
     <Popover>
       <PopoverTrigger>
         {children}
         {/* <Button>Trigger</Button> */}
       </PopoverTrigger>
-      <PopoverContent
-        maxW="120px"
-      >
+      <PopoverContent maxW="120px">
         <PopoverArrow />
         {/* <PopoverCloseButton /> */}
         <PopoverBody>
           <Flex justify="center" direction="column">
-            <Button >delete</Button>
+            <Button onClick={() => deleteThread()}>delete</Button>
             <Button marginTop="6px">edit</Button>
           </Flex>
         </PopoverBody>
@@ -71,6 +91,7 @@ export const OptionsPopover: React.FC<OptionsPopoverProps> = ({ children }) => {
 };
 
 interface QuestionBoxProps {
+  threadId?: number;
   username?: string;
   question: string;
   specializtion?: string;
@@ -78,8 +99,10 @@ interface QuestionBoxProps {
   repliesCount?: number;
   showThreadOptions?: boolean;
   setShowThreadOptions?: React.Dispatch<React.SetStateAction<boolean>>;
+  refetchProfileThreads?: () => Promise<ApolloQueryResult<ListUserThreadsQuery>>
 }
 export const QuestionBox: React.FC<QuestionBoxProps> = ({
+  threadId,
   question,
   username,
   createdAt,
@@ -87,6 +110,7 @@ export const QuestionBox: React.FC<QuestionBoxProps> = ({
   specializtion,
   showThreadOptions,
   setShowThreadOptions,
+  refetchProfileThreads
 }) => {
   // const currentUser = useMeQuery();
 
@@ -132,11 +156,10 @@ export const QuestionBox: React.FC<QuestionBoxProps> = ({
           variant="subtle"
           colorScheme="green"
           pos="absolute"
-          p="0.3rem"
+          p="0.2rem"
           right="2px"
-          top="0.1rem"
-          fontSize="0.8rem"
-          // fontFamily="cursive"
+          top={username ? "0.1rem" : "1.2rem"}
+          fontSize="0.7rem"
           opacity="0.7"
         >
           {specializtion}
@@ -144,7 +167,9 @@ export const QuestionBox: React.FC<QuestionBoxProps> = ({
       </Heading>
       {!username && (
         <Tooltip label="thread oprtions" aria-label="A tooltip">
-          <OptionsPopover>
+          <OptionsPopover
+          refetch={refetchProfileThreads!}
+           threadId={threadId!}>
             <Box
               as="button"
               onClick={() => {
@@ -161,10 +186,14 @@ export const QuestionBox: React.FC<QuestionBoxProps> = ({
           </OptionsPopover>
         </Tooltip>
       )}
-      <InteractionsSection repliesCount={repliesCount!} />
-      <Heading pos="absolute" right="20px" color="gray.400" fontSize="12px">
-        {createdAt !== null && createdAt?.substr(0, 10)}
-      </Heading>
+      {username && (
+        <>
+          <InteractionsSection repliesCount={repliesCount!} />
+          <Heading pos="absolute" right="20px" color="gray.400" fontSize="12px">
+            {createdAt !== null && createdAt?.substr(0, 10)}
+          </Heading>
+        </>
+      )}
     </Box>
   );
 };
