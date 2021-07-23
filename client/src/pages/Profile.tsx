@@ -10,15 +10,16 @@ import { QuestionForm } from "../smallComps/QuestionForm";
 import { QuestionBox } from "../smallComps/QuestionBox";
 import { FastBigSpinner } from "../smallComps/Spinners";
 import { useListUserThreadsQuery } from "../generated/graphql";
-import {ProfileModal} from "../components/ProfileModal"
+import { ProfileModal } from "../components/ProfileModal";
 
 export const Profile = () => {
-    const [showModal, setShowModal] = useState(false);
-    const { isOpen, onOpen, onClose } = useDisclosure({
-      onClose: () => setShowModal(false),
-      onOpen: () => console.log("Modal is Open"),
-    });
-  
+  const [showModal, setShowModal] = useState(false);
+  const [showThreadOptions, setShowThreadOptions] = useState(false);
+  const { isOpen, onOpen, onClose } = useDisclosure({
+    onClose: () => setShowModal(false),
+    onOpen: () => console.log("Modal is Open"),
+  });
+
   const { data, error, loading } = useListUserThreadsQuery({
     fetchPolicy: "cache-first",
   });
@@ -31,7 +32,7 @@ export const Profile = () => {
     console.log("create new");
 
     // TODO: import the modal here
-    setShowModal(true)
+    setShowModal(true);
   }
 
   let ThreadSection: any = null;
@@ -47,6 +48,8 @@ export const Profile = () => {
               question={thread.question}
               createdAt={thread.createdAt}
               specializtion={thread.specialization}
+              showThreadOptions={showThreadOptions}
+              setShowThreadOptions={setShowThreadOptions}
             />
           );
         })}
@@ -55,7 +58,7 @@ export const Profile = () => {
   }
   return (
     <>
-    <ProfileModal showModal={showModal} onClose={onClose}/>
+      <ProfileModal showModal={showModal} onClose={onClose} />
       <Box
         marginLeft="1rem"
         marginY="1rem"
@@ -66,7 +69,7 @@ export const Profile = () => {
         textShadow="lg"
       >
         Threads created by you
-        <Divider mt="0.5rem" w="350px"/>
+        <Divider mt="0.5rem" w="350px" />
       </Box>
       <Flex marginRight="auto" marginLeft="auto" marginTop="2rem">
         <Flex
@@ -89,6 +92,8 @@ export const Profile = () => {
         >
           <Box p="1rem" shadow="base" marginBottom="2rem">
             <Box
+              as="button"
+              width="100%"
               onClick={() => createNewThread()}
               textAlign="center"
               p="0.8rem"

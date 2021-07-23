@@ -62,6 +62,7 @@ export const topicsQuery = gql`
     listTopics
   }
 `;
+
 export const Topics: React.FC<RouteComponentProps> = () => {
   const { data } = useQuery(topicsQuery);
   const [topcis, setTopics] = useState([]);

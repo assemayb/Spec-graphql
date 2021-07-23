@@ -147,26 +147,17 @@ export class ThreadResolver {
         @Ctx() { payload }: MyContext
     ) {
 
-        let thread = await Thread.findOne({
-            where: {
-                id,
-            }
-        })
-        const threadCreator = thread!.getDataValue("threadCreator")
-        if (threadCreator == payload?.userId as any) {
-            try {
-                await Thread.destroy({
-                    where: {
-                        id
-                    },
-                })
-                return true
-            } catch (error) {
-                console.log(error)
-                return false
-            }
-        } else {
-            throw new Error("Not Authenticated to delete this thread")
+        try {
+            await Thread.destroy({
+                where: {
+                    id
+                },
+            })
+            return true
+        } catch (error) {
+
+            console.log(error.message)
+            return false
         }
 
     }

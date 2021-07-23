@@ -1,10 +1,25 @@
 import React, { useState, useEffect, useRef } from "react";
 
-import { Box, Heading, Divider, Flex, Badge, Tooltip } from "@chakra-ui/react";
+import {
+  Box,
+  Heading,
+  Divider,
+  Flex,
+  Badge,
+  Tooltip,
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+  PopoverHeader,
+  PopoverBody,
+  PopoverFooter,
+  PopoverArrow,
+  PopoverCloseButton,
+  Button,
+} from "@chakra-ui/react";
 
 import { FiUser } from "react-icons/fi";
-import { useMeQuery } from "../generated/graphql";
-import { BiCommentDetail, BiDotsHorizontal, BiCog } from "react-icons/bi";
+import { BiCommentDetail, BiDotsHorizontal } from "react-icons/bi";
 
 interface InteractionsSectionProps {
   repliesCount: number;
@@ -31,12 +46,32 @@ export const InteractionsSection: React.FC<InteractionsSectionProps> = ({
   );
 };
 
+interface OptionsPopoverProps {}
+export const OptionsPopover: React.FC<OptionsPopoverProps> = ({ children }) => {
+  return (
+    <Popover>
+      <PopoverTrigger>
+        {children}
+        {/* <Button>Trigger</Button> */}
+      </PopoverTrigger>
+      <PopoverContent>
+        <PopoverArrow />
+        <PopoverCloseButton />
+        <PopoverHeader>Confirmation!</PopoverHeader>
+        <PopoverBody>Are you sure you want to have that milkshake?</PopoverBody>
+      </PopoverContent>
+    </Popover>
+  );
+};
+
 interface QuestionBoxProps {
   username?: string;
   question: string;
   specializtion?: string;
   createdAt?: string;
   repliesCount?: number;
+  showThreadOptions?: boolean;
+  setShowThreadOptions?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 export const QuestionBox: React.FC<QuestionBoxProps> = ({
   question,
@@ -44,6 +79,8 @@ export const QuestionBox: React.FC<QuestionBoxProps> = ({
   createdAt,
   repliesCount,
   specializtion,
+  showThreadOptions,
+  setShowThreadOptions,
 }) => {
   // const currentUser = useMeQuery();
 
@@ -101,9 +138,21 @@ export const QuestionBox: React.FC<QuestionBoxProps> = ({
       </Heading>
       {!username && (
         <Tooltip label="thread oprtions" aria-label="A tooltip">
-          <Box pos="absolute" top="0px" right="1px">
-            <BiDotsHorizontal color="gray" size="1.3rem" cursor="pointer" />
-          </Box>
+          <OptionsPopover>
+            <Box
+              as="button"
+              onClick={() => {
+                if (setShowThreadOptions) {
+                  setShowThreadOptions((prevVal) => !prevVal);
+                }
+              }}
+              pos="absolute"
+              top="0px"
+              right="1px"
+            >
+              <BiDotsHorizontal color="gray" size="1.3rem" cursor="pointer" />
+            </Box>
+          </OptionsPopover>
         </Tooltip>
       )}
       <InteractionsSection repliesCount={repliesCount!} />
