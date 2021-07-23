@@ -7,6 +7,7 @@ import { Test } from "./pages/Test";
 import { Login } from "./pages/Login";
 import { Profile } from "./pages/Profile";
 import { Topics } from "./pages/Topics";
+import { SignleTopicPage} from "./pages/SignleTopicPage";
 
 export const BaseRouter: React.FC = () => {
   return (
@@ -16,6 +17,7 @@ export const BaseRouter: React.FC = () => {
       <Route exact path="/register" component={Register} />
       <Route exact path="/login" component={Login} />
       <Route exact path="/profile" component={Profile} />
+      <Route path="/topics/:topicName" component={SignleTopicPage} />
       <Route exact path="/topics" component={Topics} />
     </Switch>
   );

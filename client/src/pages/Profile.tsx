@@ -15,18 +15,16 @@ import { ProfileModal } from "../components/ProfileModal";
 export const Profile = () => {
   const [showModal, setShowModal] = useState(false);
   const [showThreadOptions, setShowThreadOptions] = useState(false);
+
   const { isOpen, onOpen, onClose } = useDisclosure({
     onClose: () => setShowModal(false),
     onOpen: () => console.log("Modal is Open"),
   });
 
-  const { data, error, loading, refetch } = useListUserThreadsQuery({
-    fetchPolicy: "cache-first",
+  const { data, loading, refetch } = useListUserThreadsQuery({
+    fetchPolicy: "network-only",
   });
 
-  useEffect(() => {
-    console.log(data?.listUserThreads);
-  }, [data]);
 
   const createNewThread = () => setShowModal(true);
   

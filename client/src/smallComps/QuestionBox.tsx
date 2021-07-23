@@ -32,6 +32,7 @@ export const QuestionBox: React.FC<QuestionBoxProps> = ({
   showThreadOptions,
   setShowThreadOptions,
   refetchProfileThreads,
+
 }) => {
   // const currentUser = useMeQuery();
 
@@ -88,7 +89,9 @@ export const QuestionBox: React.FC<QuestionBoxProps> = ({
       </Heading>
       {!username && (
         <Tooltip label="thread oprtions" aria-label="A tooltip">
-          <OptionsPopover refetch={refetchProfileThreads!} threadId={threadId!}>
+          <OptionsPopover
+          setShowThreadOptions={setShowThreadOptions}
+          refetch={refetchProfileThreads!} threadId={threadId!}>
             <Box
               as="button"
               onClick={() => {

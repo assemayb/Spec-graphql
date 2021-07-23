@@ -17,7 +17,7 @@ interface HomeProps {}
 export const Home: React.FC<RouteComponentProps> = ({ history, location }) => {
   const [threadsHeader, setThreadsHeader] = useState("Most trendy threads");
   const { data, loading, error, refetch } = useListThreadsQuery({
-    fetchPolicy: "cache-first",
+    fetchPolicy: "cache-and-network",
     variables: {
       sortBy: threadsHeader.split(" ")[1],
     },

@@ -10,7 +10,7 @@ interface NavLink {
 
 export const LinkBox: React.FC<NavLink> = ({ route, icon }) => {
   return (
-    <Link to={route !== "Home" ? route : "/"}>
+    <Link to={route !== "Home" ? `/${route}` : "/"}>
       <Box
         // mx="0.4rem"
         

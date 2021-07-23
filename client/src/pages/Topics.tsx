@@ -1,6 +1,6 @@
 import React, { useState, useEffect, FC } from "react";
 import { useIsUserLoggedInQuery } from "../generated/graphql";
-import { RouteComponentProps } from "react-router-dom";
+import { RouteComponentProps, useHistory } from "react-router-dom";
 import {
   Box,
   Container,
@@ -22,8 +22,13 @@ interface TopicBoxProps {
   topic: string;
 }
 const TopicBox: FC<TopicBoxProps> = ({ topic }) => {
+  const router = useHistory()
+  const goToTopic = () => {
+    router.push(`/topics/${topic}`)    
+  } 
   return (
     <Box
+      onClick={() => goToTopic()}
       cursor="pointer"
       w="100%"
       h="100px"
