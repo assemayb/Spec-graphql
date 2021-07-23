@@ -17,6 +17,7 @@ interface QuestionBoxProps {
   createdAt?: string;
   repliesCount?: number;
   showThreadOptions?: boolean;
+  fromTopicPage?: boolean;
   setShowThreadOptions?: React.Dispatch<React.SetStateAction<boolean>>;
   refetchProfileThreads?: () => Promise<
     ApolloQueryResult<ListUserThreadsQuery>
@@ -30,9 +31,9 @@ export const QuestionBox: React.FC<QuestionBoxProps> = ({
   repliesCount,
   specializtion,
   showThreadOptions,
+  fromTopicPage,
   setShowThreadOptions,
   refetchProfileThreads,
-
 }) => {
   // const currentUser = useMeQuery();
 
@@ -73,25 +74,28 @@ export const QuestionBox: React.FC<QuestionBoxProps> = ({
         }}
       >
         {question}
-
-        <Badge
-          variant="subtle"
-          colorScheme="green"
-          pos="absolute"
-          p="0.2rem"
-          right="2px"
-          top={username ? "0.1rem" : "1.2rem"}
-          fontSize="0.7rem"
-          opacity="0.7"
-        >
-          {specializtion}
-        </Badge>
+        {!fromTopicPage && (
+          <Badge
+            variant="subtle"
+            colorScheme="green"
+            pos="absolute"
+            p="0.2rem"
+            right="2px"
+            top={username ? "0.1rem" : "1.2rem"}
+            fontSize="0.7rem"
+            opacity="0.7"
+          >
+            {specializtion}
+          </Badge>
+        )}
       </Heading>
       {!username && (
         <Tooltip label="thread oprtions" aria-label="A tooltip">
           <OptionsPopover
-          setShowThreadOptions={setShowThreadOptions}
-          refetch={refetchProfileThreads!} threadId={threadId!}>
+            setShowThreadOptions={setShowThreadOptions}
+            refetch={refetchProfileThreads!}
+            threadId={threadId!}
+          >
             <Box
               as="button"
               onClick={() => {
