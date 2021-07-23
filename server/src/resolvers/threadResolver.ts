@@ -142,7 +142,7 @@ export class ThreadResolver {
 
     // list topic-related threads
     @Query(() => [ThreadType], { nullable: true })
-    async lisTopicThredas(
+    async lisTopicThreads(
         @Arg("topic", () => String) topic: string
     ) {
 

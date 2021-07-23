@@ -1,8 +1,5 @@
-import React, { useState, useEffect } from "react";
-import {
-  useIsUserLoggedInQuery,
-  useListThreadsQuery,
-} from "../generated/graphql";
+import React, { useState } from "react";
+import { useListThreadsQuery } from "../generated/graphql";
 import { RouteComponentProps } from "react-router-dom";
 import { Box, Divider, Flex } from "@chakra-ui/react";
 
@@ -21,7 +18,6 @@ export const Home: React.FC<RouteComponentProps> = ({ history, location }) => {
     },
   });
 
-  
   let ThreadsComp: any = null;
   if (loading) {
     ThreadsComp = <FastBigSpinner />;
@@ -35,7 +31,7 @@ export const Home: React.FC<RouteComponentProps> = ({ history, location }) => {
               question={thread.question}
               username={thread.threadCreator}
               createdAt={thread.createdAt}
-              repliesCount={thread.replies.length}
+              repliesCount={thread.replies?.length}
               specializtion={thread.specialization}
             />
           );

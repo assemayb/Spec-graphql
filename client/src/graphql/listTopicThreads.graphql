@@ -1,0 +1,15 @@
+query listTopicThreads($topic: String!) {
+  lisTopicThreads(topic: $topic) {
+    id
+    question
+    threadCreator
+    createdAt
+    replies {
+      id
+      upvotes
+      text
+      replyThread
+      replySpecialist
+    }
+  }
+}

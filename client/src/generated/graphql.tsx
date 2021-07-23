@@ -25,12 +25,18 @@ export type Query = {
   listUserThreads?: Maybe<Array<ThreadType>>;
   listThreads?: Maybe<Array<ThreadType>>;
   listTopics: Array<Scalars['String']>;
+  lisTopicThreads?: Maybe<Array<ThreadType>>;
   listThreadReplies?: Maybe<Array<ReplyType>>;
 };
 
 
 export type QueryListThreadsArgs = {
   sortBy: Scalars['String'];
+};
+
+
+export type QueryLisTopicThreadsArgs = {
+  topic: Scalars['String'];
 };
 
 
@@ -55,7 +61,7 @@ export type ThreadType = {
   specialization: Scalars['String'];
   threadCreator: Scalars['String'];
   createdAt: Scalars['DateTime'];
-  replies: Array<ReplyType>;
+  replies?: Maybe<Array<ReplyType>>;
 };
 
 
@@ -206,10 +212,27 @@ export type ListThreadsQuery = (
   & { listThreads?: Maybe<Array<(
     { __typename?: 'ThreadType' }
     & Pick<ThreadType, 'id' | 'question' | 'specialization' | 'threadCreator' | 'createdAt'>
-    & { replies: Array<(
+    & { replies?: Maybe<Array<(
       { __typename?: 'ReplyType' }
       & Pick<ReplyType, 'id' | 'upvotes' | 'text' | 'replyThread' | 'replySpecialist'>
-    )> }
+    )>> }
+  )>> }
+);
+
+export type ListTopicThreadsQueryVariables = Exact<{
+  topic: Scalars['String'];
+}>;
+
+
+export type ListTopicThreadsQuery = (
+  { __typename?: 'Query' }
+  & { lisTopicThreads?: Maybe<Array<(
+    { __typename?: 'ThreadType' }
+    & Pick<ThreadType, 'id' | 'question' | 'threadCreator' | 'createdAt'>
+    & { replies?: Maybe<Array<(
+      { __typename?: 'ReplyType' }
+      & Pick<ReplyType, 'id' | 'upvotes' | 'text' | 'replyThread' | 'replySpecialist'>
+    )>> }
   )>> }
 );
 
@@ -452,6 +475,49 @@ export function useListThreadsLazyQuery(baseOptions?: Apollo.LazyQueryHookOption
 export type ListThreadsQueryHookResult = ReturnType<typeof useListThreadsQuery>;
 export type ListThreadsLazyQueryHookResult = ReturnType<typeof useListThreadsLazyQuery>;
 export type ListThreadsQueryResult = Apollo.QueryResult<ListThreadsQuery, ListThreadsQueryVariables>;
+export const ListTopicThreadsDocument = gql`
+    query listTopicThreads($topic: String!) {
+  lisTopicThreads(topic: $topic) {
+    id
+    question
+    threadCreator
+    createdAt
+    replies {
+      id
+      upvotes
+      text
+      replyThread
+      replySpecialist
+    }
+  }
+}
+    `;
+
+/**
+ * __useListTopicThreadsQuery__
+ *
+ * To run a query within a React component, call `useListTopicThreadsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useListTopicThreadsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useListTopicThreadsQuery({
+ *   variables: {
+ *      topic: // value for 'topic'
+ *   },
+ * });
+ */
+export function useListTopicThreadsQuery(baseOptions: Apollo.QueryHookOptions<ListTopicThreadsQuery, ListTopicThreadsQueryVariables>) {
+        return Apollo.useQuery<ListTopicThreadsQuery, ListTopicThreadsQueryVariables>(ListTopicThreadsDocument, baseOptions);
+      }
+export function useListTopicThreadsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ListTopicThreadsQuery, ListTopicThreadsQueryVariables>) {
+          return Apollo.useLazyQuery<ListTopicThreadsQuery, ListTopicThreadsQueryVariables>(ListTopicThreadsDocument, baseOptions);
+        }
+export type ListTopicThreadsQueryHookResult = ReturnType<typeof useListTopicThreadsQuery>;
+export type ListTopicThreadsLazyQueryHookResult = ReturnType<typeof useListTopicThreadsLazyQuery>;
+export type ListTopicThreadsQueryResult = Apollo.QueryResult<ListTopicThreadsQuery, ListTopicThreadsQueryVariables>;
 export const ListUserThreadsDocument = gql`
     query listUserThreads {
   listUserThreads {
