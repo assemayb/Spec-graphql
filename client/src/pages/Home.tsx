@@ -9,23 +9,17 @@ import { Box, Divider, Flex } from "@chakra-ui/react";
 import { QuestionForm } from "../smallComps/QuestionForm";
 import { QuestionBox } from "../smallComps/QuestionBox";
 import { FastBigSpinner } from "../smallComps/Spinners";
-import { SortBtn } from "../smallComps/SortBtn";
 import { BiBarChartAlt } from "react-icons/bi";
 import { FiClock } from "react-icons/fi";
 
-interface HomeProps {}
 export const Home: React.FC<RouteComponentProps> = ({ history, location }) => {
   const [threadsHeader, setThreadsHeader] = useState("Most trendy threads");
-  const { data, loading, error, refetch } = useListThreadsQuery({
-    fetchPolicy: "cache-and-network",
+  const { data, loading, refetch } = useListThreadsQuery({
+    fetchPolicy: "cache-first",
     variables: {
       sortBy: threadsHeader.split(" ")[1],
     },
   });
-
-  useEffect(() => {
-    console.log(data?.listThreads);
-  }, [data]);
 
   
   let ThreadsComp: any = null;

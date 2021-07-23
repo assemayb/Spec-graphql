@@ -140,6 +140,26 @@ export class ThreadResolver {
     }
 
 
+    // list topic-related threads
+    @Query(() => [ThreadType], { nullable: true })
+    async lisTopicThredas(
+        @Arg("topic", () => String) topic: string
+    ) {
+
+        let topicsThreads;
+        try {
+            topicsThreads = await Thread.findAll({
+                where: {
+                    specialization: topic
+                },
+                include: 'replies'
+            })
+        } catch (error) {
+            throw new Error(error.message)
+        }
+        return topicsThreads
+    }
+
     @Mutation(() => Boolean, { nullable: true })
     @UseMiddleware(isAuthenticated)
     async deleteThread(

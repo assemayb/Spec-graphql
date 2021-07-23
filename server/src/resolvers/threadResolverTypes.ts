@@ -1,5 +1,5 @@
 import { ObjectType, Field, Int, InputType, } from "type-graphql"
-import {ReplyType, reply} from "./replyResolverTypes"
+import { ReplyType, reply } from "./replyResolverTypes"
 
 @ObjectType()
 export class ThreadType {
@@ -18,8 +18,8 @@ export class ThreadType {
     @Field(() => Date)
     createdAt?: string
 
-    @Field(() => [ReplyType])
-    replies? : reply[]
+    @Field(() => [ReplyType], { nullable: true })
+    replies?: reply[]
 }
 
 @ObjectType()
@@ -60,11 +60,11 @@ export class UpdateThreadInput {
 }
 
 
-@ObjectType() 
+@ObjectType()
 export class TopicType {
     @Field(() => String)
-    specializtion?: string 
+    specializtion?: string
 
     @Field(() => Int)
-    threadsNum?: number 
+    threadsNum?: number
 }
