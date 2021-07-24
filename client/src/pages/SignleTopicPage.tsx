@@ -5,18 +5,56 @@ import { useListTopicThreadsQuery } from "../generated/graphql";
 import { QuestionBox } from "../smallComps/QuestionBox";
 import { FastBigSpinner } from "../smallComps/Spinners";
 
-interface SignleTopicPageProps {}
+interface SideNavBoxProps {
+  topics?: string[]
+}
+export const SideNavBox: React.FC<SideNavBoxProps> = ({topics}) => {
+  return (
+    <Flex
+      flex="1"
+      p="0.5rem"
+      flexDirection="column"
+      maxH="500px"
+      marginX="8px"
+      shadow="base"
+    >
+      {topics && topics.map((topic, index) => (
+      <Box
+        key={index}
+        textAlign="center"
+        p="1rem"
+        bgColor="yellow.200"
+        color="Window"
+        borderRadius="-20px"
+        cursor="pointer"
+        _hover={{
+          bgColor: "orange.200",
+        }}
+        marginY="3px"
+      >
+        <Flex justify="center" align="center">
+            {topic}
+        </Flex>
+      </Box>
 
-export const SignleTopicPage: React.FC<SignleTopicPageProps> = ({}) => {
-  const params: {
-    topicName: string;
-  } = useParams();
+      ))}
+    </Flex>
+  );
+};
+
+interface SignleTopicPageProps { }
+export const SignleTopicPage: React.FC<SignleTopicPageProps> = ({ }) => {
+  const params: any = useParams();
   const { data, loading } = useListTopicThreadsQuery({
     fetchPolicy: "cache-first",
     variables: {
       topic: params.topicName,
     },
   });
+
+  useEffect(() => {
+    console.log(Object.entries(params));
+  })
 
   let ThreadsComp: any = null;
   if (loading) {
@@ -40,10 +78,6 @@ export const SignleTopicPage: React.FC<SignleTopicPageProps> = ({}) => {
     );
   }
 
-  // useEffect(() => {
-  //   console.log(data?.lisTopicThreads);
-  // }, [data]);
-
   return (
     <>
       <Box
@@ -56,6 +90,7 @@ export const SignleTopicPage: React.FC<SignleTopicPageProps> = ({}) => {
         textShadow="lg"
         width="500px"
       >
+        {`${params.topicName} Threads`}
         <Divider />
       </Box>
 
@@ -70,6 +105,7 @@ export const SignleTopicPage: React.FC<SignleTopicPageProps> = ({}) => {
         >
           {ThreadsComp}
         </Flex>
+        <SideNavBox />
       </Flex>
     </>
   );

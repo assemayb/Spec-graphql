@@ -20,11 +20,14 @@ import { gql, useQuery } from "@apollo/client";
 
 interface TopicBoxProps {
   topic: string;
+  topics: string[]
 }
-const TopicBox: FC<TopicBoxProps> = ({ topic }) => {
+const TopicBox: FC<TopicBoxProps> = ({ topic, topics }) => {
   const router = useHistory();
   const goToTopic = () => {
-    router.push(`/topics/${topic}`);
+    router.push(`/topics/${topic}`, {
+      topics: topics
+    } );
   };
   return (
     <Box
@@ -109,9 +112,9 @@ export const Topics: React.FC<RouteComponentProps> = () => {
           <>
             {topcis.length < 1
               ? dummieArr.map((item, idx) => {
-                  return <Skeleton color="green.100" key={idx} height="80px" />;
-                })
-              : topcis.map((item, idx) => <TopicBox key={idx} topic={item} />)}
+                return <Skeleton color="green.100" key={idx} height="80px" />;
+              })
+              : topcis.map((item, idx) => <TopicBox topics={['1', '2']} key={idx} topic={item} />)}
           </>
         </Grid>
       </Box>
