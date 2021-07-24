@@ -21,7 +21,6 @@ function App() {
       method: "POST",
     }).then(async (x) => {
       const resposne = await x.json();
-      console.log(resposne.accessToken);
       setAccessToken(resposne.accessToken);
       setAppLoading(false);
     });

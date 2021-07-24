@@ -20,18 +20,19 @@ import { ApolloQueryResult } from "@apollo/client";
 interface OptionsPopoverProps {
   threadId: number;
   refetch: () => Promise<ApolloQueryResult<ListUserThreadsQuery>>;
-  setShowThreadOptions?: any;
+  setShowThreadOptions:
+    | React.Dispatch<React.SetStateAction<boolean>>
+    | undefined;
 }
 export const OptionsPopover: React.FC<OptionsPopoverProps> = ({
   children,
   threadId,
   refetch,
-  setShowThreadOptions
+  setShowThreadOptions,
 }) => {
   const [deleteReq] = useDeleteThreadMutation({
     update: () => {
-    setShowThreadOptions(false);
-    refetch();
+      refetch();
     },
   });
   const deleteThread = () => {
@@ -40,16 +41,12 @@ export const OptionsPopover: React.FC<OptionsPopoverProps> = ({
         id: threadId,
       },
     });
+    setShowThreadOptions && setShowThreadOptions(false);
   };
-
-  const editThread = () => {};
 
   return (
     <Popover>
-      <PopoverTrigger>
-        {children}
-        {/* <Button>Trigger</Button> */}
-      </PopoverTrigger>
+      <PopoverTrigger>{children}</PopoverTrigger>
       <PopoverContent maxW="120px">
         <PopoverArrow />
         <PopoverBody padding="6px">

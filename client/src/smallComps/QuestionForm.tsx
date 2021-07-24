@@ -15,7 +15,6 @@ import {
   Select,
 } from "@chakra-ui/react";
 import { ApolloQueryResult } from "@apollo/client";
-import { AiFillEdit } from "react-icons/ai";
 import { useQuery } from "@apollo/client";
 import { topicsQuery } from "../pages/Topics";
 interface QuestionFormProps {
@@ -62,7 +61,6 @@ export const QuestionForm: React.FC<QuestionFormProps> = ({
         textColor="gray.400"
         marginBottom="4px"
       >
-        {/* <AiFillEdit size="15px"/> */}
         Create Thread
       </Heading>
 
@@ -71,9 +69,7 @@ export const QuestionForm: React.FC<QuestionFormProps> = ({
         flexDirection="column"
         p="1rem"
         my="10px"
-        // bgColor="gray.50"
-
-        shadow={clickedFromProfilePage ? "" : "md"}
+        boxShadow={clickedFromProfilePage ? "" : "lg"}
         textAlign="center"
       >
         <form onSubmit={(e) => submitQuestion(e)}>
@@ -103,18 +99,13 @@ export const QuestionForm: React.FC<QuestionFormProps> = ({
               <option value="disabled" disabled>
                 choose a topic
               </option>
-              {topicsArr && topicsArr.map((topic, idx) => (
-                <option key={idx} value={topic} >
-                  {topic}
-                </option>
-              ))}
+              {topicsArr &&
+                topicsArr.map((topic, idx) => (
+                  <option key={idx} value={topic}>
+                    {topic}
+                  </option>
+                ))}
             </Select>
-            {/* <Input
-              borderRadius="-10px"
-              type="text"
-              value={specilization}
-              onChange={(e) => setSpecilization(e.target.value)}
-            /> */}
           </FormControl>
           <Button
             isDisabled={!userLogginData.data?.isUserLoggedIn}

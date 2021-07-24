@@ -18,10 +18,8 @@ export class ThreadResolver {
         @Arg("options", () => CreateThreadInput) options: CreateThreadInput,
         @Ctx() { payload }: MyContext
     ) {
-        // the threadCreator is implicitly added from the payload data
-        const { question, specialization } = options
-        // console.log({ question, specialization, threadCreator });
 
+        const { question, specialization } = options
         try {
             await Thread.create({
                 question,
@@ -109,14 +107,10 @@ export class ThreadResolver {
                 threads = [...sortedByReplies]
             }
             let idx = 0
-            for (let x of threads) {
-                let creator = await User.findOne({
-                    where: {
-                        id: x.getDataValue("threadCreator")
-                    }
-                })
-                x.setDataValue("threadCreator", creator!.getDataValue("username")! as any)
-                threads[idx] = x
+            for (let thread of threads) {
+                let creator = await User.findOne({ where: { id: thread.getDataValue("threadCreator") } })
+                thread.setDataValue("threadCreator", creator!.getDataValue("username")! as any)
+                threads[idx] = thread
                 idx += 1;
             }
             return threads
@@ -154,6 +148,13 @@ export class ThreadResolver {
                 },
                 include: 'replies'
             })
+            let idx = 0
+            for (let thread of topicsThreads) {
+                let creator = await User.findOne({ where: { id: thread.getDataValue("threadCreator") } })
+                thread.setDataValue("threadCreator", creator!.getDataValue("username")! as any)
+                topicsThreads[idx] = thread
+                idx += 1;
+            }
         } catch (error) {
             throw new Error(error.message)
         }
