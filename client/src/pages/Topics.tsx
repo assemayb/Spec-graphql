@@ -25,9 +25,7 @@ interface TopicBoxProps {
 const TopicBox: FC<TopicBoxProps> = ({ topic, topics }) => {
   const router = useHistory();
   const goToTopic = () => {
-    router.push(`/topics/${topic}`, {
-      topics: topics
-    } );
+    router.push(`/topics/${topic}`, {topics} );
   };
   return (
     <Box
@@ -114,7 +112,7 @@ export const Topics: React.FC<RouteComponentProps> = () => {
               ? dummieArr.map((item, idx) => {
                 return <Skeleton color="green.100" key={idx} height="80px" />;
               })
-              : topcis.map((item, idx) => <TopicBox topics={['1', '2']} key={idx} topic={item} />)}
+              : topcis.map((item, idx) => <TopicBox topics={data.listTopics} key={idx} topic={item} />)}
           </>
         </Grid>
       </Box>

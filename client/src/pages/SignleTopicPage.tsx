@@ -1,6 +1,6 @@
 import { Box, Divider, Flex } from "@chakra-ui/react";
 import React, { useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useLocation, useHistory } from "react-router-dom";
 import { useListTopicThreadsQuery } from "../generated/graphql";
 import { QuestionBox } from "../smallComps/QuestionBox";
 import { FastBigSpinner } from "../smallComps/Spinners";
@@ -9,26 +9,30 @@ interface SideNavBoxProps {
   topics?: string[]
 }
 export const SideNavBox: React.FC<SideNavBoxProps> = ({topics}) => {
+  const router = useHistory()
   return (
     <Flex
       flex="1"
       p="0.5rem"
       flexDirection="column"
-      maxH="500px"
+      maxH="autox"
       marginX="8px"
       shadow="base"
     >
       {topics && topics.map((topic, index) => (
       <Box
+      onClick={() => {
+        router.push(`/topics/${topic}`, {topics});
+      }}
         key={index}
         textAlign="center"
-        p="1rem"
-        bgColor="yellow.200"
-        color="Window"
+        p="0.5rem"
+        bgColor="green.200"
+        color="white"
         borderRadius="-20px"
         cursor="pointer"
         _hover={{
-          bgColor: "orange.200",
+          bgColor: "blue.200",
         }}
         marginY="3px"
       >
@@ -45,6 +49,8 @@ export const SideNavBox: React.FC<SideNavBoxProps> = ({topics}) => {
 interface SignleTopicPageProps { }
 export const SignleTopicPage: React.FC<SignleTopicPageProps> = ({ }) => {
   const params: any = useParams();
+  const location: any = useLocation();
+
   const { data, loading } = useListTopicThreadsQuery({
     fetchPolicy: "cache-first",
     variables: {
@@ -52,9 +58,7 @@ export const SignleTopicPage: React.FC<SignleTopicPageProps> = ({ }) => {
     },
   });
 
-  useEffect(() => {
-    console.log(Object.entries(params));
-  })
+
 
   let ThreadsComp: any = null;
   if (loading) {
@@ -99,13 +103,13 @@ export const SignleTopicPage: React.FC<SignleTopicPageProps> = ({ }) => {
           justifyContent="center"
           flexDirection="column"
           alignItems="center"
-          flex="4"
+          flex="6"
           shadow="base"
           p="1rem"
         >
           {ThreadsComp}
         </Flex>
-        <SideNavBox />
+        <SideNavBox topics={location.state.topics}/>
       </Flex>
     </>
   );
