@@ -22,10 +22,10 @@ interface TopicBoxProps {
   topic: string;
 }
 const TopicBox: FC<TopicBoxProps> = ({ topic }) => {
-  const router = useHistory()
+  const router = useHistory();
   const goToTopic = () => {
-    router.push(`/topics/${topic}`)    
-  } 
+    router.push(`/topics/${topic}`);
+  };
   return (
     <Box
       onClick={() => goToTopic()}
@@ -44,7 +44,7 @@ const TopicBox: FC<TopicBoxProps> = ({ topic }) => {
       <Box
         textAlign="center"
         p="0.2rem"
-        fontSize="20px"
+        fontSize={["10px", "13px", "18px", "20px"]}
         fontWeight="bold"
         textShadow="md"
         marginTop="5px"
@@ -97,7 +97,15 @@ export const Topics: React.FC<RouteComponentProps> = () => {
       </Box>
 
       <Box p="2rem" marginTop="2rem" shadow="base">
-        <Grid templateColumns="repeat(5, 1fr)" gap={5}>
+        <Grid
+          templateColumns={[
+            "repeat(2, 1fr)",
+            "repeat(3, 1fr)",
+            "repeat(4, 1fr)",
+            "repeat(5, 1fr)",
+          ]}
+          gap={5}
+        >
           <>
             {topcis.length < 1
               ? dummieArr.map((item, idx) => {
