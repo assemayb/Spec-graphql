@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import {
   ListThreadsQuery,
+  ListUserThreadsQuery,
   useCreateThreadMutation,
   useIsUserLoggedInQuery,
 } from "../generated/graphql";
@@ -13,6 +14,7 @@ import {
   Heading,
   Input,
   Select,
+  Divider
 } from "@chakra-ui/react";
 import { ApolloQueryResult } from "@apollo/client";
 import { useQuery } from "@apollo/client";
@@ -20,16 +22,20 @@ import { topicsQuery } from "../pages/Topics";
 interface QuestionFormProps {
   refetch?: () => Promise<ApolloQueryResult<ListThreadsQuery>>;
   clickedFromProfilePage?: boolean;
+  setShowModal?: React.Dispatch<React.SetStateAction<boolean>>
+  refetchProfileThreads?: () => Promise<ApolloQueryResult<ListUserThreadsQuery>>
 }
 export const QuestionForm: React.FC<QuestionFormProps> = ({
   refetch,
   clickedFromProfilePage,
+  setShowModal,
+  refetchProfileThreads
 }) => {
   const [question, setQuestion] = useState("");
   const [specilization, setSpecilization] = useState("");
-
   const { data } = useQuery(topicsQuery);
   const [topicsArr, setTopicsArr] = useState([]);
+
   useEffect(() => {
     setTopicsArr(data?.listTopics);
   }, [data]);
@@ -45,6 +51,10 @@ export const QuestionForm: React.FC<QuestionFormProps> = ({
           spec: specilization,
         },
       });
+      if(setShowModal && refetchProfileThreads) {
+        await refetchProfileThreads()
+        setShowModal(false)
+      }
       if (refetch !== undefined) {
         refetch();
       }
@@ -62,6 +72,7 @@ export const QuestionForm: React.FC<QuestionFormProps> = ({
         marginBottom="4px"
       >
         Create Thread
+        <Divider  marginTop="5px"/>
       </Heading>
 
       <Box

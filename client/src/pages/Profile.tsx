@@ -1,12 +1,6 @@
 import React, { useState, useEffect } from "react";
-import {
-  useIsUserLoggedInQuery,
-  useListThreadsQuery,
-} from "../generated/graphql";
-
 import { Box, Divider, Flex, useDisclosure } from "@chakra-ui/react";
 
-import { QuestionForm } from "../smallComps/QuestionForm";
 import { QuestionBox } from "../smallComps/QuestionBox";
 import { FastBigSpinner } from "../smallComps/Spinners";
 import { useListUserThreadsQuery } from "../generated/graphql";
@@ -15,12 +9,16 @@ import { ProfileModal } from "../components/ProfileModal";
 export const Profile = () => {
   const [showModal, setShowModal] = useState(false);
   const [showThreadOptions, setShowThreadOptions] = useState(false);
-  const { isOpen, onOpen, onClose } = useDisclosure({
-    onClose: () => setShowModal(false),
+  const { onClose } = useDisclosure({
+    onClose: () => {
+      setShowModal(false)
+    },
+
   });
   const { data, loading, refetch } = useListUserThreadsQuery({
-    fetchPolicy: "cache-and-network",
+    fetchPolicy: "network-only",
   });
+
   const createNewThread = () => setShowModal(true);
 
   let ThreadSection: any = null;
@@ -48,7 +46,7 @@ export const Profile = () => {
   }
   return (
     <>
-      <ProfileModal showModal={showModal} onClose={onClose} />
+      <ProfileModal refetchProfileThreads={refetch} setShowModal={setShowModal} showModal={showModal} onClose={onClose} />
       <Box
         marginLeft="1rem"
         marginY="1rem"

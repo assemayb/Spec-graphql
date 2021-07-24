@@ -12,17 +12,23 @@ import {
   Heading,
 } from "@chakra-ui/react";
 
-import {QuestionForm} from "../smallComps/QuestionForm"
+import { QuestionForm } from "../smallComps/QuestionForm"
+import { ApolloQueryResult } from "@apollo/client";
+import { ListUserThreadsQuery } from "../generated/graphql";
 
 interface ProfileModalProps {
   showModal: boolean;
   onClose: () => void;
+  setShowModal: React.Dispatch<React.SetStateAction<boolean>>
+  refetchProfileThreads?: () => Promise<ApolloQueryResult<ListUserThreadsQuery>>
 }
 
 export const ProfileModal: React.FC<ProfileModalProps> = ({
-    onClose,
-    showModal
- }) => {
+  onClose,
+  showModal,
+  setShowModal,
+  refetchProfileThreads
+}) => {
 
   return (
     <>
@@ -32,7 +38,7 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({
           <ModalCloseButton />
 
           <ModalBody margin="1rem">
-                <QuestionForm clickedFromProfilePage={true}/>
+            <QuestionForm refetchProfileThreads={refetchProfileThreads} setShowModal={setShowModal} clickedFromProfilePage={true} />
           </ModalBody>
         </ModalContent>
       </Modal>

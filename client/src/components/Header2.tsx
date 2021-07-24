@@ -142,7 +142,7 @@ export const Header2: React.FC<Header2Props> = ({}) => {
       <Flex ml="1rem" position="absolute" left="2px">
         <LinkBox route="Home" icon={<AiFillHome width="20px" />} />
         <LinkBox route="topics" icon={<BiBookContent width="20px" />} />
-        <LinkBox route="test" />
+        {/* <LinkBox route="test" /> */}
       </Flex>
 
       <Flex

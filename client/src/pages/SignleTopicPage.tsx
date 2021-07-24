@@ -1,14 +1,17 @@
-import { Box, Divider, Flex } from "@chakra-ui/react";
-import React, { useEffect } from "react";
+import { Box, Divider, Flex} from "@chakra-ui/react";
 import { useParams, useLocation, useHistory } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import {useQuery} from "@apollo/client"
 import { useListTopicThreadsQuery } from "../generated/graphql";
 import { QuestionBox } from "../smallComps/QuestionBox";
 import { FastBigSpinner } from "../smallComps/Spinners";
+import { topicsQuery } from "./Topics";
 
 interface SideNavBoxProps {
   topics?: string[]
 }
-export const SideNavBox: React.FC<SideNavBoxProps> = ({topics}) => {
+
+export const SideNavBox: React.FC<SideNavBoxProps> = ({ topics }) => {
   const router = useHistory()
   return (
     <Flex
@@ -20,26 +23,26 @@ export const SideNavBox: React.FC<SideNavBoxProps> = ({topics}) => {
       shadow="base"
     >
       {topics && topics.map((topic, index) => (
-      <Box
-      onClick={() => {
-        router.push(`/topics/${topic}`, {topics});
-      }}
-        key={index}
-        textAlign="center"
-        p="0.5rem"
-        bgColor="green.200"
-        color="white"
-        borderRadius="-20px"
-        cursor="pointer"
-        _hover={{
-          bgColor: "blue.200",
-        }}
-        marginY="3px"
-      >
-        <Flex justify="center" align="center">
+        <Box
+          onClick={() => {
+            router.push(`/topics/${topic}`, { topics });
+          }}
+          key={index}
+          textAlign="center"
+          p="0.5rem"
+          bgColor="green.200"
+          color="white"
+          borderRadius="-20px"
+          cursor="pointer"
+          _hover={{
+            bgColor: "blue.200",
+          }}
+          marginY="3px"
+        >
+          <Flex justify="center" align="center">
             {topic}
-        </Flex>
-      </Box>
+          </Flex>
+        </Box>
 
       ))}
     </Flex>
@@ -49,16 +52,13 @@ export const SideNavBox: React.FC<SideNavBoxProps> = ({topics}) => {
 interface SignleTopicPageProps { }
 export const SignleTopicPage: React.FC<SignleTopicPageProps> = ({ }) => {
   const params: any = useParams();
-  const location: any = useLocation();
-
+  const topicsArr = useQuery(topicsQuery)
   const { data, loading } = useListTopicThreadsQuery({
-    fetchPolicy: "cache-first",
+    fetchPolicy: "cache-and-network",
     variables: {
       topic: params.topicName,
     },
   });
-
-
 
   let ThreadsComp: any = null;
   if (loading) {
@@ -103,13 +103,15 @@ export const SignleTopicPage: React.FC<SignleTopicPageProps> = ({ }) => {
           justifyContent="center"
           flexDirection="column"
           alignItems="center"
-          flex="6"
+          flex="7"
           shadow="base"
           p="1rem"
         >
           {ThreadsComp}
         </Flex>
-        <SideNavBox topics={location.state.topics}/>
+        {topicsArr.data && (
+          <SideNavBox topics={topicsArr.data.listTopics} />
+        )}
       </Flex>
     </>
   );
