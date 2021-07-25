@@ -56,7 +56,7 @@ export const LoginFrom = () => {
         },
       });
       if (response && response.data) {
-        console.log(response.data);
+        // console.log(response.data);
 
         setAccessToken(response.data.loginUser?.accessToken!);
         history.push("/");

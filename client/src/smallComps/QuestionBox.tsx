@@ -89,31 +89,32 @@ export const QuestionBox: React.FC<QuestionBoxProps> = ({
           </Badge>
         )}
       </Heading>
-      {!username && (
+      {!username &&(
         <OptionsPopover
-          setShowThreadOptions={setShowThreadOptions}
+          showThreadOptions={showThreadOptions}
+          setShowThreadOptions={setShowThreadOptions!}
           refetch={refetchProfileThreads!}
           threadId={threadId!}
         >
           <Box
             as="button"
             onClick={() => {
-              if (setShowThreadOptions) {
-                setShowThreadOptions((prevVal) => !prevVal);
+              if (setShowThreadOptions !== undefined) {
+                setShowThreadOptions(true);
               }
             }}
             pos="absolute"
             top="0px"
             right="1px"
           >
-            <Tooltip
+            {/* <Tooltip
               label="thread oprtions"
               aria-label="thread oprtions tooltip"
-            >
+            > */}
               <div>
                 <BiDotsHorizontal color="gray" size="1.3rem" cursor="pointer" />
               </div>
-            </Tooltip>
+            {/* </Tooltip> */}
           </Box>
         </OptionsPopover>
       )}

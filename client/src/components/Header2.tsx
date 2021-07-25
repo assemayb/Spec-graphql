@@ -54,7 +54,7 @@ const ProfileButton: React.FC<ProfileButtonProps> = ({ isUserLogged }) => {
         fontSize="medium"
         fontWeight="bold"
         bgColor="green.400"
-        borderRadius= "-10px"
+        borderRadius="-10px"
         _hover={{
           bgColor: "green.500",
         }}
@@ -68,7 +68,7 @@ const ProfileButton: React.FC<ProfileButtonProps> = ({ isUserLogged }) => {
   );
 };
 
-interface LogoutButtonProps extends ProfileButtonProps {}
+interface LogoutButtonProps extends ProfileButtonProps { }
 const LogoutButton: React.FC<LogoutButtonProps> = ({ isUserLogged }) => {
   const [logoutUser, { client }] = useLogoutMutation();
 
@@ -76,7 +76,7 @@ const LogoutButton: React.FC<LogoutButtonProps> = ({ isUserLogged }) => {
     let isMounted = false;
     return () => {
       console.log("unmounting");
-      
+
       if (isMounted === false) {
         isMounted = true;
       }
@@ -118,8 +118,8 @@ const LogoutButton: React.FC<LogoutButtonProps> = ({ isUserLogged }) => {
   );
 };
 
-interface Header2Props {}
-export const Header2: React.FC<Header2Props> = ({}) => {
+interface Header2Props { }
+export const Header2: React.FC<Header2Props> = ({ }) => {
   // const { data, loading, error } = useMeQuery();
 
   const currentMode = useColorMode();
@@ -133,16 +133,16 @@ export const Header2: React.FC<Header2Props> = ({}) => {
       alignItems="center"
       bgColor="green.300"
       height="80px"
-      fontSize="xl"
+      fontSize={["sm","md", "large", "xl"]}
       fontWeight="bold"
       color="white"
       position="relative"
       width="100%"
+      // width="vw"
     >
       <Flex ml="1rem" position="absolute" left="2px">
         <LinkBox route="Home" icon={<AiFillHome width="20px" />} />
         <LinkBox route="topics" icon={<BiBookContent width="20px" />} />
-        {/* <LinkBox route="test" /> */}
       </Flex>
 
       <Flex
@@ -153,16 +153,7 @@ export const Header2: React.FC<Header2Props> = ({}) => {
         position="absolute"
         right="8px"
       >
-        {/* <Button
-          onClick={() => currentMode.toggleColorMode()}
-          bgColor="green.400"
-          _hover={{
-            bgColorome: "green.500",
-          }}
-          height="50%"
-        >
-          {currentMode.colorMode === "light" ? <MoonIcon /> : <SunIcon />}
-        </Button> */}
+
 
         {loginState && loginState.loading && (
           <Box marginLeft="5px">

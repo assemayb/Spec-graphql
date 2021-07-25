@@ -8,6 +8,7 @@ import { QuestionBox } from "../smallComps/QuestionBox";
 import { FastBigSpinner } from "../smallComps/Spinners";
 import { BiBarChartAlt } from "react-icons/bi";
 import { FiClock } from "react-icons/fi";
+import { Skeleton } from "../smallComps/Skeleton"
 
 export const Home: React.FC<RouteComponentProps> = ({ history, location }) => {
   const [threadsHeader, setThreadsHeader] = useState("Most trendy threads");
@@ -41,7 +42,8 @@ export const Home: React.FC<RouteComponentProps> = ({ history, location }) => {
   }
 
   return (
-    <>
+    < >
+
       <Box
         marginLeft="1rem"
         marginTop="1rem"
@@ -55,7 +57,9 @@ export const Home: React.FC<RouteComponentProps> = ({ history, location }) => {
         {threadsHeader}
         <Divider />
       </Box>
-      <Flex marginRight="auto" marginLeft="auto" marginTop="2rem">
+
+      <Flex marginTop="2rem">
+
         <Flex
           justifyContent="center"
           flexDirection="column"

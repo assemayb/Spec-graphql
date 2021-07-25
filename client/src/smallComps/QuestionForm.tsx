@@ -20,8 +20,8 @@ import { ApolloQueryResult } from "@apollo/client";
 import { useQuery } from "@apollo/client";
 import { topicsQuery } from "../pages/Topics";
 interface QuestionFormProps {
-  refetch?: () => Promise<ApolloQueryResult<ListThreadsQuery>>;
-  clickedFromProfilePage?: boolean;
+  refetch?: () => Promise<ApolloQueryResult<ListThreadsQuery>>; /* from home page*/
+  clickedFromProfilePage?: boolean;  /* if this prop is passed from profile page */
   setShowModal?: React.Dispatch<React.SetStateAction<boolean>>
   refetchProfileThreads?: () => Promise<ApolloQueryResult<ListUserThreadsQuery>>
 }
@@ -37,11 +37,12 @@ export const QuestionForm: React.FC<QuestionFormProps> = ({
   const [topicsArr, setTopicsArr] = useState([]);
 
   useEffect(() => {
-    setTopicsArr(data?.listTopics);
+    setTopicsArr(data && data.listTopics);
   }, [data]);
 
   const [createQuestion] = useCreateThreadMutation();
   const userLogginData = useIsUserLoggedInQuery();
+
   const submitQuestion = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
@@ -51,9 +52,9 @@ export const QuestionForm: React.FC<QuestionFormProps> = ({
           spec: specilization,
         },
       });
-      if(setShowModal && refetchProfileThreads) {
+      if(refetchProfileThreads !== undefined) {
         await refetchProfileThreads()
-        setShowModal(false)
+        // setShowModal(false)
       }
       if (refetch !== undefined) {
         refetch();

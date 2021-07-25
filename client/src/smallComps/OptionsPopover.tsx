@@ -20,16 +20,18 @@ import { ApolloQueryResult } from "@apollo/client";
 interface OptionsPopoverProps {
   threadId: number;
   refetch: () => Promise<ApolloQueryResult<ListUserThreadsQuery>>;
-  setShowThreadOptions:
-    | React.Dispatch<React.SetStateAction<boolean>>
-    | undefined;
+  setShowThreadOptions: React.Dispatch<React.SetStateAction<boolean>>
+  showThreadOptions?: boolean
 }
+
 export const OptionsPopover: React.FC<OptionsPopoverProps> = ({
   children,
   threadId,
   refetch,
+  showThreadOptions,
   setShowThreadOptions,
 }) => {
+
   const [deleteReq] = useDeleteThreadMutation({
     update: () => {
       refetch();
@@ -41,31 +43,41 @@ export const OptionsPopover: React.FC<OptionsPopoverProps> = ({
         id: threadId,
       },
     });
-    setShowThreadOptions && setShowThreadOptions(false);
+    setShowThreadOptions(false);
   };
+
+  const editThread = () => {
+    console.log("edit thread funcc");
+  }
 
   return (
     <Popover>
       <PopoverTrigger>{children}</PopoverTrigger>
-      <PopoverContent maxW="120px">
-        <PopoverArrow />
-        <PopoverBody padding="6px">
-          <Flex justify="center" direction="column">
-            <Button
-              bgColor="green.300"
-              _hover={{
-                color: "white",
-                bgColor: "green.400",
-              }}
-              onClick={() => deleteThread()}
-            >
-              <FiTrash2 style={{ marginRight: "3px" }} />
-              delete
-            </Button>
-            <Button marginTop="6px">edit</Button>
-          </Flex>
-        </PopoverBody>
-      </PopoverContent>
+      {showThreadOptions === true && (
+        <PopoverContent maxW="120px">
+          <PopoverArrow />
+          <PopoverBody padding="6px">
+            <Flex justify="center" direction="column">
+              <Button
+                bgColor="green.300"
+                _hover={{
+                  color: "white",
+                  bgColor: "green.400",
+                }}
+                onClick={() => deleteThread()}
+              >
+                <FiTrash2 style={{ marginRight: "3px" }} />
+                delete
+              </Button>
+              <Button
+                onClick={() => editThread()}
+                marginTop="6px">edit</Button>
+            </Flex>
+          </PopoverBody>
+        </PopoverContent>
+      )}
+
     </Popover>
   );
+
 };

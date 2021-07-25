@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Box, Divider, Flex, useDisclosure } from "@chakra-ui/react";
+import { Box, Divider, Flex, Skeleton, useDisclosure } from "@chakra-ui/react";
 
 import { QuestionBox } from "../smallComps/QuestionBox";
 import { FastBigSpinner } from "../smallComps/Spinners";
@@ -19,6 +19,7 @@ export const Profile = () => {
     fetchPolicy: "network-only",
   });
 
+  
   const createNewThread = () => setShowModal(true);
 
   let ThreadSection: any = null;
