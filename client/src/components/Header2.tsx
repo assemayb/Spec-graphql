@@ -132,29 +132,27 @@ export const Header2: React.FC<Header2Props> = ({ }) => {
       justifyContent="center"
       alignItems="center"
       bgColor="green.300"
-      height="80px"
-      fontSize={["sm","md", "large", "xl"]}
+      flexDir={["column", "column", "row", "row"]}
+      fontSize={["sm", "md", "large", "xl"]}
       fontWeight="bold"
       color="white"
-      position="relative"
       width="100%"
-      // width="vw"
+      height="100px"
     >
-      <Flex ml="1rem" position="absolute" left="2px">
+      <Flex ml="1rem" position={["relative", "relative", "absolute", "absolute"]} left="4px">
         <LinkBox route="Home" icon={<AiFillHome width="20px" />} />
         <LinkBox route="topics" icon={<BiBookContent width="20px" />} />
       </Flex>
 
       <Flex
-        marginRight="8px"
-        height="100px"
+        // position="absolute"
+        position={["relative", "relative", "absolute", "absolute"]}
         alignItems="center"
         justifyContent="center"
-        position="absolute"
+        marginRight="8px"
+        height="100px"
         right="8px"
       >
-
-
         {loginState && loginState.loading && (
           <Box marginLeft="5px">
             <SmallSpinner />

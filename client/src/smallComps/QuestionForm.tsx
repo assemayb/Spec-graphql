@@ -19,6 +19,7 @@ import {
 import { ApolloQueryResult } from "@apollo/client";
 import { useQuery } from "@apollo/client";
 import { topicsQuery } from "../pages/Topics";
+
 interface QuestionFormProps {
   refetch?: () => Promise<ApolloQueryResult<ListThreadsQuery>>; /* from home page*/
   clickedFromProfilePage?: boolean;  /* if this prop is passed from profile page */
@@ -33,12 +34,15 @@ export const QuestionForm: React.FC<QuestionFormProps> = ({
 }) => {
   const [question, setQuestion] = useState("");
   const [specilization, setSpecilization] = useState("");
-  const { data } = useQuery(topicsQuery);
+  const { data, client } = useQuery(topicsQuery);
   const [topicsArr, setTopicsArr] = useState([]);
 
   useEffect(() => {
     setTopicsArr(data && data.listTopics);
-  }, [data]);
+    return () => {
+      client.stop()
+    }
+  }, [client, data]);
 
   const [createQuestion] = useCreateThreadMutation();
   const userLogginData = useIsUserLoggedInQuery();

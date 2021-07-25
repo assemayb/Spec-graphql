@@ -1,7 +1,7 @@
-import { Box, Divider, Flex} from "@chakra-ui/react";
+import { Box, Divider, Flex } from "@chakra-ui/react";
 import { useParams, useLocation, useHistory } from "react-router-dom";
 import React, { useEffect, useState } from "react";
-import {useQuery} from "@apollo/client"
+import { useQuery } from "@apollo/client"
 import { useListTopicThreadsQuery } from "../generated/graphql";
 import { QuestionBox } from "../smallComps/QuestionBox";
 import { FastBigSpinner } from "../smallComps/Spinners";
@@ -18,7 +18,7 @@ export const SideNavBox: React.FC<SideNavBoxProps> = ({ topics }) => {
       flex="1"
       p="0.5rem"
       flexDirection="column"
-      maxH="autox"
+      h="auto"
       marginX="8px"
       shadow="base"
     >
@@ -30,7 +30,7 @@ export const SideNavBox: React.FC<SideNavBoxProps> = ({ topics }) => {
           key={index}
           textAlign="center"
           p="0.5rem"
-          bgColor="green.200"
+          bgColor="green.300"
           color="white"
           borderRadius="-20px"
           cursor="pointer"
@@ -53,12 +53,18 @@ interface SignleTopicPageProps { }
 export const SignleTopicPage: React.FC<SignleTopicPageProps> = ({ }) => {
   const params: any = useParams();
   const topicsArr = useQuery(topicsQuery)
-  const { data, loading } = useListTopicThreadsQuery({
+  const { data, loading, client } = useListTopicThreadsQuery({
     fetchPolicy: "cache-and-network",
     variables: {
       topic: params.topicName,
-    },
+    }
   });
+
+  useEffect(() => {
+    return () => {
+      client.stop()
+    }
+  }, [client])
 
   let ThreadsComp: any = null;
   if (loading) {
