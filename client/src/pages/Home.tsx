@@ -64,7 +64,7 @@ export const Home: React.FC<RouteComponentProps> = ({ history, location }) => {
           justifyContent="center"
           flexDirection="column"
           alignItems="center"
-          flex={["4", "4", "4", "4"]}
+          flex="4"
           shadow="base"
           p={["5px", "5px", "1rem", "1rem"]}
         >
@@ -72,17 +72,17 @@ export const Home: React.FC<RouteComponentProps> = ({ history, location }) => {
         </Flex>
 
         <Flex
-          flex={["1", "1", "1", "1"]}
+          flex="1"
           p="0.5rem"
           flexDirection="column"
           maxH="auto"
           marginLeft="5px"
         >
-          <Box p={["0.5rem", "0.5rem", "0.8rem", "0.8rem"]} shadow="base" marginBottom="1rem">
+          <Box p={["0.3rem", "0.4rem", "0.8rem", "0.8rem"]} shadow="base" marginBottom="1rem">
             <Box
               onClick={() => setThreadsHeader("Most trendy threads")}
               textAlign="center"
-              p={["0.5rem", "0.5rem", "0.8rem", "0.8rem"]}
+              p={["0.2rem", "0.4rem", "0.8rem", "0.8rem"]}
               bgColor="green.300"
               color="Window"
               borderRadius="-10px"
@@ -93,8 +93,8 @@ export const Home: React.FC<RouteComponentProps> = ({ history, location }) => {
               }}
               marginY="3px"
             >
-              <Flex justify="center" align="center">
-                <BiBarChartAlt size="1rem" style={{ marginRight: "3px" }} />
+              <Flex justify="center" align="center" fontSize="0.8rem">
+                <BiBarChartAlt style={{ marginRight: "3px" }} />
                 <span>most answers</span>
               </Flex>
             </Box>
@@ -113,8 +113,8 @@ export const Home: React.FC<RouteComponentProps> = ({ history, location }) => {
               }}
               marginY="3px"
             >
-              <Flex justify="center" align="center">
-                <FiClock size="1rem" style={{ marginRight: "5px" }} />
+              <Flex justify="center" align="center" fontSize="0.8rem">
+                <FiClock  style={{ marginRight: "5px" }} />
                 <span>most recent</span>
               </Flex>
             </Box>

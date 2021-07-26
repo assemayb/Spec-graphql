@@ -53,7 +53,7 @@ export const QuestionForm: React.FC<QuestionFormProps> = ({
           spec: specilization,
         },
       });
-      if(refetchProfileThreads !== undefined) {
+      if (refetchProfileThreads !== undefined) {
         await refetchProfileThreads()
         // setShowModal(false)
       }
@@ -69,27 +69,33 @@ export const QuestionForm: React.FC<QuestionFormProps> = ({
   return (
     <Box>
       <Heading
-        as="h3"
-        fontSize="20px"
+        fontSize={["14px", "14px", "20px", "20px"]}
         textAlign="center"
         textColor="gray.400"
         marginBottom="4px"
       >
         Create Thread
-        <Divider  marginTop="5px"/>
+        <Divider marginTop="5px" />
       </Heading>
 
       <Box
         display="flex"
         flexDirection="column"
-        p="1rem"
-        my="10px"
+        // p={["0.4rem", "1rem","1rem"]}
+        p={{
+          base: "0.6rem",
+          md: "1rem",
+        }}
+        my={{
+          base: "5px",
+          md: "10px"
+        }}
         boxShadow={clickedFromProfilePage ? "" : "lg"}
         textAlign="center"
       >
         <form onSubmit={(e) => submitQuestion(e)}>
           <FormControl isRequired>
-            <FormLabel color="green.400" fontWeight="bold">
+            <FormLabel color="green.400">
               {" "}
               question
             </FormLabel>
@@ -101,12 +107,12 @@ export const QuestionForm: React.FC<QuestionFormProps> = ({
             />
           </FormControl>
           <FormControl isRequired>
-            <FormLabel color="green.400" fontWeight="bold">
+            <FormLabel color="green.400" >
               specilization
             </FormLabel>
             <Select
               onChange={(e) => setSpecilization(e.target.value)}
-              fontSize="16px"
+              fontSize="12px"
               defaultValue={"disabled"}
               name="topic"
               variant="flushed"
@@ -126,8 +132,17 @@ export const QuestionForm: React.FC<QuestionFormProps> = ({
             isDisabled={!userLogginData.data?.isUserLoggedIn}
             type="submit"
             borderRadius="-20px"
-            marginTop="12px"
+            marginTop={{
+              base: "8px",
+              md: "12px",
+    
+            }}
+            
             marginX="auto"
+            fontSize={{
+              base: "10px",
+              md: "1rem",
+            }}
           >
             submit
           </Button>

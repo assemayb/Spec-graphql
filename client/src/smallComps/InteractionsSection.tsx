@@ -17,7 +17,7 @@ export const InteractionsSection: React.FC<InteractionsSectionProps> = ({
       left="25px"
       bottom="1px"
       color="gray.400"
-      fontSize="10px"
+      fontSize={["8px","8px", "10px","10px"]}
       marginTop="4px"
       fontWeight="bold"
     >

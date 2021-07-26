@@ -136,9 +136,12 @@ export const Header2: React.FC<Header2Props> = ({ }) => {
       fontWeight="bold"
       color="white"
       width="100%"
-      height="100px"
+      height={["70px","70px","100px", "100px"]}
     >
-      <Flex ml="0.3rem" position="absolute" left="0px">
+      <Flex ml={{
+        small: "0.1rem",
+        base: "0.5rem"
+      }} position="absolute" left="0px">
         <LinkBox route="Home" icon={<AiFillHome width="20px" />} />
         <LinkBox route="topics" icon={<BiBookContent width="20px" />} />
       </Flex>
