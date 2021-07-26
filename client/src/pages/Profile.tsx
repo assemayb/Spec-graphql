@@ -50,7 +50,7 @@ export const Profile = () => {
     <>
       <ProfileModal refetchProfileThreads={refetch} setShowModal={setShowModal} showModal={showModal} onClose={onClose} />
       <HeaderComp threadsHeader={"Threads you created"}/>
-      <Flex p={["0.8rem", "0.8rem", "1rem", "1rem"]}  shadow="base" marginTop="1rem">
+      <Flex p={["0.8rem", "0.8rem", "1rem", "1rem"]}   marginTop="1rem">
         <Flex
           justifyContent="center"
           flexDirection="column"

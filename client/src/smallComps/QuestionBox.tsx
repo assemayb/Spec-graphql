@@ -68,15 +68,23 @@ export const QuestionBox: React.FC<QuestionBoxProps> = ({
       p={username ? "1rem" : "0.8rem"}
       my="5px"
       shadow={username ? "md" : "sm"}
-      bgColor="gray.200"
+      bgColor="gray.100"
       _hover={{
-        bgColor: "gray.400",
+        bgColor: "gray.200",
         borderRadius: "-30px",
       }}
       borderRadius="-20px"
     >
       {username && (
-        <Heading size="6px" color="gray.400" display="flex" alignItems="center">
+        <Heading
+          fontSize={{
+            base: "10px",
+            md: "1rem",
+          }}
+          color="gray.400"
+          display="flex"
+          alignItems="center"
+        >
           <FiUser />
           <Box ml="4px">{username}</Box>
         </Heading>
@@ -86,14 +94,14 @@ export const QuestionBox: React.FC<QuestionBoxProps> = ({
         boxShadow="sm"
         marginTop="0.7rem"
         marginLeft="5px"
+        marginBottom="0.6rem"
         p={["0.4rem", "0.4rem", "1.4rem", "1.4rem"]}
         pos="relative"
-        borderRadius="5px"
-        // cursor="pointer"
-        bgColor="whiteAlpha.400"
-        color="blackAlpha.700"
+        borderRadius="14px"
+        textShadow="md"
+        color="#718096"
         textOverflow="ellipsis"
-        fontSize={["10px", "16px", "large", "xl"]}
+        fontSize={["10px", "16px", "large", "22px"]}
         _hover={{
           color: "green.600",
         }}
@@ -106,8 +114,8 @@ export const QuestionBox: React.FC<QuestionBoxProps> = ({
           colorScheme="green"
           pos="absolute"
           p="0.1rem"
-          right="5px"
-          top="2px"
+          right="1px"
+          top="1px"
           fontSize={["0.5rem", "0.5rem", "0.5rem", "0.7rem"]}
           opacity="0.7"
         >
@@ -116,38 +124,35 @@ export const QuestionBox: React.FC<QuestionBoxProps> = ({
       )}
 
       {!username && (
-        <Flex align="center" marginLeft="6px" p="0.3rem" marginTop="6px">
+        <Flex align="center" marginLeft="6px" p="0.2rem" marginTop="6px">
           <Button
             onClick={() => deleteThread()}
             bgColor="whiteAlpha.600"
             width="100px"
-            height="30px"
-            borderRadius="-10px"
+            height="40px"
+            borderRadius="10px"
+            _hover={{
+              bgColor: "green.200",
+              color: "white",
+            }}
           >
             <FiTrash2 style={{ marginRight: "5px" }} />
             delete
           </Button>
-          {currentlyEditing ? (
-            <Button
-              bgColor="whiteAlpha.600"
-              width="100px"
-              height="30px"
-              marginLeft="1rem"
-              borderRadius="-10px"
-            >
-              save
-            </Button>
-          ) : (
-            <Button
-              bgColor="whiteAlpha.600"
-              width="100px"
-              height="30px"
-              marginLeft="1rem"
-              borderRadius="-10px"
-            >
-              edit
-            </Button>
-          )}
+          <Button
+            onClick={() => deleteThread()}
+            bgColor="whiteAlpha.600"
+            maxWidth="130px"
+            maxHeight="40px"
+            borderRadius="10px"
+            marginLeft="4px"
+            _hover={{
+              bgColor: "green.200",
+              color: "white",
+            }}
+          >
+            go to thread
+          </Button>
         </Flex>
       )}
       {username && (
