@@ -61,7 +61,6 @@ export const QuestionForm: React.FC<QuestionFormProps> = ({
         refetch();
       }
       setQuestion("")
-      setSpecilization("")
     } catch (error) {
       console.log(error.messge);
     }
@@ -81,7 +80,6 @@ export const QuestionForm: React.FC<QuestionFormProps> = ({
       <Box
         display="flex"
         flexDirection="column"
-        // p={["0.4rem", "1rem","1rem"]}
         p={{
           base: "0.6rem",
           md: "1rem",
