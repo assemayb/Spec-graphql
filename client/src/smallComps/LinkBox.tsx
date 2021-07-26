@@ -12,8 +12,8 @@ export const LinkBox: React.FC<NavLink> = ({ route, icon }) => {
   return (
     <Link to={route !== "Home" ? `/${route}` : "/"}>
       <Box
-        // mx="0.4rem"
-        
+        as="button"
+        fontWeight="bold"
         _hover={{
           bgColor: "green.400",
           borderRadius: "-10px"

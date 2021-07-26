@@ -6,6 +6,7 @@ import { useListTopicThreadsQuery } from "../generated/graphql";
 import { QuestionBox } from "../smallComps/QuestionBox";
 import { FastBigSpinner } from "../smallComps/Spinners";
 import { topicsQuery } from "./Topics";
+import { HeaderComp } from "../smallComps/HeaderComp";
 
 interface SideNavBoxProps {
   topics?: string[]
@@ -25,6 +26,7 @@ export const SideNavBox: React.FC<SideNavBoxProps> = ({ topics }) => {
       {topics && topics.map((topic, index) => {
         return (
           <Box
+            as="button"
             onClick={() => {
               router.push(`/topics/${topic}`, { topics });
             } }
@@ -86,23 +88,10 @@ export const SignleTopicPage: React.FC<SignleTopicPageProps> = () => {
 
   return (
     <>
-      <Box
-        marginLeft="1rem"
-        marginTop="1rem"
-        fontSize="30px"
-        fontFamily="fantasy"
-        fontWeight="bold"
-        color="gray.500"
-        textShadow="lg"
-        width="500px"
-      >
-        {`${params.topicName} Threads`}
-        <Divider />
-      </Box>
-
+      <HeaderComp threadsHeader={`${params.topicName} Threads`}/>
+        
       <Flex marginRight="auto" marginLeft="auto" marginTop="2rem">
         <Flex
-          justifyContent="center"
           flexDirection="column"
           alignItems="center"
           flex="7"

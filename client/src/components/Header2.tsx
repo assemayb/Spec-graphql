@@ -141,19 +141,17 @@ export const Header2: React.FC<Header2Props> = ({ }) => {
       <Flex ml={{
         small: "0.1rem",
         base: "0.5rem"
-      }} position="absolute" left="0px">
+      }} position="absolute" left={{base: "1px", md: "1rem"}}>
         <LinkBox route="Home" icon={<AiFillHome width="20px" />} />
         <LinkBox route="topics" icon={<BiBookContent width="20px" />} />
       </Flex>
 
       <Flex
-        // position="absolute"
         position="absolute"
         alignItems="center"
         justifyContent="center"
-        // marginRight="8px"
         height="100px"
-        right="2px"
+        right={{base: "1px", md: "1rem"}}
       >
         {loginState && loginState.loading && (
           <Box marginLeft="5px">

@@ -48,7 +48,7 @@ export const Home: React.FC<RouteComponentProps> = ({ history, location }) => {
       
       <Flex marginTop="1rem">
         <Flex
-          justifyContent="center"
+          // justifyContent="center"
           flexDirection="column"
           alignItems="center"
           flex="4"
@@ -80,8 +80,8 @@ export const Home: React.FC<RouteComponentProps> = ({ history, location }) => {
               }}
               marginY="3px"
             >
-              <Flex justify="center" align="center" fontSize="0.8rem">
-                <BiBarChartAlt style={{ marginRight: "3px" }} />
+              <Flex justify="center" align="center" fontSize={{base: "0.7rem", md: "1.2rem"}}>
+                <BiBarChartAlt style={{ marginRight: "5px" }} />
                 <span>most answers</span>
               </Flex>
             </Box>
@@ -100,7 +100,7 @@ export const Home: React.FC<RouteComponentProps> = ({ history, location }) => {
               }}
               marginY="3px"
             >
-              <Flex justify="center" align="center" fontSize="0.8rem">
+              <Flex justify="center" align="center" fontSize={{base: "0.7rem", md: "1.2rem"}}>
                 <FiClock  style={{ marginRight: "5px" }} />
                 <span>most recent</span>
               </Flex>

@@ -69,13 +69,13 @@ export const QuestionForm: React.FC<QuestionFormProps> = ({
   return (
     <Box>
       <Heading
-        fontSize={["14px", "14px", "20px", "20px"]}
+        fontSize={{ base: "14px", md: "1.5rem" }}
         textAlign="center"
         textColor="gray.400"
-        marginBottom="4px"
+        marginBottom={{ base: "6px", md: "1rem" }}
       >
         Create Thread
-        <Divider marginTop="5px" />
+        <Divider marginTop="8px" />
       </Heading>
 
       <Box
@@ -95,19 +95,21 @@ export const QuestionForm: React.FC<QuestionFormProps> = ({
       >
         <form onSubmit={(e) => submitQuestion(e)}>
           <FormControl isRequired>
-            <FormLabel color="green.400">
+            <FormLabel color="green.400" fontSize={{ base: "0.7rem", md: "1rem" }}>
               {" "}
               question
             </FormLabel>
             <Input
+              fontSize={{ base: "0.7rem", md: "1rem" }}
               borderRadius="-10px"
+              padding={{ base: "0.4rem", md: "1rem" }}
               type="text"
               value={question}
               onChange={(e) => setQuestion(e.target.value)}
             />
           </FormControl>
           <FormControl isRequired>
-            <FormLabel color="green.400" >
+            <FormLabel color="green.400" fontSize={{ base: "0.7rem", md: "1rem" }}>
               specilization
             </FormLabel>
             <Select
@@ -135,9 +137,8 @@ export const QuestionForm: React.FC<QuestionFormProps> = ({
             marginTop={{
               base: "8px",
               md: "12px",
-    
             }}
-            
+
             marginX="auto"
             fontSize={{
               base: "10px",
