@@ -5,6 +5,7 @@ import { QuestionBox } from "../smallComps/QuestionBox";
 import { FastBigSpinner } from "../smallComps/Spinners";
 import { useListUserThreadsQuery } from "../generated/graphql";
 import { ProfileModal } from "../components/ProfileModal";
+import { HeaderComp } from "../smallComps/HeaderComp";
 
 export const Profile = () => {
   const [showModal, setShowModal] = useState(false);
@@ -48,19 +49,8 @@ export const Profile = () => {
   return (
     <>
       <ProfileModal refetchProfileThreads={refetch} setShowModal={setShowModal} showModal={showModal} onClose={onClose} />
-      <Box
-        marginLeft="1rem"
-        marginY="1rem"
-        fontSize="30px"
-        fontFamily="fantasy"
-        fontWeight="bold"
-        color="gray.500"
-        textShadow="lg"
-      >
-        Threads created by you
-        <Divider mt="0.5rem" w="350px" />
-      </Box>
-      <Flex marginRight="auto" marginLeft="auto" marginTop="2rem">
+      <HeaderComp threadsHeader={"Threads you created"}/>
+      <Flex p={["0.8rem", "0.8rem", "1rem", "1rem"]}  shadow="base" marginTop="1rem">
         <Flex
           justifyContent="center"
           flexDirection="column"

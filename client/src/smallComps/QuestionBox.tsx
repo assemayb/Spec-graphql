@@ -68,6 +68,11 @@ export const QuestionBox: React.FC<QuestionBoxProps> = ({
         pos="relative"
         cursor="pointer"
         color="blackAlpha.700"
+        // maxW={{
+        //   base: "180px",
+        //   "lg": "auto"
+        // }}
+        textOverflow='ellipsis'
         fontSize={["10px", "16px", "large", "xl"]}
         _hover={{
           color: "green.600",

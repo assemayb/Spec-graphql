@@ -17,6 +17,7 @@ import {
   Center,
 } from "@chakra-ui/react";
 import { gql, useQuery } from "@apollo/client";
+import { HeaderComp } from "../smallComps/HeaderComp";
 
 interface TopicBoxProps {
   topic: string;
@@ -83,20 +84,8 @@ export const Topics: React.FC<RouteComponentProps> = () => {
 
   return (
     <>
-      <Box
-        marginLeft="1rem"
-        marginTop="1rem"
-        fontSize="30px"
-        fontFamily="fantasy"
-        fontWeight="bold"
-        color="gray.500"
-        textShadow="lg"
-      >
-        Health Topics
-        <Divider />
-      </Box>
-
-      <Box p="2rem" marginTop="2rem" shadow="base">
+      <HeaderComp threadsHeader={"Health Topics"}/>
+      <Box p={["0.8rem", "0.8rem", "1rem", "1rem"]}  shadow="base" marginTop="1rem">
         <Grid
           templateColumns={[
             "repeat(2, 1fr)",
