@@ -41,7 +41,7 @@ export const QuestionBox: React.FC<QuestionBoxProps> = ({
     <Box
       pos="relative"
       width="100%"
-      p={username ? "1.2rem" : "14px"}
+      p={username ? "0.8rem" : "0.6rem"}
       my="5px"
       shadow={username ? "md" : "sm"}
       bgColor="gray.200"
@@ -50,11 +50,11 @@ export const QuestionBox: React.FC<QuestionBoxProps> = ({
         borderRadius: "-30px",
       }}
       borderRadius="-20px"
-      borderLeft="5px solid green.200"
+      
     >
       {username && (
-        <Heading as="h5" size="xs" color="gray.400" display="flex">
-          <FiUser size="15px" />
+        <Heading size="6px" color="gray.400" display="flex" alignItems="center">
+          <FiUser />
           <Box ml="4px">{username}</Box>
         </Heading>
       )}
@@ -63,12 +63,12 @@ export const QuestionBox: React.FC<QuestionBoxProps> = ({
         boxShadow="sm"
         size="md"
         my="5px"
-        marginLeft={[ "0.5rem", "0.5rem", "2rem", "2rem"]}
+        marginLeft={["0.1rem", "0.4rem", "1rem", "2rem"]}
         p={["2px", "2px","10px", "10px"]}
         pos="relative"
         cursor="pointer"
         color="blackAlpha.700"
-        fontSize={["sm", "md", "large", "xl"]}
+        fontSize={["10px", "16px", "large", "xl"]}
         _hover={{
           color: "green.600",
         }}
@@ -79,10 +79,10 @@ export const QuestionBox: React.FC<QuestionBoxProps> = ({
             variant="subtle"
             colorScheme="green"
             pos="absolute"
-            p="0.2rem"
+            p="0.1rem"
             right="2px"
             top={username ? "0.1rem" : "1.2rem"}
-            fontSize="0.7rem"
+            fontSize={["0.5rem", "0.5rem", "0.5rem","0.7rem"]}
             opacity="0.7"
           >
             {specializtion}
@@ -121,7 +121,7 @@ export const QuestionBox: React.FC<QuestionBoxProps> = ({
       {username && (
         <>
           <InteractionsSection repliesCount={repliesCount!} />
-          <Heading pos="absolute" right="20px" color="gray.400" fontSize="12px">
+          <Heading pos="absolute" right="20px" color="gray.400" fontSize={["8px", "8px", "10px","12px"]}>
             {createdAt !== null && createdAt?.substr(0, 10)}
           </Heading>
         </>

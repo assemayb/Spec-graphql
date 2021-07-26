@@ -64,7 +64,7 @@ export const Home: React.FC<RouteComponentProps> = ({ history, location }) => {
           justifyContent="center"
           flexDirection="column"
           alignItems="center"
-          flex="4"
+          flex={["4", "4", "4", "4"]}
           shadow="base"
           p={["5px", "5px", "1rem", "1rem"]}
         >
@@ -72,13 +72,13 @@ export const Home: React.FC<RouteComponentProps> = ({ history, location }) => {
         </Flex>
 
         <Flex
-          flex="1"
+          flex={["1", "1", "1", "1"]}
           p="0.5rem"
           flexDirection="column"
           maxH="auto"
-          marginX="8px"
+          marginLeft="5px"
         >
-          <Box p={["0.5rem", "0.5rem", "0.8rem", "0.8rem"]} shadow="base" marginBottom="0.7rem">
+          <Box p={["0.5rem", "0.5rem", "0.8rem", "0.8rem"]} shadow="base" marginBottom="1rem">
             <Box
               onClick={() => setThreadsHeader("Most trendy threads")}
               textAlign="center"
