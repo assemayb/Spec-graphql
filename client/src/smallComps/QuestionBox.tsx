@@ -59,16 +59,16 @@ export const QuestionBox: React.FC<QuestionBoxProps> = ({
         </Heading>
       )}
       <Heading
-        as="h3"
+        // as="h3"
         boxShadow="sm"
         size="md"
         my="5px"
-        marginLeft="2rem"
-        p="10px"
+        marginLeft={[ "0.5rem", "0.5rem", "2rem", "2rem"]}
+        p={["2px", "2px","10px", "10px"]}
         pos="relative"
         cursor="pointer"
         color="blackAlpha.700"
-        fontSize="xl"
+        fontSize={["sm", "md", "large", "xl"]}
         _hover={{
           color: "green.600",
         }}

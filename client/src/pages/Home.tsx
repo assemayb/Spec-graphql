@@ -46,13 +46,13 @@ export const Home: React.FC<RouteComponentProps> = ({ history, location }) => {
 
       <Box
         marginLeft="1rem"
-        marginTop="1rem"
-        fontSize="30px"
+        marginTop={["8px", "8px", "1rem", "1rem"]}
+        fontSize={["15px", "20px", "30px", "30px"]}
         fontFamily="fantasy"
         fontWeight="bold"
         color="gray.500"
         textShadow="lg"
-        width="500px"
+        maxWidth={["150px", "200px", "500px", "500px"]}
       >
         {threadsHeader}
         <Divider />
@@ -66,23 +66,23 @@ export const Home: React.FC<RouteComponentProps> = ({ history, location }) => {
           alignItems="center"
           flex="4"
           shadow="base"
-          p="1rem"
+          p={["5px", "5px", "1rem", "1rem"]}
         >
           {ThreadsComp}
         </Flex>
 
         <Flex
           flex="1"
-          p="1rem"
+          p="0.5rem"
           flexDirection="column"
           maxH="auto"
           marginX="8px"
         >
-          <Box p="1rem" shadow="base" marginBottom="2rem">
+          <Box p={["0.5rem", "0.5rem", "0.8rem", "0.8rem"]} shadow="base" marginBottom="0.7rem">
             <Box
               onClick={() => setThreadsHeader("Most trendy threads")}
               textAlign="center"
-              p="0.8rem"
+              p={["0.5rem", "0.5rem", "0.8rem", "0.8rem"]}
               bgColor="green.300"
               color="Window"
               borderRadius="-10px"
@@ -94,15 +94,15 @@ export const Home: React.FC<RouteComponentProps> = ({ history, location }) => {
               marginY="3px"
             >
               <Flex justify="center" align="center">
-                <BiBarChartAlt size="25px" style={{ marginRight: "5px" }} />
-                most answers
+                <BiBarChartAlt size="1rem" style={{ marginRight: "3px" }} />
+                <span>most answers</span>
               </Flex>
             </Box>
 
             <Box
               onClick={() => setThreadsHeader("Most recent threads")}
               textAlign="center"
-              p="0.8rem"
+              p={["0.2rem", "0.2rem", "0.8rem", "0.8rem"]}
               bgColor="green.300"
               color="Window"
               borderRadius="-10px"
@@ -114,8 +114,8 @@ export const Home: React.FC<RouteComponentProps> = ({ history, location }) => {
               marginY="3px"
             >
               <Flex justify="center" align="center">
-                <FiClock size="25px" style={{ marginRight: "5px" }} />
-                most recent
+                <FiClock size="1rem" style={{ marginRight: "5px" }} />
+                <span>most recent</span>
               </Flex>
             </Box>
           </Box>
