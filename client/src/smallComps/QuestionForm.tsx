@@ -34,15 +34,12 @@ export const QuestionForm: React.FC<QuestionFormProps> = ({
 }) => {
   const [question, setQuestion] = useState("");
   const [specilization, setSpecilization] = useState("");
-  const { data, client } = useQuery(topicsQuery);
+  const { data } = useQuery(topicsQuery);
   const [topicsArr, setTopicsArr] = useState([]);
 
   useEffect(() => {
     setTopicsArr(data && data.listTopics);
-    return () => {
-      client.stop()
-    }
-  }, [client, data]);
+  }, [data]);
 
   const [createQuestion] = useCreateThreadMutation();
   const userLogginData = useIsUserLoggedInQuery();
@@ -63,6 +60,8 @@ export const QuestionForm: React.FC<QuestionFormProps> = ({
       if (refetch !== undefined) {
         refetch();
       }
+      setQuestion("")
+      setSpecilization("")
     } catch (error) {
       console.log(error.messge);
     }

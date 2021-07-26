@@ -1,6 +1,6 @@
 import { Box, Divider, Flex } from "@chakra-ui/react";
-import { useParams, useLocation, useHistory } from "react-router-dom";
-import React, { useEffect, useState } from "react";
+import { useParams,  useHistory } from "react-router-dom";
+import React  from "react";
 import { useQuery } from "@apollo/client"
 import { useListTopicThreadsQuery } from "../generated/graphql";
 import { QuestionBox } from "../smallComps/QuestionBox";
@@ -22,49 +22,45 @@ export const SideNavBox: React.FC<SideNavBoxProps> = ({ topics }) => {
       marginX="8px"
       shadow="base"
     >
-      {topics && topics.map((topic, index) => (
-        <Box
-          onClick={() => {
-            router.push(`/topics/${topic}`, { topics });
-          }}
-          key={index}
-          textAlign="center"
-          p="0.5rem"
-          bgColor="green.300"
-          color="white"
-          borderRadius="-20px"
-          cursor="pointer"
-          _hover={{
-            bgColor: "blue.200",
-          }}
-          marginY="3px"
-        >
-          <Flex justify="center" align="center">
-            {topic}
-          </Flex>
-        </Box>
+      {topics && topics.map((topic, index) => {
+        return (
+          <Box
+            onClick={() => {
+              router.push(`/topics/${topic}`, { topics });
+            } }
+            key={index}
+            textAlign="center"
+            p="0.5rem"
+            bgColor="green.300"
+            color="white"
+            borderRadius="-20px"
+            cursor="pointer"
+            _hover={{
+              bgColor: "blue.200",
+            }}
+            marginY="3px"
+          >
+            <Flex justify="center" align="center">
+              {topic}
+            </Flex>
+          </Box>
 
-      ))}
+        );
+      })}
     </Flex>
   );
 };
 
 interface SignleTopicPageProps { }
-export const SignleTopicPage: React.FC<SignleTopicPageProps> = ({ }) => {
+export const SignleTopicPage: React.FC<SignleTopicPageProps> = () => {
   const params: any = useParams();
   const topicsArr = useQuery(topicsQuery)
-  const { data, loading, client } = useListTopicThreadsQuery({
+  const { data, loading  } = useListTopicThreadsQuery({
     fetchPolicy: "cache-and-network",
     variables: {
       topic: params.topicName,
     }
   });
-
-  useEffect(() => {
-    return () => {
-      client.stop()
-    }
-  }, [client])
 
   let ThreadsComp: any = null;
   if (loading) {

@@ -50,8 +50,8 @@ const ProfileButton: React.FC<ProfileButtonProps> = ({ isUserLogged }) => {
       <ModalComponent showModal={showModal} onClose={onClose} />
       <Button
         onClick={() => handleProfileClick()}
-        height="50%"
-        fontSize="medium"
+        height={["30%", "30%", "50%", "50%"]}
+        fontSize={["sm", "sm", "medium", "medium"]}
         fontWeight="bold"
         bgColor="green.400"
         borderRadius="-10px"
@@ -103,8 +103,8 @@ const LogoutButton: React.FC<LogoutButtonProps> = ({ isUserLogged }) => {
   return (
     <Button
       onClick={() => handleLogout()}
-      height="50%"
-      fontSize="medium"
+      height={["30%", "30%", "50%", "50%"]}
+      fontSize={["sm", "sm", "medium", "medium"]}
       fontWeight="bold"
       bgColor="green.400"
       borderRadius="-10px"
@@ -132,26 +132,25 @@ export const Header2: React.FC<Header2Props> = ({ }) => {
       justifyContent="center"
       alignItems="center"
       bgColor="green.300"
-      flexDir={["column", "column", "row", "row"]}
       fontSize={["sm", "md", "large", "xl"]}
       fontWeight="bold"
       color="white"
       width="100%"
       height="100px"
     >
-      <Flex ml="1rem" position={["relative", "relative", "absolute", "absolute"]} left="4px">
+      <Flex ml="0.3rem" position="absolute" left="0px">
         <LinkBox route="Home" icon={<AiFillHome width="20px" />} />
         <LinkBox route="topics" icon={<BiBookContent width="20px" />} />
       </Flex>
 
       <Flex
         // position="absolute"
-        position={["relative", "relative", "absolute", "absolute"]}
+        position="absolute"
         alignItems="center"
         justifyContent="center"
-        marginRight="8px"
+        // marginRight="8px"
         height="100px"
-        right="8px"
+        right="2px"
       >
         {loginState && loginState.loading && (
           <Box marginLeft="5px">

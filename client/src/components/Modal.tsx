@@ -6,10 +6,6 @@ import {
   ModalCloseButton,
   ModalContent,
   ModalOverlay,
-  ModalHeader,
-  ModalFooter,
-  useDisclosure,
-  Heading,
 } from "@chakra-ui/react";
 
 import { LoginFrom } from "./LoginFrom";
