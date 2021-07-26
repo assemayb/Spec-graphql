@@ -12,15 +12,13 @@ export const Profile = () => {
   const [showThreadOptions, setShowThreadOptions] = useState(false);
   const { onClose } = useDisclosure({
     onClose: () => {
-      setShowModal(false)
+      setShowModal(false);
     },
-
   });
   const { data, loading, refetch } = useListUserThreadsQuery({
     fetchPolicy: "network-only",
   });
 
-  
   const createNewThread = () => setShowModal(true);
 
   let ThreadSection: any = null;
@@ -48,45 +46,54 @@ export const Profile = () => {
   }
   return (
     <>
-      <ProfileModal refetchProfileThreads={refetch} setShowModal={setShowModal} showModal={showModal} onClose={onClose} />
-      <HeaderComp threadsHeader={"Threads you created"}/>
-      <Flex p={["0.8rem", "0.8rem", "1rem", "1rem"]}   marginTop="1rem">
+      <ProfileModal
+        refetchProfileThreads={refetch}
+        setShowModal={setShowModal}
+        showModal={showModal}
+        onClose={onClose}
+      />
+      <HeaderComp threadsHeader={"Threads you created"} />
+      <Flex marginTop="1rem">
         <Flex
           justifyContent="center"
           flexDirection="column"
           alignItems="center"
           flex="4"
           shadow="base"
-          p="1rem"
+          p={["0.2rem", "0.4rem", "1rem", "1rem"]}
         >
           {ThreadSection}
         </Flex>
 
         <Flex
           flex="1"
-          p="1rem"
+          // p={["0.2rem", "0.4rem", "1rem", "1rem"]}
           flexDirection="column"
           maxH="auto"
           marginX="8px"
         >
-          <Box p="1rem" shadow="base" marginBottom="2rem">
+      
+          <Box shadow="base" p={["0.2rem", "0.9rem", "1.2rem", "1.2rem"]}>
             <Box
               as="button"
               width="100%"
+              height={{
+                base: "40px",
+                md: "80px"
+              }}
               onClick={() => createNewThread()}
               textAlign="center"
-              p="0.8rem"
               bgColor="green.300"
               color="Window"
+              fontSize={{ base: "0.7rem", md: "1.2rem" }}
               borderRadius="-10px"
               fontWeight="bold"
               cursor="pointer"
               _hover={{
                 bgColor: "green.500",
               }}
-              marginY="3px"
             >
-              create a new thread
+              create new post
             </Box>
           </Box>
 

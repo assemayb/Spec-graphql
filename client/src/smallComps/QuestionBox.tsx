@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { Box, Heading, Badge, Tooltip, Flex, Button } from "@chakra-ui/react";
 
 import { FiUser } from "react-icons/fi";
-import { BiDotsHorizontal } from "react-icons/bi";
+import {  BiRightArrowAlt } from "react-icons/bi";
 import {
   ListUserThreadsQuery,
   useDeleteThreadMutation,
@@ -12,6 +12,7 @@ import { ApolloQueryResult } from "@apollo/client";
 import { OptionsPopover } from "../smallComps/OptionsPopover";
 import { InteractionsSection } from "../smallComps/InteractionsSection";
 import { FiTrash2 } from "react-icons/fi";
+import { useHistory } from "react-router-dom";
 
 interface QuestionBoxProps {
   threadId?: number;
@@ -40,7 +41,7 @@ export const QuestionBox: React.FC<QuestionBoxProps> = ({
   refetchProfileThreads,
 }) => {
   // const currentUser = useMeQuery();
-
+  const router = useHistory();
   const [currentlyEditing, setCurrentlyEditing] = useState(false);
   const [deleteReq] = useDeleteThreadMutation({
     update: () => {
@@ -56,16 +57,16 @@ export const QuestionBox: React.FC<QuestionBoxProps> = ({
     });
   };
 
-  const handleThreadQuestionClick = () => {
-    console.log("editinnggg");
-    setCurrentlyEditing(true);
+  const goToThread = () => {
+    console.log(threadId);
+    router.push(`/threads/${threadId}`);
   };
 
   return (
     <Box
       pos="relative"
       width="100%"
-      p={username ? "1rem" : "0.8rem"}
+      p={username ? "1rem" : "0.5rem"}
       my="5px"
       shadow={username ? "md" : "sm"}
       bgColor="gray.100"
@@ -90,8 +91,9 @@ export const QuestionBox: React.FC<QuestionBoxProps> = ({
         </Heading>
       )}
       <Heading
-        onClick={() => handleThreadQuestionClick()}
+        onClick={() => goToThread()}
         boxShadow="sm"
+        cursor="pointer"
         marginTop="0.7rem"
         marginLeft="5px"
         marginBottom="0.6rem"
@@ -124,13 +126,27 @@ export const QuestionBox: React.FC<QuestionBoxProps> = ({
       )}
 
       {!username && (
-        <Flex align="center" marginLeft="6px" p="0.2rem" marginTop="6px">
+        <Flex  marginLeft="6px" p="0.2rem" marginTop="6px">
           <Button
             onClick={() => deleteThread()}
             bgColor="whiteAlpha.600"
-            width="100px"
-            height="40px"
-            borderRadius="10px"
+            width={{
+              base: "80px",
+              md: "120px",
+            }}
+            p={{
+              base: "0.4rem",
+              md: "1rem",
+            }}
+            height={{
+              base: "25px",
+              md: "40px",
+            }}
+            fontSize={{
+              base: "10px",
+              md: "1rem",
+            }}
+            borderRadius="-10px"
             _hover={{
               bgColor: "green.200",
               color: "white",
@@ -140,18 +156,33 @@ export const QuestionBox: React.FC<QuestionBoxProps> = ({
             delete
           </Button>
           <Button
-            onClick={() => deleteThread()}
+            onClick={() => goToThread()}
             bgColor="whiteAlpha.600"
-            maxWidth="130px"
-            maxHeight="40px"
-            borderRadius="10px"
+            maxWidth={{
+              base: "120px",
+              md: "180px",
+            }}
+            fontSize={{
+              base: "10px",
+              md: "1rem",
+            }}
+            height={{
+              base: "25px",
+              md: "40px",
+            }}
+            borderRadius="-10px"
             marginLeft="4px"
+            p={{
+              base: "0.4rem",
+              md: "1rem",
+            }}
             _hover={{
               bgColor: "green.200",
               color: "white",
             }}
           >
             go to thread
+            <BiRightArrowAlt style={{ marginLeft: "5px" }}/>
           </Button>
         </Flex>
       )}

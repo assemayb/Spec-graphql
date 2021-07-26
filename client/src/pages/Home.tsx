@@ -14,7 +14,7 @@ import { HeaderComp } from "../smallComps/HeaderComp";
 export const Home: React.FC<RouteComponentProps> = ({ history, location }) => {
   const [threadsHeader, setThreadsHeader] = useState("Most trendy threads");
   const { data, loading, refetch } = useListThreadsQuery({
-    fetchPolicy: "cache-first",
+    fetchPolicy: "cache-and-network",
     variables: {
       sortBy: threadsHeader.split(" ")[1],
     },
@@ -30,6 +30,7 @@ export const Home: React.FC<RouteComponentProps> = ({ history, location }) => {
           return (
             <QuestionBox
               key={idx}
+              threadId={thread.id}
               question={thread.question}
               username={thread.threadCreator}
               createdAt={thread.createdAt}
