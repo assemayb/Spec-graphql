@@ -52,7 +52,18 @@ export class ThreadResolver {
     @Ctx() { req, res, payload }: MyContext
   ) {
     try {
-      let thread = await Thread.findOne({ where: { id }, include: "replies" });
+      const thread = await Thread.findOne({
+        where: { id },
+        include: "replies",
+      });
+
+      const replies = thread && thread.getDataValue("replies");
+      const sorteReplies = replies?.sort((a, b) => {
+        return a.id - b.id
+      })
+      thread?.setDataValue("replies", sorteReplies!)
+      
+
       return thread;
     } catch (error) {
       console.error(error.message);

@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { Box, Divider, Flex, Heading, Skeleton } from "@chakra-ui/react";
-import {BiLike} from "react-icons/bi"
+import { BiLike } from "react-icons/bi";
 import { useParams, useLocation } from "react-router-dom";
 import {
   useAddReplyMutation,
   useGetThreadDataQuery,
+  useUpvoteReplyMutation,
 } from "../generated/graphql";
 interface ThreadProps {}
 
@@ -15,19 +16,27 @@ interface params {
 export const Thread: React.FC<ThreadProps> = ({}) => {
   const params: params = useParams();
 
-  const { data, loading, error, client } = useGetThreadDataQuery({
+  const { data, loading, refetch } = useGetThreadDataQuery({
     fetchPolicy: "network-only",
     variables: {
       id: parseInt(params.threadId!),
     },
   });
 
+  const [addReplyReq, { client }] = useUpvoteReplyMutation();
+
   const [repliesCount, setRepliesCount] = useState(0);
   const [showReplies, setShowReplies] = useState(false);
-  const addReply = useAddReplyMutation();
 
+  const upvoteReply = async (id: any) => {
+    await addReplyReq({
+      variables: { id },
+    });
+    await refetch();
+  };
   useEffect(() => {
     setRepliesCount(data?.getThread?.replies?.length!);
+    console.log(data?.getThread);
   }, [data?.getThread, params]);
 
   useEffect(() => {
@@ -35,7 +44,7 @@ export const Thread: React.FC<ThreadProps> = ({}) => {
     if (repliesCount > 0) {
       setTimeout(() => {
         setShowReplies(true);
-      }, 400);
+      }, 200);
     }
   }, [repliesCount]);
 
@@ -75,7 +84,7 @@ export const Thread: React.FC<ThreadProps> = ({}) => {
                   <Heading
                     key={idx}
                     as="h4"
-                    p="1.5rem"
+                    p="1.2em"
                     textShadow="md"
                     color="#718096"
                     fontSize="15px"
@@ -87,23 +96,36 @@ export const Thread: React.FC<ThreadProps> = ({}) => {
                     display="flex"
                     justifyContent="space-between"
                     alignItems="center"
+                    
                   >
                     {reply.text}
                     <Box display="flex" left="1x" bottom="1px">
                       <Box
-                        as="button" 
+                        as="button"
+                        onClick={() => upvoteReply(reply.id)}
+                        borderRadius="-20px"
                         p="10px"
                         bg="green.50"
                         _hover={{
-                          bg:"blue.300",
-                          color:"white"
+                          bg: "blue.300",
+                          color: "white",
                         }}
                         boxShadow="md"
                         marginRight="3px"
                       >
-                        <BiLike size="15px"/>
+                        <BiLike size="15px" />
                       </Box>
-                      <Box p="10px" bg="green.100" boxShadow="md" mx="3px">
+                      <Box
+                        _hover={{
+                          bg: "blue.300",
+                          color: "white",
+                        }}
+                        p="10px"
+                        bg="green.100"
+                        boxShadow="md"
+                        mx="3px"
+                        borderRadius="-20px"
+                      >
                         {reply.upvotes} likes
                       </Box>
                     </Box>
