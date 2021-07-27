@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { Box, Divider, Flex, Skeleton, useDisclosure } from "@chakra-ui/react";
+import React, { useState } from "react";
+import { Box, Flex, useDisclosure } from "@chakra-ui/react";
 
 import { QuestionBox } from "../smallComps/QuestionBox";
 import { FastBigSpinner } from "../smallComps/Spinners";
