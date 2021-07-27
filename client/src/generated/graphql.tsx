@@ -22,11 +22,17 @@ export type Query = {
   getAllUsers?: Maybe<Array<UserType>>;
   isUserLoggedIn: Scalars['Boolean'];
   test: Scalars['String'];
+  getThread?: Maybe<ThreadType>;
   listUserThreads?: Maybe<Array<ThreadType>>;
   listThreads?: Maybe<Array<ThreadType>>;
   listTopics: Array<Scalars['String']>;
   lisTopicThreads?: Maybe<Array<ThreadType>>;
   listThreadReplies?: Maybe<Array<ReplyType>>;
+};
+
+
+export type QueryGetThreadArgs = {
+  id: Scalars['Int'];
 };
 
 
@@ -184,6 +190,23 @@ export type DeleteThreadMutationVariables = Exact<{
 export type DeleteThreadMutation = (
   { __typename?: 'Mutation' }
   & Pick<Mutation, 'deleteThread'>
+);
+
+export type GetThreadDataQueryVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type GetThreadDataQuery = (
+  { __typename?: 'Query' }
+  & { getThread?: Maybe<(
+    { __typename?: 'ThreadType' }
+    & Pick<ThreadType, 'question' | 'specialization' | 'threadCreator' | 'createdAt'>
+    & { replies?: Maybe<Array<(
+      { __typename?: 'ReplyType' }
+      & Pick<ReplyType, 'id' | 'upvotes' | 'text' | 'replyThread' | 'replySpecialist'>
+    )>> }
+  )> }
 );
 
 export type HelloQueryVariables = Exact<{ [key: string]: never; }>;
@@ -371,6 +394,49 @@ export function useDeleteThreadMutation(baseOptions?: Apollo.MutationHookOptions
 export type DeleteThreadMutationHookResult = ReturnType<typeof useDeleteThreadMutation>;
 export type DeleteThreadMutationResult = Apollo.MutationResult<DeleteThreadMutation>;
 export type DeleteThreadMutationOptions = Apollo.BaseMutationOptions<DeleteThreadMutation, DeleteThreadMutationVariables>;
+export const GetThreadDataDocument = gql`
+    query getThreadData($id: Int!) {
+  getThread(id: $id) {
+    question
+    specialization
+    threadCreator
+    createdAt
+    replies {
+      id
+      upvotes
+      text
+      replyThread
+      replySpecialist
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetThreadDataQuery__
+ *
+ * To run a query within a React component, call `useGetThreadDataQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetThreadDataQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetThreadDataQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetThreadDataQuery(baseOptions: Apollo.QueryHookOptions<GetThreadDataQuery, GetThreadDataQueryVariables>) {
+        return Apollo.useQuery<GetThreadDataQuery, GetThreadDataQueryVariables>(GetThreadDataDocument, baseOptions);
+      }
+export function useGetThreadDataLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetThreadDataQuery, GetThreadDataQueryVariables>) {
+          return Apollo.useLazyQuery<GetThreadDataQuery, GetThreadDataQueryVariables>(GetThreadDataDocument, baseOptions);
+        }
+export type GetThreadDataQueryHookResult = ReturnType<typeof useGetThreadDataQuery>;
+export type GetThreadDataLazyQueryHookResult = ReturnType<typeof useGetThreadDataLazyQuery>;
+export type GetThreadDataQueryResult = Apollo.QueryResult<GetThreadDataQuery, GetThreadDataQueryVariables>;
 export const HelloDocument = gql`
     query Hello {
   hello

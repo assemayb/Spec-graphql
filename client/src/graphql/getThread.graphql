@@ -1,0 +1,15 @@
+query getThreadData($id: Int!) {
+  getThread(id: $id) {
+    question
+    specialization
+    threadCreator
+    createdAt
+    replies {
+      id
+      upvotes
+      text
+      replyThread
+      replySpecialist
+    }
+  }
+}

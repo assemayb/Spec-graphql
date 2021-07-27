@@ -63,7 +63,6 @@ export const Home: React.FC<RouteComponentProps> = ({ history, location }) => {
           flex="1"
           p="0.5rem"
           flexDirection="column"
-          maxH="auto"
           marginLeft="5px"
         >
           <Box p={["0.3rem", "0.4rem", "0.8rem", "0.8rem"]} shadow="base" marginBottom="1rem">
