@@ -67,9 +67,17 @@ export class ReplyResolver {
     try {
       let reply = await Reply.findOne({ where: { id } });
       const replyUpvotes = reply?.getDataValue("upvotes");
-      reply?.setDataValue("upvotes", replyUpvotes! + 1);
+      console.log(replyUpvotes);
+      await reply?.update({
+          upvotes: replyUpvotes! + 1
+      })
+      let x = await Reply.findOne({ where: { id } });
+      console.log(x?.getDataValue("upvotes"));
+
+      return true;
     } catch (error) {
       console.log(error.message);
+      return false;
     }
   }
 }

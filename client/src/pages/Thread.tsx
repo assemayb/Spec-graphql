@@ -1,5 +1,6 @@
-import { Box, Divider, Flex, Heading, Skeleton } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
+import { Box, Divider, Flex, Heading, Skeleton } from "@chakra-ui/react";
+import {BiLike} from "react-icons/bi"
 import { useParams, useLocation } from "react-router-dom";
 import {
   useAddReplyMutation,
@@ -92,11 +93,15 @@ export const Thread: React.FC<ThreadProps> = ({}) => {
                       <Box
                         as="button" 
                         p="10px"
-                        bg="green.100"
+                        bg="green.50"
+                        _hover={{
+                          bg:"blue.300",
+                          color:"white"
+                        }}
                         boxShadow="md"
                         marginRight="3px"
                       >
-                        like
+                        <BiLike size="15px"/>
                       </Box>
                       <Box p="10px" bg="green.100" boxShadow="md" mx="3px">
                         {reply.upvotes} likes
