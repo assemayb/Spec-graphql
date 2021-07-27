@@ -1,6 +1,4 @@
-# interface options {
-#  name: String   
-# }
+
 mutation addReply($text: String!, $replyThread: Int!, $replySpecialist: Int!) {
     addReply(options: {
         text: $text,

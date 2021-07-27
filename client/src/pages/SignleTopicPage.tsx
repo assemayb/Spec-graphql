@@ -76,6 +76,7 @@ export const SignleTopicPage: React.FC<SignleTopicPageProps> = () => {
               key={idx}
               fromTopicPage={true}
               question={thread.question}
+              threadId={thread.id}
               username={thread.threadCreator}
               createdAt={thread.createdAt}
               repliesCount={thread.replies?.length}
