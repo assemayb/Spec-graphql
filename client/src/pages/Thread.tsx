@@ -88,16 +88,19 @@ export const Thread: React.FC<ThreadProps> = ({}) => {
                     alignItems="center"
                   >
                     {reply.text}
-                    <Box
-                      display="flex"
-                      left="1x"
-                      bottom="1px"
-                      p="10px"
-                      bg="green.100"
-                      boxShadow="md"
-                    >
-                      <Box mx="5px">{reply.upvotes}</Box>
-                      <Box>like</Box>
+                    <Box display="flex" left="1x" bottom="1px">
+                      <Box
+                        as="button" 
+                        p="10px"
+                        bg="green.100"
+                        boxShadow="md"
+                        marginRight="3px"
+                      >
+                        like
+                      </Box>
+                      <Box p="10px" bg="green.100" boxShadow="md" mx="3px">
+                        {reply.upvotes} likes
+                      </Box>
                     </Box>
                   </Heading>
                 );
