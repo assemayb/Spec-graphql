@@ -171,6 +171,18 @@ export type ReplyCreateType = {
   replySpecialist?: Maybe<Scalars['Int']>;
 };
 
+export type AddReplyMutationVariables = Exact<{
+  text: Scalars['String'];
+  replyThread: Scalars['Int'];
+  replySpecialist: Scalars['Int'];
+}>;
+
+
+export type AddReplyMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'addReply'>
+);
+
 export type CreateThreadMutationVariables = Exact<{
   question: Scalars['String'];
   spec: Scalars['String'];
@@ -333,6 +345,40 @@ export type UsersListQuery = (
 );
 
 
+export const AddReplyDocument = gql`
+    mutation addReply($text: String!, $replyThread: Int!, $replySpecialist: Int!) {
+  addReply(
+    options: {text: $text, replyThread: $replyThread, replySpecialist: $replySpecialist}
+  )
+}
+    `;
+export type AddReplyMutationFn = Apollo.MutationFunction<AddReplyMutation, AddReplyMutationVariables>;
+
+/**
+ * __useAddReplyMutation__
+ *
+ * To run a mutation, you first call `useAddReplyMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAddReplyMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [addReplyMutation, { data, loading, error }] = useAddReplyMutation({
+ *   variables: {
+ *      text: // value for 'text'
+ *      replyThread: // value for 'replyThread'
+ *      replySpecialist: // value for 'replySpecialist'
+ *   },
+ * });
+ */
+export function useAddReplyMutation(baseOptions?: Apollo.MutationHookOptions<AddReplyMutation, AddReplyMutationVariables>) {
+        return Apollo.useMutation<AddReplyMutation, AddReplyMutationVariables>(AddReplyDocument, baseOptions);
+      }
+export type AddReplyMutationHookResult = ReturnType<typeof useAddReplyMutation>;
+export type AddReplyMutationResult = Apollo.MutationResult<AddReplyMutation>;
+export type AddReplyMutationOptions = Apollo.BaseMutationOptions<AddReplyMutation, AddReplyMutationVariables>;
 export const CreateThreadDocument = gql`
     mutation createThread($question: String!, $spec: String!) {
   createThread(options: {question: $question, specialization: $spec})
