@@ -61,7 +61,7 @@ export class ThreadResolver {
       let sortedReplies: any;
       if (sortBy === "upvotes") {
         sortedReplies = replies?.sort((a, b) => {
-          return a.upvotes - b.upvotes;
+          return b.upvotes - a.upvotes;
         });
       } else {
         sortedReplies = replies?.sort((a, b) => {

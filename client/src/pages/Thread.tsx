@@ -12,10 +12,13 @@ import {
 import { BiLike, BiTimeFive } from "react-icons/bi";
 import { useParams, useLocation } from "react-router-dom";
 import {
+  GetThreadDataQuery,
   useAddReplyMutation,
   useGetThreadDataQuery,
   useUpvoteReplyMutation,
 } from "../generated/graphql";
+import { ApolloQueryResult } from "@apollo/client";
+
 
 interface LikeSectionProps {
   refetch: () => any;
@@ -90,12 +93,24 @@ interface ThreadProps {}
 interface params {
   threadId: string;
 }
-
-export const SortingButtonsSection = () => {
+interface SortingButtonsSectionProps {
+  refetch: () => Promise<ApolloQueryResult<GetThreadDataQuery>>;
+}
+export const SortingButtonsSection: React.FC<SortingButtonsSectionProps> = ({
+  refetch,
+}) => {
   return (
     <Box marginRight="0.4rem" p="0.4rem" textAlign="right">
       <Tooltip label="sort by upvotes">
-        <Button borderRadius="-10px" bg="red.100" p="0.6rem" mx="0.2rem">
+        <Button
+          onClick={() => {
+            refetch();
+          }}
+          borderRadius="-10px"
+          bg="red.100"
+          p="0.6rem"
+          mx="0.2rem"
+        >
           upvotes
         </Button>
       </Tooltip>
@@ -113,12 +128,19 @@ export const SortingButtonsSection = () => {
 export const Thread: React.FC<ThreadProps> = ({}) => {
   const params: params = useParams();
 
-  const { data, loading, refetch } = useGetThreadDataQuery({
+  const { data, loading, refetch, variables } = useGetThreadDataQuery({
     fetchPolicy: "network-only",
     variables: {
       id: parseInt(params.threadId!),
+      sortBy: "recent",
     },
   });
+  const fetchByUpvotes = () =>
+    refetch({
+      id: parseInt(params.threadId!),
+      sortBy: "upvotes",
+    });
+
   const [repliesCount, setRepliesCount] = useState(0);
   const [showReplies, setShowReplies] = useState(false);
 
@@ -153,7 +175,7 @@ export const Thread: React.FC<ThreadProps> = ({}) => {
             ))
         ) : (
           <>
-            <SortingButtonsSection />
+            <SortingButtonsSection refetch={fetchByUpvotes} />
             {data?.getThread &&
               data?.getThread?.replies?.map((reply, idx) => {
                 return (
