@@ -1,5 +1,5 @@
-query getThreadData($id: Int!) {
-  getThread(id: $id) {
+query getThreadData($id: Int!, $sortBy: String!) {
+  getThread(id: $id, sortBy: $sortBy) {
     question
     specialization
     threadCreator

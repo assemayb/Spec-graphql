@@ -49,6 +49,7 @@ export class ThreadResolver {
   @Query(() => ThreadType, { nullable: true })
   async getThread(
     @Arg("id", () => Int) id: number,
+    @Arg("sortBy", () => String) sortBy: string,
     @Ctx() { req, res, payload }: MyContext
   ) {
     try {
@@ -56,13 +57,18 @@ export class ThreadResolver {
         where: { id },
         include: "replies",
       });
-
       const replies = thread && thread.getDataValue("replies");
-      const sorteReplies = replies?.sort((a, b) => {
-        return a.id - b.id
-      })
-      thread?.setDataValue("replies", sorteReplies!)
-      
+      let sortedReplies: any;
+      if (sortBy === "upvotes") {
+        sortedReplies = replies?.sort((a, b) => {
+          return a.upvotes - b.upvotes;
+        });
+      } else {
+        sortedReplies = replies?.sort((a, b) => {
+          return a.id - b.id;
+        });
+      }
+      thread?.setDataValue("replies", sortedReplies!);
 
       return thread;
     } catch (error) {

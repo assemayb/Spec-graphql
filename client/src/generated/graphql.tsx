@@ -32,6 +32,7 @@ export type Query = {
 
 
 export type QueryGetThreadArgs = {
+  sortBy: Scalars['String'];
   id: Scalars['Int'];
 };
 
@@ -212,6 +213,7 @@ export type DeleteThreadMutation = (
 
 export type GetThreadDataQueryVariables = Exact<{
   id: Scalars['Int'];
+  sortBy: Scalars['String'];
 }>;
 
 
@@ -457,8 +459,8 @@ export type DeleteThreadMutationHookResult = ReturnType<typeof useDeleteThreadMu
 export type DeleteThreadMutationResult = Apollo.MutationResult<DeleteThreadMutation>;
 export type DeleteThreadMutationOptions = Apollo.BaseMutationOptions<DeleteThreadMutation, DeleteThreadMutationVariables>;
 export const GetThreadDataDocument = gql`
-    query getThreadData($id: Int!) {
-  getThread(id: $id) {
+    query getThreadData($id: Int!, $sortBy: String!) {
+  getThread(id: $id, sortBy: $sortBy) {
     question
     specialization
     threadCreator
@@ -487,6 +489,7 @@ export const GetThreadDataDocument = gql`
  * const { data, loading, error } = useGetThreadDataQuery({
  *   variables: {
  *      id: // value for 'id'
+ *      sortBy: // value for 'sortBy'
  *   },
  * });
  */
