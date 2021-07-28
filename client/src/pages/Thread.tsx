@@ -1,5 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { Box, Divider, Flex, Heading, Skeleton } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Divider,
+  Flex,
+  Heading,
+  Skeleton,
+  Tooltip,
+} from "@chakra-ui/react";
 import { BiLike } from "react-icons/bi";
 import { useParams, useLocation } from "react-router-dom";
 import {
@@ -62,8 +70,6 @@ export const Thread: React.FC<ThreadProps> = ({}) => {
         color="#718096"
         textTransform="uppercase"
         fontSize="25px"
-        // justify="center"
-        // display="flex"
       >
         {data?.getThread?.question}
         <Divider marginTop="0.5rem" />
@@ -78,6 +84,28 @@ export const Thread: React.FC<ThreadProps> = ({}) => {
             ))
         ) : (
           <>
+            <Box marginRight="0.4rem" p="0.4rem"  textAlign="right">
+              <Tooltip label="sort by upvotes">
+                <Button
+                  borderRadius="-10px"
+                  bg="red.100"
+                  p="0.6rem"
+                  mx="0.2rem"
+                >
+                  upvotes
+                </Button>
+              </Tooltip>
+              <Tooltip label="sort by recent">
+                <Button
+                  borderRadius="-10px"
+                  bg="blue.100"
+                  p="0.6rem"
+                  mx="0.2rem"
+                >
+                  recent
+                </Button>
+              </Tooltip>
+            </Box>
             {data?.getThread &&
               data?.getThread?.replies?.map((reply, idx) => {
                 return (
@@ -91,12 +119,15 @@ export const Thread: React.FC<ThreadProps> = ({}) => {
                     borderLeft="2px solid gray"
                     marginTop="8px"
                     bgColor="gray.50"
+                    _hover={{
+                      bgColor: "gray.100",
+                      textShadow: "lg",
+                    }}
                     marginLeft="0.5rem"
                     pos="relative"
                     display="flex"
                     justifyContent="space-between"
                     alignItems="center"
-                    
                   >
                     {reply.text}
                     <Box display="flex" left="1x" bottom="1px">
