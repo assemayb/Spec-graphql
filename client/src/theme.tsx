@@ -4,7 +4,7 @@ import "@fontsource/open-sans";
 
 export const theme = extendTheme({
     // fonts: {
-      heading: "Open-Sans",
+      // heading: "Open-Sans",
       body: "Open-Sans",
     // },
   });

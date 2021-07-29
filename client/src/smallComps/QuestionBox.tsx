@@ -1,15 +1,14 @@
-import React, { useState } from "react";
+import React from "react";
 
-import { Box, Heading, Badge, Tooltip, Flex, Button } from "@chakra-ui/react";
+import { Box, Heading, Badge, Flex, Button } from "@chakra-ui/react";
 
 import { FiUser } from "react-icons/fi";
-import {  BiRightArrowAlt } from "react-icons/bi";
+import { BiRightArrowAlt } from "react-icons/bi";
 import {
   ListUserThreadsQuery,
   useDeleteThreadMutation,
 } from "../generated/graphql";
 import { ApolloQueryResult } from "@apollo/client";
-import { OptionsPopover } from "../smallComps/OptionsPopover";
 import { InteractionsSection } from "../smallComps/InteractionsSection";
 import { FiTrash2 } from "react-icons/fi";
 import { useHistory } from "react-router-dom";
@@ -42,7 +41,6 @@ export const QuestionBox: React.FC<QuestionBoxProps> = ({
 }) => {
   // const currentUser = useMeQuery();
   const router = useHistory();
-  const [currentlyEditing, setCurrentlyEditing] = useState(false);
   const [deleteReq] = useDeleteThreadMutation({
     update: () => {
       refetchProfileThreads!();
@@ -91,6 +89,7 @@ export const QuestionBox: React.FC<QuestionBoxProps> = ({
         </Heading>
       )}
       <Heading
+        as="button"
         onClick={() => goToThread()}
         boxShadow="sm"
         cursor="pointer"
@@ -103,7 +102,7 @@ export const QuestionBox: React.FC<QuestionBoxProps> = ({
         textShadow="md"
         color="#718096"
         textOverflow="ellipsis"
-        fontSize={["10px", "16px", "large", "22px"]}
+        fontSize={["13px", "16px", "large", "22px"]}
         _hover={{
           color: "green.600",
         }}
@@ -126,7 +125,7 @@ export const QuestionBox: React.FC<QuestionBoxProps> = ({
       )}
 
       {!username && (
-        <Flex  marginLeft="6px" p="0.2rem" marginTop="6px">
+        <Flex marginLeft="6px" p="0.2rem" marginTop="6px">
           <Button
             onClick={() => deleteThread()}
             bgColor="whiteAlpha.600"
@@ -182,7 +181,7 @@ export const QuestionBox: React.FC<QuestionBoxProps> = ({
             }}
           >
             go to thread
-            <BiRightArrowAlt style={{ marginLeft: "5px" }}/>
+            <BiRightArrowAlt style={{ marginLeft: "5px" }} />
           </Button>
         </Flex>
       )}

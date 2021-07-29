@@ -1,76 +1,16 @@
 import React, { useEffect, useState } from "react";
 import {
   Box,
-  Button,
-  Center,
   Divider,
   Flex,
   Heading,
   Skeleton,
-  Tooltip,
 } from "@chakra-ui/react";
-import { BiLike, BiTimeFive } from "react-icons/bi";
-import { useParams, useLocation } from "react-router-dom";
-import {
-  GetThreadDataQuery,
-  useAddReplyMutation,
-  useGetThreadDataQuery,
-  useUpvoteReplyMutation,
-} from "../generated/graphql";
-import { ApolloQueryResult } from "@apollo/client";
+import { useParams } from "react-router-dom";
+import { useGetThreadDataQuery } from "../generated/graphql";
+import { LikeSection } from "../smallComps/LikeSection";
+import { SortingButtonsSection } from "../smallComps/ThreadSortingBtns";
 
-
-interface LikeSectionProps {
-  refetch: () => any;
-  replyId: number;
-  upvotes: number;
-}
-const LikeSection: React.FC<LikeSectionProps> = ({
-  refetch,
-  replyId,
-  upvotes,
-}) => {
-  const [addReplyReq] = useUpvoteReplyMutation();
-  const upvoteReply = async (id: any) => {
-    await addReplyReq({
-      variables: { id },
-    });
-    await refetch();
-  };
-
-  return (
-    <Box display="flex" left="1x" bottom="1px">
-      <Box
-        as="button"
-        onClick={() => upvoteReply(replyId)}
-        borderRadius="-20px"
-        p="10px"
-        bg="green.50"
-        _hover={{
-          bg: "blue.300",
-          color: "white",
-        }}
-        boxShadow="md"
-        marginRight="3px"
-      >
-        <BiLike size="15px" />
-      </Box>
-      <Box
-        _hover={{
-          bg: "blue.300",
-          color: "white",
-        }}
-        p="10px"
-        bg="green.100"
-        boxShadow="md"
-        mx="3px"
-        borderRadius="-20px"
-      >
-        {upvotes} likes
-      </Box>
-    </Box>
-  );
-};
 interface HeaderSectionProps {
   question: string;
 }
@@ -90,45 +30,11 @@ export const HeaderSection: React.FC<HeaderSectionProps> = ({ question }) => {
 };
 
 interface ThreadProps {}
-interface params {
-  threadId: string;
-}
-interface SortingButtonsSectionProps {
-  refetch: () => Promise<ApolloQueryResult<GetThreadDataQuery>>;
-}
-export const SortingButtonsSection: React.FC<SortingButtonsSectionProps> = ({
-  refetch,
-}) => {
-  return (
-    <Box marginRight="0.4rem" p="0.4rem" textAlign="right">
-      <Tooltip label="sort by upvotes">
-        <Button
-          onClick={() => {
-            refetch();
-          }}
-          borderRadius="-10px"
-          bg="red.100"
-          p="0.6rem"
-          mx="0.2rem"
-        >
-          upvotes
-        </Button>
-      </Tooltip>
-      <Tooltip label="sort by recent">
-        <Button borderRadius="-10px" bg="blue.100" p="0.6rem" mx="0.2rem">
-          <Center>
-            <BiTimeFive size="15px" />
-          </Center>
-        </Button>
-      </Tooltip>
-    </Box>
-  );
-};
-
-export const Thread: React.FC<ThreadProps> = ({}) => {
-  const params: params = useParams();
-
-  const { data, loading, refetch, variables } = useGetThreadDataQuery({
+export const Thread: React.FC<ThreadProps> = () => {
+  const params: {
+    threadId: string;
+  } = useParams();
+  const { data, refetch } = useGetThreadDataQuery({
     fetchPolicy: "network-only",
     variables: {
       id: parseInt(params.threadId!),
@@ -141,6 +47,12 @@ export const Thread: React.FC<ThreadProps> = ({}) => {
       sortBy: "upvotes",
     });
 
+  const refetchByDate = () => {
+    refetch({
+      id: parseInt(params.threadId!),
+      sortBy: "recent",
+    });
+  };
   const [repliesCount, setRepliesCount] = useState(0);
   const [showReplies, setShowReplies] = useState(false);
 
@@ -149,7 +61,6 @@ export const Thread: React.FC<ThreadProps> = ({}) => {
   }, [data?.getThread, params]);
 
   useEffect(() => {
-    console.log(repliesCount);
     if (repliesCount > 0) {
       setTimeout(() => {
         setShowReplies(true);
@@ -175,7 +86,10 @@ export const Thread: React.FC<ThreadProps> = ({}) => {
             ))
         ) : (
           <>
-            <SortingButtonsSection refetch={fetchByUpvotes} />
+            <SortingButtonsSection
+              fetchByUpvotes={fetchByUpvotes}
+              refetchByDate={refetchByDate}
+            />
             {data?.getThread &&
               data?.getThread?.replies?.map((reply, idx) => {
                 return (
@@ -201,7 +115,7 @@ export const Thread: React.FC<ThreadProps> = ({}) => {
                   >
                     {reply.text}
                     <LikeSection
-                      refetch={refetch}
+                      refetch={refetchByDate}
                       replyId={reply.id}
                       upvotes={reply.upvotes}
                     />

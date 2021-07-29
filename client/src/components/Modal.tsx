@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Button,
   Modal,
@@ -10,6 +10,7 @@ import {
 
 import { LoginFrom } from "./LoginFrom";
 import { RegisterFrom } from "./RegisterForm";
+
 interface ModalComponentProps {
   showModal: boolean;
   onClose: () => void;
@@ -20,6 +21,7 @@ export const ModalComponent: React.FC<ModalComponentProps> = ({
   onClose,
 }) => {
   const [displayedForm, setDisplayedForm] = useState("loginForm");
+
   return (
     <>
       <Modal isOpen={showModal} onClose={onClose}>
@@ -30,24 +32,21 @@ export const ModalComponent: React.FC<ModalComponentProps> = ({
           <ModalBody margin="1rem">
             {displayedForm === "loginForm" ? <LoginFrom /> : <RegisterFrom />}
           </ModalBody>
-
-          {/* <ModalFooter display="flex" justifyContent="center"> */}
-            <Button
-              bgColor="green.200"
-              textAlign="center"
-              onClick={() => {
-                if (displayedForm === "loginForm") {
-                  setDisplayedForm("signupForm");
-                } else {
-                  setDisplayedForm("loginForm");
-                }
-              }}
-            >
-              {displayedForm === "loginForm"
-                ? "create an account"
-                : "login to your acccount"}
-            </Button>
-          {/* </ModalFooter> */}
+          <Button
+            bgColor="green.200"
+            textAlign="center"
+            onClick={() => {
+              if (displayedForm === "loginForm") {
+                setDisplayedForm("signupForm");
+              } else {
+                setDisplayedForm("loginForm");
+              }
+            }}
+          >
+            {displayedForm === "loginForm"
+              ? "create an account"
+              : "login to your acccount"}
+          </Button>
         </ModalContent>
       </Modal>
     </>

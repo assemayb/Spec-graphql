@@ -13,12 +13,11 @@ import {
   IsUserLoggedInQuery,
   useLoginMutation,
 } from "../generated/graphql";
-import { useHistory } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 import { setAccessToken } from "../accessToken";
 
 export const LoginFrom = () => {
   const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showMessage, setShowMessage] = useState({
     show: false,
@@ -26,11 +25,18 @@ export const LoginFrom = () => {
   });
 
   const [login] = useLoginMutation();
+  const location = useLocation();
+
+  // useEffect(() => {
+  //   return () => {
+
+  //     console.log(path);
+  //   };
+  // }, [location.pathname]);
 
   const history = useHistory();
   const submitLoginForm = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("submit form");
     try {
       const response = await login({
         variables: {
@@ -41,12 +47,6 @@ export const LoginFrom = () => {
           if (!data) {
             return null;
           }
-          // cache.writeQuery<MeQuery>({
-          //     query: MeDocument,
-          //     data: {
-          //         me: data.loginUser?.user
-          //     }
-          // })
           cache.writeQuery<IsUserLoggedInQuery>({
             query: IsUserLoggedInDocument,
             data: {
@@ -56,10 +56,11 @@ export const LoginFrom = () => {
         },
       });
       if (response && response.data) {
-        // console.log(response.data);
-
         setAccessToken(response.data.loginUser?.accessToken!);
-        history.push("/");
+        const currentPage = location.pathname.split("/")[1];
+        if (currentPage !== "threads") {
+          history.push("/");
+        }
         setUsername("");
         setPassword("");
       }

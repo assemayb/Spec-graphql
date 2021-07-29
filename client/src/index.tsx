@@ -39,6 +39,7 @@ const cache = new InMemoryCache();
 const httpLink = new HttpLink({
   uri: "http://localhost:8000/graphql",
   credentials: "include",
+  useGETForQueries: true,
 });
 
 const requestLink = new ApolloLink(

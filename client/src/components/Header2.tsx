@@ -32,10 +32,10 @@ interface ProfileButtonProps {
 
 const ProfileButton: React.FC<ProfileButtonProps> = ({ isUserLogged }) => {
   const [showModal, setShowModal] = useState(false);
-  const { isOpen, onOpen, onClose } = useDisclosure({
+  const {  onClose } = useDisclosure({
     onClose: () => setShowModal(false),
-    onOpen: () => console.log("Modal is Open"),
   });
+
 
   const router = useHistory();
   const handleProfileClick = () => {
@@ -68,10 +68,10 @@ const ProfileButton: React.FC<ProfileButtonProps> = ({ isUserLogged }) => {
   );
 };
 
-interface LogoutButtonProps extends ProfileButtonProps { }
+interface LogoutButtonProps extends ProfileButtonProps {}
 const LogoutButton: React.FC<LogoutButtonProps> = ({ isUserLogged }) => {
   const [logoutUser, { client }] = useLogoutMutation();
-
+  const history = useHistory();
   useEffect(() => {
     let isMounted = false;
     return () => {
@@ -96,7 +96,7 @@ const LogoutButton: React.FC<LogoutButtonProps> = ({ isUserLogged }) => {
           });
         },
       });
-      // await client.resetStore();
+      history.push("/");
     }
   };
 
@@ -118,8 +118,8 @@ const LogoutButton: React.FC<LogoutButtonProps> = ({ isUserLogged }) => {
   );
 };
 
-interface Header2Props { }
-export const Header2: React.FC<Header2Props> = ({ }) => {
+interface Header2Props {}
+export const Header2: React.FC<Header2Props> = ({}) => {
   // const { data, loading, error } = useMeQuery();
 
   const currentMode = useColorMode();
@@ -136,12 +136,16 @@ export const Header2: React.FC<Header2Props> = ({ }) => {
       fontWeight="bold"
       color="white"
       width="100%"
-      height={["70px","70px","100px", "100px"]}
+      height={["70px", "70px", "100px", "100px"]}
     >
-      <Flex ml={{
-        small: "0.1rem",
-        base: "0.5rem"
-      }} position="absolute" left={{base: "1px", md: "1rem"}}>
+      <Flex
+        ml={{
+          small: "0.1rem",
+          base: "0.5rem",
+        }}
+        position="absolute"
+        left={{ base: "1px", md: "1rem" }}
+      >
         <LinkBox route="Home" icon={<AiFillHome width="20px" />} />
         <LinkBox route="topics" icon={<BiBookContent width="20px" />} />
       </Flex>
@@ -151,7 +155,7 @@ export const Header2: React.FC<Header2Props> = ({ }) => {
         alignItems="center"
         justifyContent="center"
         height="100px"
-        right={{base: "1px", md: "1rem"}}
+        right={{ base: "1px", md: "1rem" }}
       >
         {loginState && loginState.loading && (
           <Box marginLeft="5px">
