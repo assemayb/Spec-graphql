@@ -21,7 +21,6 @@ export const ModalComponent: React.FC<ModalComponentProps> = ({
   showModal,
   onClose,
 }) => {
-  const isUserLoggedIn = useIsUserLoggedInQuery({fetchPolicy: "network-only"})
   const [displayedForm, setDisplayedForm] = useState("loginForm");
   return (
     <>

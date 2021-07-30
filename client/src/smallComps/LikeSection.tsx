@@ -19,6 +19,17 @@ export const LikeSection: React.FC<LikeSectionProps> = ({
   upvotes,
 }) => {
   const [isUserLoggedInLazyQuery, {data}] = useIsUserLoggedInLazyQuery({ fetchPolicy: "network-only" });
+  useEffect(() => {
+    let isMounted = true;
+    if (isMounted) {
+      isUserLoggedInLazyQuery();
+    }
+    return () => {
+      isMounted = false;
+    };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
   const [showUserLoginModal, setShowUserLoginModal] = useState(false);
   const { onClose } = useDisclosure({
     onClose: () => {

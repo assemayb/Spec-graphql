@@ -1,9 +1,14 @@
-import React, { useState } from "react";
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useEffect, useState } from "react";
 import { Box, Flex, useDisclosure } from "@chakra-ui/react";
 
 import { QuestionBox } from "../smallComps/QuestionBox";
 import { FastBigSpinner } from "../smallComps/Spinners";
-import { useListUserThreadsQuery } from "../generated/graphql";
+import {
+  useListTopicThreadsLazyQuery,
+  useListUserThreadsLazyQuery,
+  useListUserThreadsQuery,
+} from "../generated/graphql";
 import { ProfileModal } from "../components/ProfileModal";
 import { HeaderComp } from "../smallComps/HeaderComp";
 
@@ -15,10 +20,22 @@ export const Profile = () => {
       setShowModal(false);
     },
   });
-  const { data, loading, refetch } = useListUserThreadsQuery({
-    fetchPolicy: "network-only",
-  });
-
+  // const { data, loading, refetch } = useListUserThreadsQuery({
+  //   fetchPolicy: "network-only",
+  // });
+  const [listUserQuery, { data, loading, refetch }] =
+    useListUserThreadsLazyQuery({
+      fetchPolicy: "network-only",
+    });
+  useEffect(() => {
+    let isMounted = true;
+    if (isMounted) {
+      listUserQuery();
+    }
+    return () => {
+      isMounted = false;
+    };
+  }, []);
   const createNewThread = () => setShowModal(true);
 
   let ThreadSection: any = null;
@@ -65,20 +82,14 @@ export const Profile = () => {
           {ThreadSection}
         </Flex>
 
-        <Flex
-          flex="1"
-          flexDirection="column"
-          maxH="auto"
-          marginX="8px"
-        >
-      
+        <Flex flex="1" flexDirection="column" maxH="auto" marginX="8px">
           <Box shadow="base" p={["0.2rem", "0.9rem", "1.2rem", "1.2rem"]}>
             <Box
               as="button"
               width="100%"
               height={{
                 base: "40px",
-                md: "80px"
+                md: "80px",
               }}
               onClick={() => createNewThread()}
               textAlign="center"

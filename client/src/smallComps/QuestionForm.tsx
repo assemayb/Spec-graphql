@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from "react";
 import {
   ListThreadsQuery,
@@ -15,23 +16,27 @@ import {
   Heading,
   Input,
   Select,
-  Divider
+  Divider,
 } from "@chakra-ui/react";
 import { ApolloQueryResult } from "@apollo/client";
 import { useQuery } from "@apollo/client";
 import { topicsQuery } from "../pages/Topics";
 
 interface QuestionFormProps {
-  refetch?: () => Promise<ApolloQueryResult<ListThreadsQuery>>; /* from home page*/
-  clickedFromProfilePage?: boolean;  /* if this prop is passed from profile page */
-  setShowModal?: React.Dispatch<React.SetStateAction<boolean>>
-  refetchProfileThreads?: () => Promise<ApolloQueryResult<ListUserThreadsQuery>>
+  refetch?: () => Promise<
+    ApolloQueryResult<ListThreadsQuery>
+  > /* from home page*/;
+  clickedFromProfilePage?: boolean /* if this prop is passed from profile page */;
+  setShowModal?: React.Dispatch<React.SetStateAction<boolean>>;
+  refetchProfileThreads?: () => Promise<
+    ApolloQueryResult<ListUserThreadsQuery>
+  >;
 }
 export const QuestionForm: React.FC<QuestionFormProps> = ({
   refetch,
   clickedFromProfilePage,
   setShowModal,
-  refetchProfileThreads
+  refetchProfileThreads,
 }) => {
   const [question, setQuestion] = useState("");
   const [specilization, setSpecilization] = useState("");
@@ -44,7 +49,16 @@ export const QuestionForm: React.FC<QuestionFormProps> = ({
 
   const [createQuestion] = useCreateThreadMutation();
   // const userLogginData = useIsUserLoggedInQuery();
-  const [userLogginData, {data}] = useIsUserLoggedInLazyQuery()
+  const [userLogginData, { data }] = useIsUserLoggedInLazyQuery();
+  useEffect(() => {
+    let isMounted = true;
+    if (isMounted) {
+      userLogginData();
+    }
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   const submitQuestion = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -56,13 +70,13 @@ export const QuestionForm: React.FC<QuestionFormProps> = ({
         },
       });
       if (refetchProfileThreads !== undefined) {
-        await refetchProfileThreads()
+        await refetchProfileThreads();
         // setShowModal(false)
       }
       if (refetch !== undefined) {
         refetch();
       }
-      setQuestion("")
+      setQuestion("");
     } catch (error) {
       console.log(error.messge);
     }
@@ -88,14 +102,17 @@ export const QuestionForm: React.FC<QuestionFormProps> = ({
         }}
         my={{
           base: "5px",
-          md: "10px"
+          md: "10px",
         }}
         boxShadow={clickedFromProfilePage ? "" : "lg"}
         textAlign="center"
       >
         <form onSubmit={(e) => submitQuestion(e)}>
           <FormControl isRequired>
-            <FormLabel color="green.400" fontSize={{ base: "0.7rem", md: "1rem" }}>
+            <FormLabel
+              color="green.400"
+              fontSize={{ base: "0.7rem", md: "1rem" }}
+            >
               {" "}
               question
             </FormLabel>
@@ -109,7 +126,10 @@ export const QuestionForm: React.FC<QuestionFormProps> = ({
             />
           </FormControl>
           <FormControl isRequired>
-            <FormLabel color="green.400" fontSize={{ base: "0.7rem", md: "1rem" }}>
+            <FormLabel
+              color="green.400"
+              fontSize={{ base: "0.7rem", md: "1rem" }}
+            >
               specilization
             </FormLabel>
             <Select
@@ -138,7 +158,6 @@ export const QuestionForm: React.FC<QuestionFormProps> = ({
               base: "8px",
               md: "12px",
             }}
-
             marginX="auto"
             fontSize={{
               base: "10px",

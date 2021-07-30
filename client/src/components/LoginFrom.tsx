@@ -3,7 +3,6 @@ import {
   FormControl,
   FormLabel,
   Input,
-  VStack,
   Button,
   Center,
   Container,
@@ -13,7 +12,7 @@ import {
   IsUserLoggedInQuery,
   useLoginMutation,
 } from "../generated/graphql";
-import { useHistory,} from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { setAccessToken } from "../accessToken";
 
 export const LoginFrom = () => {
@@ -23,7 +22,13 @@ export const LoginFrom = () => {
     show: false,
     value: "",
   });
-  const [login] = useLoginMutation();
+  const [login] = useLoginMutation({
+    onCompleted: () => {
+      console.log("login is successful!!");
+      setUsername("");
+      setPassword("");
+    },
+  });
   const history = useHistory();
   const submitLoginForm = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -48,8 +53,6 @@ export const LoginFrom = () => {
       if (response && response.data) {
         setAccessToken(response.data.loginUser?.accessToken!);
         history.push("/");
-        setUsername("");
-        setPassword("");
       }
     } catch (error) {
       setShowMessage({ show: true, value: error.message });
