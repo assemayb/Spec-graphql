@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useListThreadsQuery } from "../generated/graphql";
+import { useListThreadsLazyQuery, useListThreadsQuery } from "../generated/graphql";
 import { RouteComponentProps } from "react-router-dom";
 import { Box, Divider, Flex } from "@chakra-ui/react";
 
@@ -8,18 +8,29 @@ import { QuestionBox } from "../smallComps/QuestionBox";
 import { FastBigSpinner } from "../smallComps/Spinners";
 import { BiBarChartAlt } from "react-icons/bi";
 import { FiClock } from "react-icons/fi";
-import { Skeleton } from "../smallComps/Skeleton"
 import { HeaderComp } from "../smallComps/HeaderComp";
+import { useEffect } from "react";
 
 export const Home: React.FC<RouteComponentProps> = ({ history, location }) => {
   const [threadsHeader, setThreadsHeader] = useState("Most trendy threads");
-  const { data, loading, refetch } = useListThreadsQuery({
+  const   [ListThreadsQuery,  {data, loading, refetch}] = useListThreadsLazyQuery({
     fetchPolicy: "cache-and-network",
     variables: {
       sortBy: threadsHeader.split(" ")[1],
     },
   });
 
+  useEffect(() => {
+    let isMounted = true
+    if(isMounted === true) {
+      ListThreadsQuery()
+    }
+    return () => {
+      isMounted = false
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+  
   let ThreadsComp: any = null;
   if (loading) {
     ThreadsComp = <FastBigSpinner />;

@@ -1,19 +1,19 @@
 import { Box, Flex } from "@chakra-ui/react";
-import { useParams,  useHistory } from "react-router-dom";
-import React  from "react";
-import { useQuery } from "@apollo/client"
-import { useListTopicThreadsQuery } from "../generated/graphql";
+import { useParams, useHistory } from "react-router-dom";
+import React, { useEffect } from "react";
+import { useQuery } from "@apollo/client";
+import { useListTopicThreadsLazyQuery, useListTopicThreadsQuery } from "../generated/graphql";
 import { QuestionBox } from "../smallComps/QuestionBox";
 import { FastBigSpinner } from "../smallComps/Spinners";
 import { topicsQuery } from "./Topics";
 import { HeaderComp } from "../smallComps/HeaderComp";
 
 interface SideNavBoxProps {
-  topics?: string[]
+  topics?: string[];
 }
 
 export const SideNavBox: React.FC<SideNavBoxProps> = ({ topics }) => {
-  const router = useHistory()
+  const router = useHistory();
   return (
     <Flex
       flex="1"
@@ -23,46 +23,57 @@ export const SideNavBox: React.FC<SideNavBoxProps> = ({ topics }) => {
       marginX="8px"
       shadow="base"
     >
-      {topics && topics.map((topic, index) => {
-        return (
-          <Box
-            as="button"
-            onClick={() => {
-              router.push(`/topics/${topic}`, { topics });
-            } }
-            key={index}
-            textAlign="center"
-            p="0.5rem"
-            bgColor="green.300"
-            color="white"
-            borderRadius="-20px"
-            cursor="pointer"
-            _hover={{
-              bgColor: "blue.200",
-            }}
-            marginY="3px"
-          >
-            <Flex justify="center" align="center">
-              {topic}
-            </Flex>
-          </Box>
-
-        );
-      })}
+      {topics &&
+        topics.map((topic, index) => {
+          return (
+            <Box
+              as="button"
+              onClick={() => {
+                router.push(`/topics/${topic}`, { topics });
+              }}
+              key={index}
+              textAlign="center"
+              p="0.5rem"
+              bgColor="green.300"
+              color="white"
+              borderRadius="-20px"
+              cursor="pointer"
+              _hover={{
+                bgColor: "blue.200",
+              }}
+              marginY="3px"
+            >
+              <Flex justify="center" align="center">
+                {topic}
+              </Flex>
+            </Box>
+          );
+        })}
     </Flex>
   );
 };
 
-interface SignleTopicPageProps { }
+interface SignleTopicPageProps {}
 export const SignleTopicPage: React.FC<SignleTopicPageProps> = () => {
   const params: any = useParams();
-  const topicsArr = useQuery(topicsQuery)
-  const { data, loading  } = useListTopicThreadsQuery({
+  const topicsArr = useQuery(topicsQuery);
+  const [ListTopicThreadsQuery, { data, loading }] = useListTopicThreadsLazyQuery({
     fetchPolicy: "cache-and-network",
     variables: {
       topic: params.topicName,
-    }
+    },
   });
+
+  useEffect(() => {
+    let isMounted = true;
+    if (isMounted === true) {
+      ListTopicThreadsQuery();
+    }
+    return () => {
+      isMounted = false;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   let ThreadsComp: any = null;
   if (loading) {
@@ -89,8 +100,8 @@ export const SignleTopicPage: React.FC<SignleTopicPageProps> = () => {
 
   return (
     <>
-      <HeaderComp threadsHeader={`${params.topicName} Threads`}/>
-        
+      <HeaderComp threadsHeader={`${params.topicName} Threads`} />
+
       <Flex marginRight="auto" marginLeft="auto" marginTop="2rem">
         <Flex
           flexDirection="column"
@@ -101,9 +112,7 @@ export const SignleTopicPage: React.FC<SignleTopicPageProps> = () => {
         >
           {ThreadsComp}
         </Flex>
-        {topicsArr.data && (
-          <SideNavBox topics={topicsArr.data.listTopics} />
-        )}
+        {topicsArr.data && <SideNavBox topics={topicsArr.data.listTopics} />}
       </Flex>
     </>
   );
