@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
 import {
   Box,
@@ -5,7 +6,6 @@ import {
   Divider,
   Flex,
   FormControl,
-  FormLabel,
   Heading,
   Input,
   Modal,
@@ -17,9 +17,15 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import { useParams } from "react-router-dom";
-import { useGetThreadDataQuery } from "../generated/graphql";
+import {
+  GetThreadDataQuery,
+  useAddReplyMutation,
+  useGetThreadDataQuery,
+  useMeLazyQuery,
+} from "../generated/graphql";
 import { LikeSection } from "../smallComps/LikeSection";
 import { SortingButtonsSection } from "../smallComps/ThreadSortingBtns";
+import { ApolloQueryResult } from "@apollo/client";
 
 interface HeaderSectionProps {
   question: string;
@@ -42,31 +48,66 @@ export const HeaderSection: React.FC<HeaderSectionProps> = ({ question }) => {
 interface AddReplyModalProps {
   showModal: boolean;
   setShowModal: any;
+  threadId: number;
+  refetch: () => any
 }
 export const AddReplyModal: React.FC<AddReplyModalProps> = ({
   showModal,
   setShowModal,
+  threadId,
+  refetch,
 }) => {
+  const [getUserData, { data }] = useMeLazyQuery({
+    fetchPolicy: "network-only",
+  });
+  useEffect(() => {
+    let isMounted = true;
+    isMounted === true && getUserData();
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  const [addReplyReq] = useAddReplyMutation();
   const { onClose } = useDisclosure({
     onClose: () => {
       setShowModal(false);
     },
   });
   const [newReply, setNewReply] = useState("");
-  const submitReply = () => {
-    console.log("submit reply fucntion");
+
+  const submitReply = async (e: any) => {
+    e.preventDefault();
+    await addReplyReq({
+      variables: {
+        text: newReply,
+        replyThread: threadId,
+        replySpecialist: data?.me?.id!,
+      },
+    });
+    refetch();
+    setShowModal(false);
+    // setNewReply("");
   };
 
   let Form: any = (
-    <form onSubmit={() => submitReply()}>
-      <Flex  alignItems="center" p="3rem" >
+    <form onSubmit={(e) => submitReply(e)}>
+      <Flex alignItems="center" p="0.5rem">
         <FormControl id="reply" isRequired my="5px">
           <Input
             value={newReply}
             onChange={(e) => setNewReply(e.target.value)}
           />
         </FormControl>
-        <Button p="0.2rm" marginLeft="0.2rem"> submit </Button>
+        <Button
+          borderRadius="-10px"
+          type="submit"
+          p="0.2rm"
+          marginLeft="0.2rem"
+        >
+          {" "}
+          submit{" "}
+        </Button>
       </Flex>
     </form>
   );
@@ -76,8 +117,7 @@ export const AddReplyModal: React.FC<AddReplyModalProps> = ({
       <ModalOverlay />
       <ModalContent marginTop="8rem">
         <ModalCloseButton />
-        {Form}
-        <ModalBody margin="1rem"></ModalBody>
+        <ModalBody marginTop="1.5rem">{Form}</ModalBody>
       </ModalContent>
     </Modal>
   );
@@ -129,7 +169,12 @@ export const Thread: React.FC<ThreadProps> = () => {
       boxShadow="md"
       flexDir="column"
     >
-      <AddReplyModal setShowModal={setShowModal} showModal={showModal} />
+      <AddReplyModal
+        setShowModal={setShowModal}
+        showModal={showModal}
+        threadId={parseInt(params.threadId!)}
+        refetch={refetchByDate}
+      />
       <Flex align="center" justify="space-between" p="1.5rem">
         <HeaderSection question={data?.getThread?.question!} />
         <Button
