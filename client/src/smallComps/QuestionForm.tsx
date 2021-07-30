@@ -3,6 +3,7 @@ import {
   ListThreadsQuery,
   ListUserThreadsQuery,
   useCreateThreadMutation,
+  useIsUserLoggedInLazyQuery,
   useIsUserLoggedInQuery,
 } from "../generated/graphql";
 
@@ -34,15 +35,16 @@ export const QuestionForm: React.FC<QuestionFormProps> = ({
 }) => {
   const [question, setQuestion] = useState("");
   const [specilization, setSpecilization] = useState("");
-  const { data } = useQuery(topicsQuery);
+  const topics = useQuery(topicsQuery);
   const [topicsArr, setTopicsArr] = useState([]);
 
   useEffect(() => {
-    setTopicsArr(data && data.listTopics);
-  }, [data]);
+    setTopicsArr(topics.data && topics.data.listTopics);
+  }, [topics.data]);
 
   const [createQuestion] = useCreateThreadMutation();
-  const userLogginData = useIsUserLoggedInQuery();
+  // const userLogginData = useIsUserLoggedInQuery();
+  const [userLogginData, {data}] = useIsUserLoggedInLazyQuery()
 
   const submitQuestion = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -129,7 +131,7 @@ export const QuestionForm: React.FC<QuestionFormProps> = ({
             </Select>
           </FormControl>
           <Button
-            isDisabled={!userLogginData.data?.isUserLoggedIn}
+            isDisabled={!data?.isUserLoggedIn}
             type="submit"
             borderRadius="-20px"
             marginTop={{

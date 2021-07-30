@@ -1,21 +1,6 @@
 import React, { useState, useEffect, FC } from "react";
-import { useIsUserLoggedInQuery } from "../generated/graphql";
 import { RouteComponentProps, useHistory } from "react-router-dom";
-import {
-  Box,
-  Container,
-  Flex,
-  VStack,
-  Button,
-  FormControl,
-  FormLabel,
-  Input,
-  Grid,
-  Spinner,
-  Skeleton,
-  Divider,
-  Center,
-} from "@chakra-ui/react";
+import { Box, Grid, Skeleton, Center } from "@chakra-ui/react";
 import { gql, useQuery } from "@apollo/client";
 import { HeaderComp } from "../smallComps/HeaderComp";
 
@@ -84,8 +69,12 @@ export const Topics: React.FC<RouteComponentProps> = () => {
 
   return (
     <>
-      <HeaderComp threadsHeader={"Health Topics"}/>
-      <Box p={["0.8rem", "0.8rem", "1rem", "1rem"]}  shadow="base" marginTop="1rem">
+      <HeaderComp threadsHeader={"Health Topics"} />
+      <Box
+        p={["0.8rem", "0.8rem", "1rem", "1rem"]}
+        shadow="base"
+        marginTop="1rem"
+      >
         <Grid
           templateColumns={[
             "repeat(2, 1fr)",
@@ -98,9 +87,9 @@ export const Topics: React.FC<RouteComponentProps> = () => {
           <>
             {topcis.length < 1
               ? dummieArr.map((item, idx) => {
-                return <Skeleton color="green.100" key={idx} height="80px" />;
-              })
-              : topcis.map((item, idx) => <TopicBox  key={idx} topic={item} />)}
+                  return <Skeleton color="green.100" key={idx} height="80px" />;
+                })
+              : topcis.map((item, idx) => <TopicBox key={idx} topic={item} />)}
           </>
         </Grid>
       </Box>

@@ -36,7 +36,6 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({
         <ModalOverlay />
         <ModalContent marginTop="8rem">
           <ModalCloseButton />
-
           <ModalBody margin="1rem">
             <QuestionForm refetchProfileThreads={refetchProfileThreads} setShowModal={setShowModal} clickedFromProfilePage={true} />
           </ModalBody>

@@ -67,7 +67,6 @@ export const Profile = () => {
 
         <Flex
           flex="1"
-          // p={["0.2rem", "0.4rem", "1rem", "1rem"]}
           flexDirection="column"
           maxH="auto"
           marginX="8px"

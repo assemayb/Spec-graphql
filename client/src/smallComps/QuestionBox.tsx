@@ -56,7 +56,6 @@ export const QuestionBox: React.FC<QuestionBoxProps> = ({
   };
 
   const goToThread = () => {
-    console.log(threadId);
     router.push(`/threads/${threadId}`);
   };
 

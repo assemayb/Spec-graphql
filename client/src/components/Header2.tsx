@@ -1,21 +1,17 @@
 import React, { useState, useEffect } from "react";
 import {
-  Container,
   Flex,
   Button,
   useColorMode,
   useDisclosure,
-  Center,
   Box,
 } from "@chakra-ui/react";
-import { MoonIcon, SunIcon } from "@chakra-ui/icons";
 import { useHistory } from "react-router-dom";
 import {
   IsUserLoggedInDocument,
   IsUserLoggedInQuery,
   useIsUserLoggedInQuery,
   useLogoutMutation,
-  useMeQuery,
 } from "../generated/graphql";
 
 import { setAccessToken } from "../accessToken";
@@ -70,7 +66,7 @@ const ProfileButton: React.FC<ProfileButtonProps> = ({ isUserLogged }) => {
 
 interface LogoutButtonProps extends ProfileButtonProps {}
 const LogoutButton: React.FC<LogoutButtonProps> = ({ isUserLogged }) => {
-  const [logoutUser, { client }] = useLogoutMutation();
+  const [logoutUser] = useLogoutMutation();
   const history = useHistory();
   useEffect(() => {
     let isMounted = false;
@@ -121,8 +117,6 @@ const LogoutButton: React.FC<LogoutButtonProps> = ({ isUserLogged }) => {
 interface Header2Props {}
 export const Header2: React.FC<Header2Props> = ({}) => {
   // const { data, loading, error } = useMeQuery();
-
-  const currentMode = useColorMode();
   const loginState = useIsUserLoggedInQuery({
     fetchPolicy: "network-only",
   });

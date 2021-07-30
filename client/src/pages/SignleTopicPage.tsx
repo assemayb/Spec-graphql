@@ -1,4 +1,4 @@
-import { Box, Divider, Flex } from "@chakra-ui/react";
+import { Box, Flex } from "@chakra-ui/react";
 import { useParams,  useHistory } from "react-router-dom";
 import React  from "react";
 import { useQuery } from "@apollo/client"

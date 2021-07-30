@@ -1,7 +1,8 @@
 import { Box, useDisclosure } from "@chakra-ui/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { BiLike } from "react-icons/bi";
 import {
+  useIsUserLoggedInLazyQuery,
   useIsUserLoggedInQuery,
   useUpvoteReplyMutation,
 } from "../generated/graphql";
@@ -17,7 +18,7 @@ export const LikeSection: React.FC<LikeSectionProps> = ({
   replyId,
   upvotes,
 }) => {
-  const { data } = useIsUserLoggedInQuery({ fetchPolicy: "network-only" });
+  const [isUserLoggedInLazyQuery, {data}] = useIsUserLoggedInLazyQuery({ fetchPolicy: "network-only" });
   const [showUserLoginModal, setShowUserLoginModal] = useState(false);
   const { onClose } = useDisclosure({
     onClose: () => {

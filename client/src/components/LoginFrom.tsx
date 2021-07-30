@@ -13,7 +13,7 @@ import {
   IsUserLoggedInQuery,
   useLoginMutation,
 } from "../generated/graphql";
-import { useHistory, useLocation } from "react-router-dom";
+import { useHistory,} from "react-router-dom";
 import { setAccessToken } from "../accessToken";
 
 export const LoginFrom = () => {
@@ -23,17 +23,7 @@ export const LoginFrom = () => {
     show: false,
     value: "",
   });
-
   const [login] = useLoginMutation();
-  const location = useLocation();
-
-  // useEffect(() => {
-  //   return () => {
-
-  //     console.log(path);
-  //   };
-  // }, [location.pathname]);
-
   const history = useHistory();
   const submitLoginForm = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -57,10 +47,7 @@ export const LoginFrom = () => {
       });
       if (response && response.data) {
         setAccessToken(response.data.loginUser?.accessToken!);
-        const currentPage = location.pathname.split("/")[1];
-        if (currentPage !== "threads") {
-          history.push("/");
-        }
+        history.push("/");
         setUsername("");
         setPassword("");
       }

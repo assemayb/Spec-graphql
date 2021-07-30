@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   Button,
   Modal,
@@ -10,6 +10,7 @@ import {
 
 import { LoginFrom } from "./LoginFrom";
 import { RegisterFrom } from "./RegisterForm";
+import { useIsUserLoggedInQuery } from "../generated/graphql";
 
 interface ModalComponentProps {
   showModal: boolean;
@@ -20,8 +21,8 @@ export const ModalComponent: React.FC<ModalComponentProps> = ({
   showModal,
   onClose,
 }) => {
+  const isUserLoggedIn = useIsUserLoggedInQuery({fetchPolicy: "network-only"})
   const [displayedForm, setDisplayedForm] = useState("loginForm");
-
   return (
     <>
       <Modal isOpen={showModal} onClose={onClose}>
