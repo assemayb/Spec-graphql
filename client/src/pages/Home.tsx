@@ -1,7 +1,7 @@
-import React, { useState } from "react";
-import { useListThreadsLazyQuery, useListThreadsQuery } from "../generated/graphql";
+import React, { useState , useEffect} from "react";
+import { useListThreadsLazyQuery } from "../generated/graphql";
 import { RouteComponentProps } from "react-router-dom";
-import { Box, Divider, Flex } from "@chakra-ui/react";
+import { Box, Flex } from "@chakra-ui/react";
 
 import { QuestionForm } from "../smallComps/QuestionForm";
 import { QuestionBox } from "../smallComps/QuestionBox";
@@ -9,28 +9,29 @@ import { FastBigSpinner } from "../smallComps/Spinners";
 import { BiBarChartAlt } from "react-icons/bi";
 import { FiClock } from "react-icons/fi";
 import { HeaderComp } from "../smallComps/HeaderComp";
-import { useEffect } from "react";
+
 
 export const Home: React.FC<RouteComponentProps> = ({ history, location }) => {
   const [threadsHeader, setThreadsHeader] = useState("Most trendy threads");
-  const   [ListThreadsQuery,  {data, loading, refetch}] = useListThreadsLazyQuery({
-    fetchPolicy: "cache-and-network",
-    variables: {
-      sortBy: threadsHeader.split(" ")[1],
-    },
-  });
+  const [ListThreadsQuery, { data, loading, refetch }] =
+    useListThreadsLazyQuery({
+      fetchPolicy: "cache-and-network",
+      variables: {
+        sortBy: threadsHeader.split(" ")[1],
+      },
+    });
 
   useEffect(() => {
-    let isMounted = true
-    if(isMounted === true) {
-      ListThreadsQuery()
+    let isMounted = true;
+    if (isMounted === true) {
+      ListThreadsQuery();
     }
     return () => {
-      isMounted = false
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-  
+      isMounted = false;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   let ThreadsComp: any = null;
   if (loading) {
     ThreadsComp = <FastBigSpinner />;
@@ -55,9 +56,9 @@ export const Home: React.FC<RouteComponentProps> = ({ history, location }) => {
   }
 
   return (
-    < >
-      <HeaderComp threadsHeader={threadsHeader}/>
-      
+    <>
+      <HeaderComp threadsHeader={threadsHeader} />
+
       <Flex marginTop="1rem">
         <Flex
           // justifyContent="center"
@@ -70,13 +71,12 @@ export const Home: React.FC<RouteComponentProps> = ({ history, location }) => {
           {ThreadsComp}
         </Flex>
 
-        <Flex
-          flex="1"
-          p="0.5rem"
-          flexDirection="column"
-          marginLeft="5px"
-        >
-          <Box p={["0.3rem", "0.4rem", "0.8rem", "0.8rem"]} shadow="base" marginBottom="1rem">
+        <Flex flex="1" p="0.5rem" flexDirection="column" marginLeft="5px">
+          <Box
+            p={["0.3rem", "0.4rem", "0.8rem", "0.8rem"]}
+            shadow="base"
+            marginBottom="1rem"
+          >
             <Box
               onClick={() => setThreadsHeader("Most trendy threads")}
               textAlign="center"
@@ -91,7 +91,11 @@ export const Home: React.FC<RouteComponentProps> = ({ history, location }) => {
               }}
               marginY="3px"
             >
-              <Flex justify="center" align="center" fontSize={{base: "0.7rem", md: "1.2rem"}}>
+              <Flex
+                justify="center"
+                align="center"
+                fontSize={{ base: "0.7rem", md: "1.2rem" }}
+              >
                 <BiBarChartAlt style={{ marginRight: "5px" }} />
                 <span>most answers</span>
               </Flex>
@@ -111,8 +115,12 @@ export const Home: React.FC<RouteComponentProps> = ({ history, location }) => {
               }}
               marginY="3px"
             >
-              <Flex justify="center" align="center" fontSize={{base: "0.7rem", md: "1.2rem"}}>
-                <FiClock  style={{ marginRight: "5px" }} />
+              <Flex
+                justify="center"
+                align="center"
+                fontSize={{ base: "0.7rem", md: "1.2rem" }}
+              >
+                <FiClock style={{ marginRight: "5px" }} />
                 <span>most recent</span>
               </Flex>
             </Box>
