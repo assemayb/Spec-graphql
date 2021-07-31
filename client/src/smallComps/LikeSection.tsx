@@ -1,12 +1,10 @@
-import { Box, useDisclosure } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+import { Box } from "@chakra-ui/react";
 import { BiLike } from "react-icons/bi";
 import {
   useIsUserLoggedInLazyQuery,
-  useIsUserLoggedInQuery,
   useUpvoteReplyMutation,
 } from "../generated/graphql";
-import { ModalComponent } from "../components/Modal";
 
 interface LikeSectionProps {
   refetch: () => any;
@@ -18,7 +16,10 @@ export const LikeSection: React.FC<LikeSectionProps> = ({
   replyId,
   upvotes,
 }) => {
-  const [isUserLoggedInLazyQuery, {data}] = useIsUserLoggedInLazyQuery({ fetchPolicy: "network-only" });
+  const [isUserLoggedInLazyQuery, { data }] = useIsUserLoggedInLazyQuery({
+    fetchPolicy: "network-only",
+  });
+
   useEffect(() => {
     let isMounted = true;
     if (isMounted) {
@@ -27,30 +28,24 @@ export const LikeSection: React.FC<LikeSectionProps> = ({
     return () => {
       isMounted = false;
     };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-  const [showUserLoginModal, setShowUserLoginModal] = useState(false);
-  const { onClose } = useDisclosure({
-    onClose: () => {
-      setShowUserLoginModal(false);
-    },
-  });
   const [upvoteReq] = useUpvoteReplyMutation();
   const upvoteReply = async (id: any) => {
     if (data?.isUserLoggedIn === true) {
       await upvoteReq({
         variables: { id },
-      });
+      });  
       await refetch();
     } else {
-      setShowUserLoginModal(true);
+      const profileBtn: HTMLElement = document.getElementById("profile-btn")!;
+      profileBtn.click();
     }
   };
 
   return (
     <Box display="flex" left="1x" bottom="1px">
-      <ModalComponent showModal={showUserLoginModal} onClose={onClose} />
       <Box
         as="button"
         // disabled={data?.isUserLoggedIn === false}

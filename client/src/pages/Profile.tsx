@@ -5,9 +5,7 @@ import { Box, Flex, useDisclosure } from "@chakra-ui/react";
 import { QuestionBox } from "../smallComps/QuestionBox";
 import { FastBigSpinner } from "../smallComps/Spinners";
 import {
-  useListTopicThreadsLazyQuery,
   useListUserThreadsLazyQuery,
-  useListUserThreadsQuery,
 } from "../generated/graphql";
 import { ProfileModal } from "../components/ProfileModal";
 import { HeaderComp } from "../smallComps/HeaderComp";

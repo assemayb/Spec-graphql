@@ -2,32 +2,21 @@
 import React, { useEffect, useState } from "react";
 import {
   Box,
-  Button,
   Center,
   Divider,
   Flex,
-  FormControl,
   Heading,
-  Input,
-  Modal,
-  ModalBody,
-  ModalCloseButton,
-  ModalContent,
-  ModalOverlay,
   Skeleton,
   Tooltip,
-  useDisclosure,
 } from "@chakra-ui/react";
 import { useParams } from "react-router-dom";
 import {
-  useAddReplyMutation,
   useGetThreadDataQuery,
   useIsUserLoggedInLazyQuery,
-  useMeLazyQuery,
 } from "../generated/graphql";
 import { LikeSection } from "../smallComps/LikeSection";
 import { SortingButtonsSection } from "../smallComps/ThreadSortingBtns";
-import { BiCommentAdd } from "react-icons/bi";
+import { AddReplyModal } from "../smallComps/AddReplyModal";
 
 interface HeaderSectionProps {
   question: string;
@@ -47,83 +36,6 @@ export const HeaderSection: React.FC<HeaderSectionProps> = ({ question }) => {
   );
 };
 
-interface AddReplyModalProps {
-  showModal: boolean;
-  setShowModal: any;
-  threadId: number;
-  refetch: () => any;
-}
-export const AddReplyModal: React.FC<AddReplyModalProps> = ({
-  showModal,
-  setShowModal,
-  threadId,
-  refetch,
-}) => {
-  const [getUserData, { data }] = useMeLazyQuery({
-    fetchPolicy: "network-only",
-  });
-  useEffect(() => {
-    let isMounted = true;
-    isMounted === true && getUserData();
-    return () => {
-      isMounted = false;
-    };
-  }, []);
-
-  const [addReplyReq] = useAddReplyMutation();
-  const { onClose } = useDisclosure({
-    onClose: () => {
-      setShowModal(false);
-    },
-  });
-  const [newReply, setNewReply] = useState("");
-
-  const submitReply = async (e: any) => {
-    e.preventDefault();
-    await addReplyReq({
-      variables: {
-        text: newReply,
-        replyThread: threadId,
-        replySpecialist: data?.me?.id!,
-      },
-    });
-    refetch();
-    setShowModal(false);
-    // setNewReply("");
-  };
-
-  let Form: any = (
-    <form onSubmit={(e) => submitReply(e)}>
-      <Flex alignItems="center" p="0.5rem">
-        <FormControl id="reply" isRequired my="5px">
-          <Input
-            value={newReply}
-            onChange={(e) => setNewReply(e.target.value)}
-          />
-        </FormControl>
-        <Button
-          borderRadius="-10px"
-          type="submit"
-          p="0.2rm"
-          marginLeft="0.2rem"
-        >
-          {" "}
-          submit{" "}
-        </Button>
-      </Flex>
-    </form>
-  );
-
-  return (
-    <Modal isOpen={showModal} onClose={onClose}>
-      <ModalOverlay />
-      <ModalContent marginTop="14rem">
-        {/* <ModalCloseButton /> */}
-        <ModalBody marginTop="1.5rem">{Form}</ModalBody>
-      </ModalContent>
-    </Modal>
-  );
-};
 interface ThreadProps {}
 export const Thread: React.FC<ThreadProps> = () => {
   const params: {

@@ -10,7 +10,6 @@ import {
 
 import { LoginFrom } from "./LoginFrom";
 import { RegisterFrom } from "./RegisterForm";
-import { useIsUserLoggedInQuery } from "../generated/graphql";
 
 interface ModalComponentProps {
   showModal: boolean;

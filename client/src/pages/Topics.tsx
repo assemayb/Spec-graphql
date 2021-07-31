@@ -1,52 +1,9 @@
-import React, { useState, useEffect, FC } from "react";
-import { RouteComponentProps, useHistory } from "react-router-dom";
-import { Box, Grid, Skeleton, Center } from "@chakra-ui/react";
+import React, { useState, useEffect } from "react";
+import { RouteComponentProps } from "react-router-dom";
+import { Box, Grid, Skeleton } from "@chakra-ui/react";
 import { gql, useQuery } from "@apollo/client";
 import { HeaderComp } from "../smallComps/HeaderComp";
-
-interface TopicBoxProps {
-  topic: string;
-}
-const TopicBox: FC<TopicBoxProps> = ({ topic }) => {
-  const router = useHistory();
-  const goToTopic = () => {
-    router.push(`/topics/${topic}`);
-  };
-  return (
-    <Box
-      onClick={() => goToTopic()}
-      cursor="pointer"
-      w="100%"
-      h="100px"
-      bg="gray.100"
-      shadow="md"
-      borderRadius="-10px"
-      _hover={{
-        color: "green.400",
-        bg: "gray.300",
-        shadow: "lg",
-      }}
-    >
-      <Box
-        textAlign="center"
-        p="0.2rem"
-        fontSize={["10px", "13px", "18px", "20px"]}
-        fontWeight="bold"
-        textShadow="md"
-        marginTop="5px"
-      >
-        {topic}
-        <Center marginTop="5px">
-          <img
-            src={topic === "Cancer" ? `${topic}.png` : `${topic}.svg`}
-            width={topic === "Cancer" ? "35px" : ""}
-            alt=""
-          />
-        </Center>
-      </Box>
-    </Box>
-  );
-};
+import { TopicBox } from "../smallComps/TopicBox";
 
 export const topicsQuery = gql`
   query listTopics {

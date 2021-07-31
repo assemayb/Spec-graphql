@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   Flex,
   Button,
-  useColorMode,
   useDisclosure,
   Box,
 } from "@chakra-ui/react";
@@ -67,7 +66,7 @@ const ProfileButton: React.FC<ProfileButtonProps> = ({ isUserLogged }) => {
 
 interface LogoutButtonProps extends ProfileButtonProps {}
 const LogoutButton: React.FC<LogoutButtonProps> = ({ isUserLogged }) => {
-  const [logoutUser, { client }] = useLogoutMutation();
+  const [logoutUser] = useLogoutMutation();
   const history = useHistory();
 
   const handleLogout = async () => {
@@ -107,7 +106,7 @@ const LogoutButton: React.FC<LogoutButtonProps> = ({ isUserLogged }) => {
 };
 
 interface Header2Props {}
-export const Header2: React.FC<Header2Props> = ({}) => {
+export const Header2: React.FC<Header2Props> = () => {
   // const { data, loading, error } = useMeQuery();
   const loginState = useIsUserLoggedInQuery({
     fetchPolicy: "network-only",
