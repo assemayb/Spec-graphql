@@ -100,17 +100,6 @@ export const RegisterFrom: React.FC<RegisterFromProps> = () => {
                   </option>
                 ))}
             </Select>
-            {/* <Input
-              value={specOptions.fieldValue}
-              onChange={(e) =>
-                setSpecOptions((value) => {
-                  return {
-                    ...value,
-                    fieldValue: e.target.value,
-                  };
-                })
-              }
-            /> */}
           </FormControl>
         )}
         <FormControl display="flex" alignItems="center" my="5px">

@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import {
   Box,
   Button,
+  Center,
   Divider,
   Flex,
   FormControl,
@@ -14,18 +15,19 @@ import {
   ModalContent,
   ModalOverlay,
   Skeleton,
+  Tooltip,
   useDisclosure,
 } from "@chakra-ui/react";
 import { useParams } from "react-router-dom";
 import {
-  GetThreadDataQuery,
   useAddReplyMutation,
   useGetThreadDataQuery,
+  useIsUserLoggedInLazyQuery,
   useMeLazyQuery,
 } from "../generated/graphql";
 import { LikeSection } from "../smallComps/LikeSection";
 import { SortingButtonsSection } from "../smallComps/ThreadSortingBtns";
-import { ApolloQueryResult } from "@apollo/client";
+import { BiCommentAdd } from "react-icons/bi";
 
 interface HeaderSectionProps {
   question: string;
@@ -49,7 +51,7 @@ interface AddReplyModalProps {
   showModal: boolean;
   setShowModal: any;
   threadId: number;
-  refetch: () => any
+  refetch: () => any;
 }
 export const AddReplyModal: React.FC<AddReplyModalProps> = ({
   showModal,
@@ -115,8 +117,8 @@ export const AddReplyModal: React.FC<AddReplyModalProps> = ({
   return (
     <Modal isOpen={showModal} onClose={onClose}>
       <ModalOverlay />
-      <ModalContent marginTop="8rem">
-        <ModalCloseButton />
+      <ModalContent marginTop="14rem">
+        {/* <ModalCloseButton /> */}
         <ModalBody marginTop="1.5rem">{Form}</ModalBody>
       </ModalContent>
     </Modal>
@@ -127,6 +129,10 @@ export const Thread: React.FC<ThreadProps> = () => {
   const params: {
     threadId: string;
   } = useParams();
+  const [isUserLoggedInLazyQuery, isUserLoggedInLazyQueryData] =
+    useIsUserLoggedInLazyQuery({
+      fetchPolicy: "network-only",
+    });
   const { data, refetch } = useGetThreadDataQuery({
     fetchPolicy: "network-only",
     variables: {
@@ -151,8 +157,20 @@ export const Thread: React.FC<ThreadProps> = () => {
   const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
+    let isMounted = true;
+    if (isMounted) {
+      isUserLoggedInLazyQuery();
+    }
+    return () => {
+      isMounted = false;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
     setRepliesCount(data?.getThread?.replies?.length!);
   }, [data?.getThread, params]);
+
   useEffect(() => {
     if (repliesCount > 0) {
       setTimeout(() => {
@@ -161,6 +179,14 @@ export const Thread: React.FC<ThreadProps> = () => {
     }
   }, [repliesCount]);
 
+  const handleAddClick = () => {
+    if (isUserLoggedInLazyQueryData.data?.isUserLoggedIn === true) {
+      setShowModal(true);
+    } else {
+      const profileBtn: HTMLElement = document.getElementById("profile-btn")!;
+      profileBtn.click();
+    }
+  };
   return (
     <Flex
       mx="auto"
@@ -177,19 +203,25 @@ export const Thread: React.FC<ThreadProps> = () => {
       />
       <Flex align="center" justify="space-between" p="1.5rem">
         <HeaderSection question={data?.getThread?.question!} />
-        <Button
-          onClick={() => setShowModal(true)}
-          bg="blue.300"
-          opacity="0.75"
-          borderRadius="-10px"
-          _hover={{
-            opacity: "0.9",
-          }}
-          p="1.5rem"
-        >
-          {" "}
-          add reply
-        </Button>
+        <Tooltip label="Add a reply to this thread">
+          <Flex
+            onClick={() => handleAddClick()}
+            bg="green.300"
+            cursor="pointer"
+            color="white"
+            p="0.6rem"
+            opacity="0.80"
+            borderRadius="-10px"
+            _hover={{
+              bg: "green.500",
+              opacity: "1",
+            }}
+            fontWeight="bold"
+          >
+            <Center>add reply</Center>
+            {/* <BiCommentAdd size="30px"/> */}
+          </Flex>
+        </Tooltip>
       </Flex>
       <Box>
         {showReplies === false ? (

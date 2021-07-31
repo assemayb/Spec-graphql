@@ -22,14 +22,14 @@ export const LoginFrom = () => {
     show: false,
     value: "",
   });
+  const history = useHistory();
   const [login] = useLoginMutation({
     onCompleted: () => {
-      console.log("login is successful!!");
       setUsername("");
       setPassword("");
+      history.push("/");
     },
   });
-  const history = useHistory();
   const submitLoginForm = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
@@ -52,7 +52,6 @@ export const LoginFrom = () => {
       });
       if (response && response.data) {
         setAccessToken(response.data.loginUser?.accessToken!);
-        history.push("/");
       }
     } catch (error) {
       setShowMessage({ show: true, value: error.message });

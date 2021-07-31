@@ -28,10 +28,9 @@ interface ProfileButtonProps {
 
 const ProfileButton: React.FC<ProfileButtonProps> = ({ isUserLogged }) => {
   const [showModal, setShowModal] = useState(false);
-  const {  onClose } = useDisclosure({
+  const { onClose } = useDisclosure({
     onClose: () => setShowModal(false),
   });
-
 
   const router = useHistory();
   const handleProfileClick = () => {
@@ -41,10 +40,12 @@ const ProfileButton: React.FC<ProfileButtonProps> = ({ isUserLogged }) => {
       setShowModal(true);
     }
   };
+
   return (
     <>
       <ModalComponent showModal={showModal} onClose={onClose} />
       <Button
+        id="profile-btn"
         onClick={() => handleProfileClick()}
         height={["30%", "30%", "50%", "50%"]}
         fontSize={["sm", "sm", "medium", "medium"]}
@@ -66,18 +67,8 @@ const ProfileButton: React.FC<ProfileButtonProps> = ({ isUserLogged }) => {
 
 interface LogoutButtonProps extends ProfileButtonProps {}
 const LogoutButton: React.FC<LogoutButtonProps> = ({ isUserLogged }) => {
-  const [logoutUser] = useLogoutMutation();
+  const [logoutUser, { client }] = useLogoutMutation();
   const history = useHistory();
-  useEffect(() => {
-    let isMounted = false;
-    return () => {
-      console.log("unmounting");
-
-      if (isMounted === false) {
-        isMounted = true;
-      }
-    };
-  }, []);
 
   const handleLogout = async () => {
     if (isUserLogged) {
@@ -92,6 +83,7 @@ const LogoutButton: React.FC<LogoutButtonProps> = ({ isUserLogged }) => {
           });
         },
       });
+      // await client.resetStore()
       history.push("/");
     }
   };

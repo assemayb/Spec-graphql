@@ -38,11 +38,11 @@ export class ThreadResolver {
         specialization,
         threadCreator: payload?.userId,
       });
+      return true;
     } catch (error) {
       console.log(error);
       return false;
     }
-    return true;
   }
 
   // get thread data by id
