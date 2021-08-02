@@ -11,6 +11,7 @@ import {
 } from "@chakra-ui/react";
 import { useParams } from "react-router-dom";
 import {
+  useGetThreadDataLazyQuery,
   useGetThreadDataQuery,
   useIsUserLoggedInLazyQuery,
 } from "../generated/graphql";
@@ -24,11 +25,17 @@ interface HeaderSectionProps {
 export const HeaderSection: React.FC<HeaderSectionProps> = ({ question }) => {
   return (
     <Heading
-      p="1rem"
+      p={{
+        base: "0.5rem",
+        md: "1rem",
+      }}
       textShadow="lg"
       color="#718096"
       textTransform="uppercase"
-      fontSize="25px"
+      fontSize={{
+        base: "20px",
+        md: "25px",
+      }}
     >
       {question}
       <Divider marginTop="1rem" />
@@ -45,21 +52,46 @@ export const Thread: React.FC<ThreadProps> = () => {
     useIsUserLoggedInLazyQuery({
       fetchPolicy: "network-only",
     });
-  const { data, refetch } = useGetThreadDataQuery({
+
+  // const { data, refetch } = useGetThreadDataQuery({
+  const [getThreadDataQuery, { data, refetch }] = useGetThreadDataLazyQuery({
     fetchPolicy: "network-only",
     variables: {
       id: parseInt(params.threadId!),
       sortBy: "recent",
     },
   });
+
+  useEffect(() => {
+    let isMounted = true;
+    if (isMounted === true) {
+      getThreadDataQuery();
+      isUserLoggedInLazyQuery();
+    }
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  // useEffect(() => {
+  //   let isMounted = true;
+  //   if (isMounted) {
+  //     isUserLoggedInLazyQuery();
+  //   }
+  //   return () => {
+  //     isMounted = false;
+  //   };
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, []);
+
   const fetchByUpvotes = () =>
-    refetch({
+    refetch!({
       id: parseInt(params.threadId!),
       sortBy: "upvotes",
     });
 
   const refetchByDate = () => {
-    refetch({
+    refetch!({
       id: parseInt(params.threadId!),
       sortBy: "recent",
     });
@@ -67,17 +99,6 @@ export const Thread: React.FC<ThreadProps> = () => {
   const [repliesCount, setRepliesCount] = useState(0);
   const [showReplies, setShowReplies] = useState(false);
   const [showModal, setShowModal] = useState(false);
-
-  useEffect(() => {
-    let isMounted = true;
-    if (isMounted) {
-      isUserLoggedInLazyQuery();
-    }
-    return () => {
-      isMounted = false;
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   useEffect(() => {
     setRepliesCount(data?.getThread?.replies?.length!);
@@ -91,14 +112,16 @@ export const Thread: React.FC<ThreadProps> = () => {
     }
   }, [repliesCount]);
 
-  const handleAddClick = () => {
-    if (isUserLoggedInLazyQueryData.data?.isUserLoggedIn === true) {
-      setShowModal(true);
-    } else {
-      const profileBtn: HTMLElement = document.getElementById("profile-btn")!;
-      profileBtn.click();
+  const addNewReply = () => {
+    const isUserLoggedIn: boolean =
+      isUserLoggedInLazyQueryData.data?.isUserLoggedIn === true;
+    if (isUserLoggedIn) {
+      return setShowModal(true);
     }
+    const profileBtn: HTMLElement = document.getElementById("profile-btn")!;
+    profileBtn.click();
   };
+
   return (
     <Flex
       mx="auto"
@@ -117,12 +140,14 @@ export const Thread: React.FC<ThreadProps> = () => {
         <HeaderSection question={data?.getThread?.question!} />
         <Tooltip label="Add a reply to this thread">
           <Flex
-            onClick={() => handleAddClick()}
+            onClick={() => addNewReply()}
             bg="green.300"
             cursor="pointer"
             color="white"
             p="0.6rem"
+            marginBottom="0.8rem"
             opacity="0.80"
+            boxShadow="lg"
             borderRadius="-10px"
             _hover={{
               bg: "green.500",
@@ -159,7 +184,7 @@ export const Thread: React.FC<ThreadProps> = () => {
                     color="#718096"
                     fontSize="15px"
                     borderLeft="4px solid gray"
-                    marginTop="8px"
+                    marginTop="12px"
                     bgColor="gray.50"
                     _hover={{
                       bgColor: "gray.100",

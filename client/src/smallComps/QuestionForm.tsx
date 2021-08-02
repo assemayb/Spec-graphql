@@ -97,8 +97,8 @@ export const QuestionForm: React.FC<QuestionFormProps> = ({
         display="flex"
         flexDirection="column"
         p={{
-          base: "0.6rem",
-          md: "1rem",
+          base: "1rem",
+          md: "1.5rem",
         }}
         my={{
           base: "5px",
@@ -107,8 +107,8 @@ export const QuestionForm: React.FC<QuestionFormProps> = ({
         boxShadow={clickedFromProfilePage ? "" : "lg"}
         textAlign="center"
       >
-        <form onSubmit={(e) => submitQuestion(e)}>
-          <FormControl isRequired>
+        <form onSubmit={(e) => submitQuestion(e)} >
+          <FormControl isRequired fontWeight="bold">
             <FormLabel
               color="green.400"
               fontSize={{ base: "0.7rem", md: "1rem" }}
@@ -125,7 +125,7 @@ export const QuestionForm: React.FC<QuestionFormProps> = ({
               onChange={(e) => setQuestion(e.target.value)}
             />
           </FormControl>
-          <FormControl isRequired>
+          <FormControl isRequired fontWeight="bold">
             <FormLabel
               color="green.400"
               fontSize={{ base: "0.7rem", md: "1rem" }}

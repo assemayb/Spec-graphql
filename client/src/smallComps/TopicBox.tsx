@@ -12,8 +12,8 @@ export const TopicBox: React.FC<TopicBoxProps> = ({ topic }) => {
   };
   return (
     <Box
+      as="button"
       onClick={() => goToTopic()}
-      cursor="pointer"
       w="100%"
       h="100px"
       bg="gray.100"

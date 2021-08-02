@@ -21,7 +21,7 @@ export const Thread: ModelDefined<ThreadAttributes, {}> = dbConfig.define("threa
         autoIncrement: true
     },
     question: {
-        type: DataTypes.STRING(300),
+        type: DataTypes.STRING(600),
         allowNull: false
     },
     specialization: {
@@ -35,7 +35,10 @@ export const Thread: ModelDefined<ThreadAttributes, {}> = dbConfig.define("threa
     createdAt: {
         type: DataTypes.DATE(),
         allowNull: false
-    }
+    },
+    // image: {
+    //     type: DataTypes.B
+    // } 
 }, {
     tableName: "threads"
 })

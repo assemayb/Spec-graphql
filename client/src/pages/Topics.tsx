@@ -28,6 +28,7 @@ export const Topics: React.FC<RouteComponentProps> = () => {
     <>
       <HeaderComp threadsHeader={"Health Topics"} />
       <Box
+        
         p={["0.8rem", "0.8rem", "1rem", "1rem"]}
         shadow="base"
         marginTop="1rem"

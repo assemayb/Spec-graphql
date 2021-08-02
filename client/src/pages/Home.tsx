@@ -59,7 +59,7 @@ export const Home: React.FC<RouteComponentProps> = ({ history, location }) => {
     <>
       <HeaderComp threadsHeader={threadsHeader} />
 
-      <Flex marginTop="1rem">
+      <Flex marginTop="1rem" minH="80vh">
         <Flex
           // justifyContent="center"
           flexDirection="column"
@@ -71,7 +71,7 @@ export const Home: React.FC<RouteComponentProps> = ({ history, location }) => {
           {ThreadsComp}
         </Flex>
 
-        <Flex flex="1" p="0.5rem" flexDirection="column" marginLeft="5px">
+        <Flex flex="1"  flexDirection="column" marginX="5px">
           <Box
             p={["0.3rem", "0.4rem", "0.8rem", "0.8rem"]}
             shadow="base"

@@ -4,9 +4,7 @@ import { Box, Flex, useDisclosure } from "@chakra-ui/react";
 
 import { QuestionBox } from "../smallComps/QuestionBox";
 import { FastBigSpinner } from "../smallComps/Spinners";
-import {
-  useListUserThreadsLazyQuery,
-} from "../generated/graphql";
+import { useListUserThreadsLazyQuery } from "../generated/graphql";
 import { ProfileModal } from "../components/ProfileModal";
 import { HeaderComp } from "../smallComps/HeaderComp";
 
@@ -70,39 +68,35 @@ export const Profile = () => {
       <HeaderComp threadsHeader={"Threads you created"} />
       <Flex marginTop="1rem">
         <Flex
-          justifyContent="center"
+          // justifyContent="center"
           flexDirection="column"
           alignItems="center"
           flex="4"
+          minH="80vh"
           shadow="base"
           p={["0.2rem", "0.4rem", "1rem", "1rem"]}
         >
           {ThreadSection}
         </Flex>
 
-        <Flex flex="1" flexDirection="column" maxH="auto" marginX="8px">
-          <Box shadow="base" p={["0.2rem", "0.9rem", "1.2rem", "1.2rem"]}>
-            <Box
-              as="button"
-              width="100%"
-              height={{
-                base: "40px",
-                md: "80px",
-              }}
-              onClick={() => createNewThread()}
-              textAlign="center"
-              bgColor="green.300"
-              color="Window"
-              fontSize={{ base: "0.7rem", md: "1.2rem" }}
-              borderRadius="-10px"
-              fontWeight="bold"
-              cursor="pointer"
-              _hover={{
-                bgColor: "green.500",
-              }}
-            >
-              create new post
-            </Box>
+        <Flex flex="1" flexDirection="column" p={{base: "0.8rem", md: "2rem"}}>
+          <Box
+            as="button"
+            boxShadow="lg"
+            p={["0.4rem", "0.9rem", "1.2rem", "1.2rem"]}
+            onClick={() => createNewThread()}
+            textAlign="center"
+            bgColor="green.300"
+            color="Window"
+            fontSize={{ base: "1rem", md: "1.4rem" }}
+            borderRadius="-10px"
+            fontWeight="bold"
+            cursor="pointer"
+            _hover={{
+              bgColor: "green.500",
+            }}
+          >
+            create new post
           </Box>
 
           {/* <QuestionForm refetch={refetch} /> */}
