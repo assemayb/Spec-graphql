@@ -19,7 +19,7 @@ export const Reply: ModelDefined<ReplyAttributes, {}> = dbConfig.define(
       autoIncrement: true,
     },
     text: {
-      type: DataTypes.STRING(500),
+      type: DataTypes.STRING(800),
       allowNull: false,
     },
     upvotes: {

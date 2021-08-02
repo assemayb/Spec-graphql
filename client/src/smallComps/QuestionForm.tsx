@@ -69,13 +69,17 @@ export const QuestionForm: React.FC<QuestionFormProps> = ({
           spec: specilization,
         },
       });
+
       if (refetchProfileThreads !== undefined) {
         await refetchProfileThreads();
-        // setShowModal(false)
+
+        setTimeout(() => {
+          setShowModal!(false);
+          const x = document.querySelector("#footer")?.scrollHeight;
+          console.log(x);
+        }, 200);
       }
-      if (refetch !== undefined) {
-        refetch();
-      }
+      refetch !== undefined && (await refetch());
       setQuestion("");
     } catch (error) {
       console.log(error.messge);
@@ -107,7 +111,7 @@ export const QuestionForm: React.FC<QuestionFormProps> = ({
         boxShadow={clickedFromProfilePage ? "" : "lg"}
         textAlign="center"
       >
-        <form onSubmit={(e) => submitQuestion(e)} >
+        <form onSubmit={(e) => submitQuestion(e)}>
           <FormControl isRequired fontWeight="bold">
             <FormLabel
               color="green.400"

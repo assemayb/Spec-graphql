@@ -58,7 +58,7 @@ export const Thread: React.FC<ThreadProps> = () => {
     fetchPolicy: "network-only",
     variables: {
       id: parseInt(params.threadId!),
-      sortBy: "recent",
+      sortBy: "upvotes",
     },
   });
 
@@ -72,17 +72,6 @@ export const Thread: React.FC<ThreadProps> = () => {
       isMounted = false;
     };
   }, []);
-
-  // useEffect(() => {
-  //   let isMounted = true;
-  //   if (isMounted) {
-  //     isUserLoggedInLazyQuery();
-  //   }
-  //   return () => {
-  //     isMounted = false;
-  //   };
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, []);
 
   const fetchByUpvotes = () =>
     refetch!({
@@ -156,7 +145,6 @@ export const Thread: React.FC<ThreadProps> = () => {
             fontWeight="bold"
           >
             <Center>add reply</Center>
-            {/* <BiCommentAdd size="30px"/> */}
           </Flex>
         </Tooltip>
       </Flex>
@@ -165,7 +153,7 @@ export const Thread: React.FC<ThreadProps> = () => {
           Array(repliesCount)
             .fill("-")
             .map((item, idx) => (
-              <Skeleton key={idx} p="1rem" height="50px" my="0.6rem" />
+              <Skeleton key={idx} p="1.5em" height="50px" marginTop="12px" />
             ))
         ) : (
           <>
@@ -178,7 +166,7 @@ export const Thread: React.FC<ThreadProps> = () => {
                 return (
                   <Heading
                     key={idx}
-                    as="h4"
+                    // as="h4"
                     p="1.2em"
                     textShadow="md"
                     color="#718096"
@@ -198,7 +186,7 @@ export const Thread: React.FC<ThreadProps> = () => {
                   >
                     {reply.text}
                     <LikeSection
-                      refetch={refetchByDate}
+                      refetch={fetchByUpvotes}
                       replyId={reply.id}
                       upvotes={reply.upvotes}
                     />

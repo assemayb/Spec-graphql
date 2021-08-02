@@ -3,6 +3,7 @@ import { Flex } from "@chakra-ui/react";
 export const Footer = () => {
   return (
     <Flex
+      id="footer"
       justifyContent="center"
       alignItems="center"
       p="1rem"
@@ -10,12 +11,10 @@ export const Footer = () => {
       bgColor="green.300"
       fontSize="medium"
       fontWeight="bold"
-      // pos="relative"
+      color="white"
       width="100%"
-      // bottom="1px"
     >
-        This is the footer
+      This is the footer
     </Flex>
   );
 };
- 

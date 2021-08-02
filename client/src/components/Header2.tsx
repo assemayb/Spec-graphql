@@ -114,6 +114,7 @@ export const Header2: React.FC<Header2Props> = () => {
 
   return (
     <Flex
+      id="header-box"
       justifyContent="center"
       alignItems="center"
       bgColor="green.300"

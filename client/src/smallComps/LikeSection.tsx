@@ -45,13 +45,12 @@ export const LikeSection: React.FC<LikeSectionProps> = ({
   };
 
   return (
-    <Box display="flex" left="1x" bottom="1px">
+    <Box display="flex">
       <Box
         as="button"
-        // disabled={data?.isUserLoggedIn === false}
         onClick={() => upvoteReply(replyId)}
         borderRadius="-20px"
-        p="10px"
+        p={{base: "5px", md: "10px"}}
         bg="green.50"
         _hover={{
           bg: "blue.300",
@@ -67,7 +66,7 @@ export const LikeSection: React.FC<LikeSectionProps> = ({
           bg: "blue.300",
           color: "white",
         }}
-        p="10px"
+        p={{base: "5px", md: "10px"}}
         bg="green.100"
         boxShadow="md"
         mx="3px"

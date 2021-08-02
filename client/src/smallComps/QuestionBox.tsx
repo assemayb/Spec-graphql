@@ -69,7 +69,6 @@ export const QuestionBox: React.FC<QuestionBoxProps> = ({
       bgColor="gray.100"
       _hover={{
         bgColor: "gray.200",
-        borderRadius: "-30px",
       }}
       borderRadius="-20px"
     >
@@ -89,6 +88,7 @@ export const QuestionBox: React.FC<QuestionBoxProps> = ({
       )}
       <Heading
         as="button"
+        w="100%"
         onClick={() => goToThread()}
         boxShadow="sm"
         cursor="pointer"
@@ -97,8 +97,9 @@ export const QuestionBox: React.FC<QuestionBoxProps> = ({
         marginBottom="0.6rem"
         p={["0.4rem", "0.4rem", "1.4rem", "1.4rem"]}
         pos="relative"
-        borderRadius="14px"
+        borderRadius="-25px"
         textShadow="md"
+        textAlign="left"
         color="#718096"
         textOverflow="ellipsis"
         fontSize={["13px", "16px", "large", "22px"]}

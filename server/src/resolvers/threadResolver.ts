@@ -65,7 +65,7 @@ export class ThreadResolver {
         });
       } else {
         sortedReplies = replies?.sort((a, b) => {
-          return a.id - b.id;
+          return b.id - a.id;
         });
       }
       thread?.setDataValue("replies", sortedReplies!);

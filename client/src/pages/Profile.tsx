@@ -32,6 +32,11 @@ export const Profile = () => {
       isMounted = false;
     };
   }, []);
+
+  useEffect(() => {
+    console.log("the refetch function is called");
+  }, [refetch]);
+  
   const createNewThread = () => setShowModal(true);
 
   let ThreadSection: any = null;
@@ -70,7 +75,7 @@ export const Profile = () => {
         <Flex
           // justifyContent="center"
           flexDirection="column"
-          alignItems="center"
+          // alignItems="center"
           flex="4"
           minH="80vh"
           shadow="base"
@@ -79,11 +84,15 @@ export const Profile = () => {
           {ThreadSection}
         </Flex>
 
-        <Flex flex="1" flexDirection="column" p={{base: "0.8rem", md: "2rem"}}>
+        <Flex
+          flex="1"
+          flexDirection="column"
+          p={{ base: "0.8rem", md: "2rem" }}
+        >
           <Box
             as="button"
             boxShadow="lg"
-            p={["0.4rem", "0.9rem", "1.2rem", "1.2rem"]}
+            p={["0.4rem", "0.5rem", "0.8rem", "1.2rem"]}
             onClick={() => createNewThread()}
             textAlign="center"
             bgColor="green.300"
