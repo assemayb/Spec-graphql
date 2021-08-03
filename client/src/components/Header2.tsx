@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Flex,
   Button,
@@ -6,6 +6,7 @@ import {
   Box,
   Tooltip,
   Center,
+  Text,
 } from "@chakra-ui/react";
 import { useHistory } from "react-router-dom";
 import {
@@ -17,7 +18,7 @@ import {
 
 import { setAccessToken } from "../accessToken";
 import { AiFillHome, AiOutlineUser } from "react-icons/ai";
-import { BiBookContent, BiNotification } from "react-icons/bi";
+import { BiBookContent, BiNotification, BiLogOut } from "react-icons/bi";
 
 import { ModalComponent } from "../components/Modal";
 import { LinkBox } from "../smallComps/LinkBox";
@@ -32,6 +33,7 @@ const ProfileButton: React.FC<ProfileButtonProps> = ({ isUserLogged }) => {
   const { onClose } = useDisclosure({
     onClose: () => setShowModal(false),
   });
+  const [screenWidth, setScreenWidth] = useState(0);
 
   const router = useHistory();
   const handleProfileClick = () => {
@@ -41,6 +43,16 @@ const ProfileButton: React.FC<ProfileButtonProps> = ({ isUserLogged }) => {
       setShowModal(true);
     }
   };
+
+  useEffect(() => {
+    function handleResize() {
+      console.log(window.innerWidth);
+      setScreenWidth(window.innerWidth);
+    }
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   return (
     <>
@@ -57,10 +69,10 @@ const ProfileButton: React.FC<ProfileButtonProps> = ({ isUserLogged }) => {
           bgColor: "green.500",
         }}
         mx="0.4rem"
+        width="auto"
       >
         <AiOutlineUser width="40px" />
-
-        <span style={{ marginLeft: "4px" }}>profile</span>
+        {screenWidth > 800 && <Box marginLeft="4px">profile</Box>}
       </Button>
     </>
   );
@@ -70,6 +82,17 @@ interface LogoutButtonProps extends ProfileButtonProps {}
 const LogoutButton: React.FC<LogoutButtonProps> = ({ isUserLogged }) => {
   const [logoutUser] = useLogoutMutation();
   const history = useHistory();
+  const [screenWidth, setScreenWidth] = useState(0);
+
+  useEffect(() => {
+    function handleResize() {
+      console.log(window.innerWidth);
+      setScreenWidth(window.innerWidth);
+    }
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   const handleLogout = async () => {
     if (isUserLogged) {
@@ -84,7 +107,6 @@ const LogoutButton: React.FC<LogoutButtonProps> = ({ isUserLogged }) => {
           });
         },
       });
-      // await client.resetStore()
       history.push("/");
     }
   };
@@ -102,7 +124,7 @@ const LogoutButton: React.FC<LogoutButtonProps> = ({ isUserLogged }) => {
       }}
       mx="0.4rem"
     >
-      Logout
+      {screenWidth > 800 ? <Text>Logout</Text> : <BiLogOut />}
     </Button>
   );
 };
@@ -120,7 +142,7 @@ const NotificationBtn = () => {
             bgColor="green.300"
             mx="0.4rem"
           >
-            <BiNotification size="40px" />
+            <BiNotification size="30px" />
           </Box>
         </Center>
       </Tooltip>
