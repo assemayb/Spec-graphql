@@ -17,13 +17,16 @@ export const SideBtn: React.FC<SideBtnProps> = ({ onClick, text }) => {
     <Box
       as="button"
       boxShadow="inner"
-      marginTop="0.5rem"
+      marginTop={text !== "New Thread" ? "0.5rem" : ""}
       p={["0.4rem", "0.5rem", "0.8rem", "1.2rem"]}
       onClick={() => onClick()}
       textAlign="center"
       bgColor="green.300"
       color="Window"
-      fontSize={{ base: "0.9rem", md: "1.4rem" }}
+      fontSize={{
+        base: text === "New Thread" ? "0.7rem" : "0.9rem",
+        md: "1.4rem",
+      }}
       borderRadius="-10px"
       fontWeight="bold"
       cursor="pointer"
@@ -109,7 +112,7 @@ export const Profile = () => {
         <Flex
           flex="1"
           flexDirection="column"
-          p={{ base: "0.8rem", md: "2rem" }}
+          p={{ base: "0.4rem", md: "2rem" }}
         >
           <SideBtn text="New Thread" onClick={() => createNewThread()} />
           <SideBtn

@@ -4,6 +4,8 @@ import {
   Button,
   useDisclosure,
   Box,
+  Tooltip,
+  Center,
 } from "@chakra-ui/react";
 import { useHistory } from "react-router-dom";
 import {
@@ -15,7 +17,7 @@ import {
 
 import { setAccessToken } from "../accessToken";
 import { AiFillHome, AiOutlineUser } from "react-icons/ai";
-import { BiBookContent } from "react-icons/bi";
+import { BiBookContent, BiNotification } from "react-icons/bi";
 
 import { ModalComponent } from "../components/Modal";
 import { LinkBox } from "../smallComps/LinkBox";
@@ -105,6 +107,26 @@ const LogoutButton: React.FC<LogoutButtonProps> = ({ isUserLogged }) => {
   );
 };
 
+const NotificationBtn = () => {
+  return (
+    <>
+      <Tooltip label="show notifications">
+        <Center>
+          <Box
+            onClick={() => console.log("notifyyyyyyy")}
+            height={["30%", "30%", "50%", "50%"]}
+            fontSize={["sm", "sm", "medium", "medium"]}
+            fontWeight="bold"
+            bgColor="green.300"
+            mx="0.4rem"
+          >
+            <BiNotification size="40px" />
+          </Box>
+        </Center>
+      </Tooltip>
+    </>
+  );
+};
 interface Header2Props {}
 export const Header2: React.FC<Header2Props> = () => {
   // const { data, loading, error } = useMeQuery();
@@ -152,6 +174,7 @@ export const Header2: React.FC<Header2Props> = () => {
           <ProfileButton isUserLogged={loginState.data?.isUserLoggedIn!} />
         ) : (
           <>
+            <NotificationBtn />
             <ProfileButton isUserLogged={loginState.data?.isUserLoggedIn!} />
             <LogoutButton isUserLogged={loginState.data?.isUserLoggedIn!} />
           </>
