@@ -1,51 +1,51 @@
 import { DataTypes, ModelDefined } from "sequelize";
-import { dbConfig } from "../config/database"
+import { dbConfig } from "../config/database";
 
-import { Reply, ReplyAttributes } from './Reply'
-
-
+import { Reply, ReplyAttributes } from "./Reply";
 
 export interface ThreadAttributes {
-    id: number
-    question: string
-    specialization: string
-    threadCreator: number
-    createdAt: string
-    replies: ReplyAttributes[]
+  id: number;
+  question: string;
+  specialization: string;
+  threadCreator: number;
+  createdAt: string;
+  replies: ReplyAttributes[];
 }
 
-export const Thread: ModelDefined<ThreadAttributes, {}> = dbConfig.define("thread", {
+export const Thread: ModelDefined<ThreadAttributes, {}> = dbConfig.define(
+  "thread",
+  {
     id: {
-        type: DataTypes.INTEGER(),
-        primaryKey: true,
-        autoIncrement: true
+      type: DataTypes.INTEGER(),
+      primaryKey: true,
+      autoIncrement: true,
     },
     question: {
-        type: DataTypes.STRING(600),
-        allowNull: false
+      type: DataTypes.STRING(600),
+      allowNull: false,
     },
     specialization: {
-        type: DataTypes.STRING(100),
-        allowNull: false
+      type: DataTypes.STRING(100),
+      allowNull: false,
     },
     threadCreator: {
-        type: DataTypes.INTEGER(),
-        allowNull: false
+      type: DataTypes.INTEGER(),
+      allowNull: false,
     },
     createdAt: {
-        type: DataTypes.DATE(),
-        allowNull: false
+      type: DataTypes.DATE(),
+      allowNull: false,
     },
     // image: {
     //     type: DataTypes.B
-    // } 
-}, {
-    tableName: "threads"
-})
-
+    // }
+  },
+  {
+    tableName: "threads",
+  }
+);
 
 Thread.hasMany(Reply, {
-    foreignKey: "replyThread"
-})
-
-
+  foreignKey: "replyThread",
+  onDelete: "CASCADE",
+});

@@ -217,7 +217,8 @@ export class ThreadResolver {
       await Thread.destroy({
         where: {
           id,
-        },
+        }, 
+        cascade: true
       });
       return true;
     } catch (error) {

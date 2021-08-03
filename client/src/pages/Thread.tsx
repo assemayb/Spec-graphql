@@ -99,7 +99,7 @@ export const Thread: React.FC<ThreadProps> = () => {
     if (repliesCount > 0) {
       setTimeout(() => {
         setShowReplies(true);
-      }, 200);
+      }, 100);
     }
   }, [repliesCount]);
 

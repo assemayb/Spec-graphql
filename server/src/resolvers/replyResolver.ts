@@ -61,6 +61,16 @@ export class ReplyResolver {
     return replies;
   }
 
+  @Query(() => [ReplyType], { nullable: true })
+  async listAllReplies() {
+    try {
+      const replies = await Reply.findAll({});
+      return replies;
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  }
+
   @Mutation(() => Boolean, { nullable: false })
   @UseMiddleware(isAuthenticated)
   async upvoteReply(@Arg("id", () => Int) id: number) {
@@ -69,8 +79,8 @@ export class ReplyResolver {
       const replyUpvotes = reply?.getDataValue("upvotes");
       console.log(replyUpvotes);
       await reply?.update({
-          upvotes: replyUpvotes! + 1
-      })
+        upvotes: replyUpvotes! + 1,
+      });
       let x = await Reply.findOne({ where: { id } });
       console.log(x?.getDataValue("upvotes"));
 
