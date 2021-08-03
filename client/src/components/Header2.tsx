@@ -18,7 +18,7 @@ import {
 
 import { setAccessToken } from "../accessToken";
 import { AiFillHome, AiOutlineUser } from "react-icons/ai";
-import { BiBookContent, BiNotification, BiLogOut } from "react-icons/bi";
+import { BiBookContent, BiNotification, BiLogOut, BiBell } from "react-icons/bi";
 
 import { ModalComponent } from "../components/Modal";
 import { LinkBox } from "../smallComps/LinkBox";
@@ -33,7 +33,7 @@ const ProfileButton: React.FC<ProfileButtonProps> = ({ isUserLogged }) => {
   const { onClose } = useDisclosure({
     onClose: () => setShowModal(false),
   });
-  const [screenWidth, setScreenWidth] = useState(0);
+  const [screenWidth, setScreenWidth] = useState(window.innerWidth);
 
   const router = useHistory();
   const handleProfileClick = () => {
@@ -45,10 +45,10 @@ const ProfileButton: React.FC<ProfileButtonProps> = ({ isUserLogged }) => {
   };
 
   useEffect(() => {
-    function handleResize() {
+    const handleResize = () => {
       console.log(window.innerWidth);
       setScreenWidth(window.innerWidth);
-    }
+    };
 
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
@@ -68,10 +68,12 @@ const ProfileButton: React.FC<ProfileButtonProps> = ({ isUserLogged }) => {
         _hover={{
           bgColor: "green.500",
         }}
-        mx="0.4rem"
-        width="auto"
+        mx={{
+          base: "0.2rem",
+          md: "0.4rem",
+        }}
       >
-        <AiOutlineUser width="40px" />
+        <AiOutlineUser size="20px" />
         {screenWidth > 800 && <Box marginLeft="4px">profile</Box>}
       </Button>
     </>
@@ -82,7 +84,7 @@ interface LogoutButtonProps extends ProfileButtonProps {}
 const LogoutButton: React.FC<LogoutButtonProps> = ({ isUserLogged }) => {
   const [logoutUser] = useLogoutMutation();
   const history = useHistory();
-  const [screenWidth, setScreenWidth] = useState(0);
+  const [screenWidth, setScreenWidth] = useState(window.innerWidth);
 
   useEffect(() => {
     function handleResize() {
@@ -124,7 +126,7 @@ const LogoutButton: React.FC<LogoutButtonProps> = ({ isUserLogged }) => {
       }}
       mx="0.4rem"
     >
-      {screenWidth > 800 ? <Text>Logout</Text> : <BiLogOut />}
+      {screenWidth > 800 ? <Text>Logout</Text> : <BiLogOut size="20px" />}
     </Button>
   );
 };
@@ -133,18 +135,32 @@ const NotificationBtn = () => {
   return (
     <>
       <Tooltip label="show notifications">
-        <Center>
+        <Button
+          onClick={() => console.log("notifyyyyyyy")}
+          height={["30%", "30%", "50%", "50%"]}
+          fontSize={["sm", "sm", "medium", "medium"]}
+          fontWeight="bold"
+          bgColor="green.400"
+          borderRadius="40px"
+          _hover={{
+            bgColor: "green.500",
+          }}
+          mx="0.4rem"
+          pos="relative"
+        >
           <Box
-            onClick={() => console.log("notifyyyyyyy")}
-            height={["30%", "30%", "50%", "50%"]}
-            fontSize={["sm", "sm", "medium", "medium"]}
+            pos="absolute"
+            top="2px"
+            right="2px"
+            fontSize="1.2rem"
+            textColor="red.500"
             fontWeight="bold"
-            bgColor="green.300"
-            mx="0.4rem"
+            width="100%"
           >
-            <BiNotification size="30px" />
+            
           </Box>
-        </Center>
+          <BiBell size="22px" />
+        </Button>
       </Tooltip>
     </>
   );

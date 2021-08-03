@@ -6,6 +6,7 @@ import morgan from "morgan";
 import cookieParser from "cookie-parser";
 import { dbConfig } from "./config/database";
 import { ApolloServer } from "apollo-server-express";
+import { createServer } from "http";
 
 import { buildSchema } from "type-graphql";
 import { verify } from "jsonwebtoken";
@@ -27,13 +28,9 @@ const sendRefreshTokenWhenAppReloads = async (req: Request, res: Response) => {
   try {
     let payload: any = verify(token, process.env.REFRESH_TOKEN_SECRET!);
     console.log("================>");
-    console.log("================>");
-    console.log("================>");
-    console.log("================>");
-    console.log("================>");
-    console.log("================>");
     console.log(payload);
-    // let transaction = await dbConfig.transaction();
+    console.log("================>");
+
     let user = await User.findOne({ where: { id: payload.userId } });
     if (!user) {
       res.json({ ok: false, accessToken: "" });
@@ -51,6 +48,8 @@ const sendRefreshTokenWhenAppReloads = async (req: Request, res: Response) => {
 
 (async () => {
   const app = experss();
+  const httpServer = createServer(app);
+
   dotenv.config({
     path: `${__dirname}/config/.env`,
   });
@@ -77,19 +76,33 @@ const sendRefreshTokenWhenAppReloads = async (req: Request, res: Response) => {
     .catch((err) => console.log(err));
 
   // graphql apollo server
-  const apolloServer = new ApolloServer({
-    schema: await buildSchema({
-      resolvers: [HelloResolver, UserResolver, ThreadResolver, ReplyResolver],
-      validate: false,
-    }),
+  try {
+    const apolloServer = new ApolloServer({
+      schema: await buildSchema({
+        resolvers: [HelloResolver, UserResolver, ThreadResolver, ReplyResolver],
+        validate: false,
+      }),
+      subscriptions: {
+        path: "/subscriptions",
+        onConnect: () => {
+          console.log("Client connected for subscriptions");
+        },
+        onDisconnect: () => {
+          console.log("Client disconnected");
+        },
+      },
+      context: ({ req, res }) => ({ req, res }),
+    });
+    apolloServer.applyMiddleware({ app, cors: false });
+    apolloServer.installSubscriptionHandlers(httpServer);
+  } catch (err) {
+    console.error(err);
+  }
 
-    context: ({ req, res }) => ({ req, res }),
-  });
-  apolloServer.applyMiddleware({ app, cors: false });
-
-  const PORT = 8000;
-  // const PORT = 8200
-  app.listen(PORT, () => {
-    console.log(`server is running at port ${PORT}`);
+  // app.listen(() => {
+  //   console.log(`server is running at port 8000`);
+  // });
+  httpServer.listen(8000, () => {
+    console.log(`server is running at port 8000`);
   });
 })();

@@ -7,6 +7,10 @@ import {
   Arg,
   Query,
   UseMiddleware,
+  Subscription,
+  PubSub,
+  PubSubEngine,
+  Root,
 } from "type-graphql";
 import {
   CreateThreadInput,
@@ -24,25 +28,40 @@ import { dbConfig } from "../config/database";
 import sequelize from "sequelize";
 import { User } from "../models/User";
 
+const channel = "threads_channel";
 export class ThreadResolver {
   @Mutation(() => Boolean)
   @UseMiddleware(isAuthenticated)
   async createThread(
+    @PubSub() pubSub: PubSubEngine,
     @Arg("options", () => CreateThreadInput) options: CreateThreadInput,
     @Ctx() { payload }: MyContext
-  ) {
+  ): Promise<boolean> {
     const { question, specialization } = options;
     try {
-      await Thread.create({
+      const thread = await Thread.create({
         question,
         specialization,
         threadCreator: payload?.userId,
       });
+
+      const JSONThread = thread.toJSON();
+      await pubSub.publish(channel, JSONThread);
+
       return true;
     } catch (error) {
       console.log(error);
       return false;
     }
+  }
+  
+  // thread creation sub
+  @Subscription(() => ThreadType, { topics: channel })
+  async threadCreated(
+    @Root()
+    { id, question, specialization, threadCreator, createdAt }: ThreadType
+  ) {
+    return { id, question, specialization, threadCreator, createdAt };
   }
 
   // get thread data by id
@@ -217,8 +236,7 @@ export class ThreadResolver {
       await Thread.destroy({
         where: {
           id,
-        }, 
-        cascade: true
+        },
       });
       return true;
     } catch (error) {
