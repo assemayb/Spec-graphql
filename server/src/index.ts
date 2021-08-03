@@ -19,6 +19,36 @@ import { User } from "./models/User";
 import { sendRefreshToken } from "./utils/sendRefreshToken";
 import { createRefreshToken, createAccessToken } from "./utils/auth";
 
+const sendRefreshTokenWhenAppReloads = async (req: Request, res: Response) => {
+  const token = req.cookies["jid"];
+  if (!token) {
+    return res.json({ ok: false, accessToken: "" });
+  }
+  try {
+    let payload: any = verify(token, process.env.REFRESH_TOKEN_SECRET!);
+    console.log("================>");
+    console.log("================>");
+    console.log("================>");
+    console.log("================>");
+    console.log("================>");
+    console.log("================>");
+    console.log(payload);
+    // let transaction = await dbConfig.transaction();
+    let user = await User.findOne({ where: { id: payload.userId } });
+    if (!user) {
+      res.json({ ok: false, accessToken: "" });
+    }
+    sendRefreshToken(res, createRefreshToken(user as any));
+    return res.json({
+      ok: true,
+      accessToken: createAccessToken(user as any),
+    });
+  } catch (error) {
+    console.log(error);
+    return res.json({ ok: false, accessToken: "" });
+  }
+};
+
 (async () => {
   const app = experss();
   dotenv.config({
@@ -34,44 +64,25 @@ import { createRefreshToken, createAccessToken } from "./utils/auth";
   };
   app.use(cors(corsOptions));
 
-  app.post("/refresh_token", async (req, res) => {
-    const token = req.cookies["jid"];
-    if (!token) {
-      res.json({ ok: false, accessToken: "" });
-    }
-    try {
-      let payload: any = verify(token, process.env.REFRESH_TOKEN_SECRET!);
-      console.log("================>");
-      console.log(payload);
-      // let transaction = await dbConfig.transaction();
-      let user = await User.findOne({ where: { id: payload.userId } });
-      if (!user) {
-        res.json({ ok: false, accessToken: "" });
-      }
-      sendRefreshToken(res, createRefreshToken(user as any));
-      return res.json({
-        ok: true,
-        accessToken: createAccessToken(user as any),
-      });
-    } catch (error) {
-      console.log(error);
-      return res.json({ ok: false, accessToken: "" });
-    }
-  });
+  app.post("/refresh_token", (req, res) =>
+    sendRefreshTokenWhenAppReloads(req, res)
+  );
 
   // connection the database
   dbConfig
     .authenticate()
     .then(() => console.log("Database connection is successful"))
-    // .then(() => dbConfig.sync(/*    { force: true }  */))
-    .then(() => dbConfig.sync( { force: true }  ))
+    .then(() => dbConfig.sync(/*    { force: true }  */))
+    // .then(() => dbConfig.sync( { force: true }  ))
     .catch((err) => console.log(err));
 
   // graphql apollo server
   const apolloServer = new ApolloServer({
     schema: await buildSchema({
       resolvers: [HelloResolver, UserResolver, ThreadResolver, ReplyResolver],
+      validate: false,
     }),
+
     context: ({ req, res }) => ({ req, res }),
   });
   apolloServer.applyMiddleware({ app, cors: false });

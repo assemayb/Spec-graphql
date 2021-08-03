@@ -8,6 +8,33 @@ import { useListUserThreadsLazyQuery } from "../generated/graphql";
 import { ProfileModal } from "../components/ProfileModal";
 import { HeaderComp } from "../smallComps/HeaderComp";
 
+interface SideBtnProps {
+  text: string;
+  onClick: () => any;
+}
+export const SideBtn: React.FC<SideBtnProps> = ({ onClick, text }) => {
+  return (
+    <Box
+      as="button"
+      boxShadow="inner"
+      marginTop="0.5rem"
+      p={["0.4rem", "0.5rem", "0.8rem", "1.2rem"]}
+      onClick={() => onClick()}
+      textAlign="center"
+      bgColor="green.300"
+      color="Window"
+      fontSize={{ base: "0.9rem", md: "1.4rem" }}
+      borderRadius="-10px"
+      fontWeight="bold"
+      cursor="pointer"
+      _hover={{
+        bgColor: "green.500",
+      }}
+    >
+      {text}
+    </Box>
+  );
+};
 export const Profile = () => {
   const [showModal, setShowModal] = useState(false);
   const [showThreadOptions, setShowThreadOptions] = useState(false);
@@ -16,9 +43,6 @@ export const Profile = () => {
       setShowModal(false);
     },
   });
-  // const { data, loading, refetch } = useListUserThreadsQuery({
-  //   fetchPolicy: "network-only",
-  // });
   const [listUserQuery, { data, loading, refetch }] =
     useListUserThreadsLazyQuery({
       fetchPolicy: "network-only",
@@ -73,10 +97,8 @@ export const Profile = () => {
       <HeaderComp threadsHeader={"Threads you created"} />
       <Flex marginTop="1rem">
         <Flex
-          // justifyContent="center"
           flexDirection="column"
-          // alignItems="center"
-          flex="4"
+          flex="5"
           minH="80vh"
           shadow="base"
           p={["0.2rem", "0.4rem", "1rem", "1rem"]}
@@ -89,67 +111,12 @@ export const Profile = () => {
           flexDirection="column"
           p={{ base: "0.8rem", md: "2rem" }}
         >
-          <Box
-            as="button"
-            boxShadow="lg"
-            p={["0.4rem", "0.5rem", "0.8rem", "1.2rem"]}
-            onClick={() => createNewThread()}
-            textAlign="center"
-            bgColor="green.300"
-            color="Window"
-            fontSize={{ base: "0.8rem", md: "1.4rem" }}
-            borderRadius="-10px"
-            fontWeight="bold"
-            cursor="pointer"
-            _hover={{
-              bgColor: "green.500",
-            }}
-          >
-            New Thread
-          </Box>
-          <Box
-            as="button"
-            boxShadow="lg"
-            marginTop="0.5rem"
-            p={["0.4rem", "0.5rem", "0.8rem", "1.2rem"]}
-            onClick={() => {
-              console.log("settings btn is clicked");
-            }}
-            textAlign="center"
-            bgColor="green.300"
-            color="Window"
-            fontSize={{ base: "0.9rem", md: "1.4rem" }}
-            borderRadius="-10px"
-            fontWeight="bold"
-            cursor="pointer"
-            _hover={{
-              bgColor: "green.500",
-            }}
-          >
-            settings
-          </Box>
-
-          <Box
-            as="button"
-            boxShadow="lg"
-            marginTop="0.5rem"
-            p={["0.4rem", "0.5rem", "0.8rem", "1.2rem"]}
-            onClick={() => {
-              console.log("settings btn is clicked");
-            }}
-            textAlign="center"
-            bgColor="green.300"
-            color="Window"
-            fontSize={{ base: "0.9rem", md: "1.4rem" }}
-            borderRadius="-10px"
-            fontWeight="bold"
-            cursor="pointer"
-            _hover={{
-              bgColor: "green.500",
-            }}
-          >
-            Dashboard
-          </Box>
+          <SideBtn text="New Thread" onClick={() => createNewThread()} />
+          <SideBtn
+            text="settings"
+            onClick={() => console.log("settings btn is clicked")}
+          />
+          <SideBtn text="Dashboard" onClick={() => console.log("dashhh")} />
         </Flex>
       </Flex>
     </>
