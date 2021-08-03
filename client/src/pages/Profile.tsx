@@ -36,7 +36,7 @@ export const Profile = () => {
   useEffect(() => {
     console.log("the refetch function is called");
   }, [refetch]);
-  
+
   const createNewThread = () => setShowModal(true);
 
   let ThreadSection: any = null;
@@ -97,7 +97,7 @@ export const Profile = () => {
             textAlign="center"
             bgColor="green.300"
             color="Window"
-            fontSize={{ base: "1rem", md: "1.4rem" }}
+            fontSize={{ base: "0.8rem", md: "1.4rem" }}
             borderRadius="-10px"
             fontWeight="bold"
             cursor="pointer"
@@ -105,10 +105,51 @@ export const Profile = () => {
               bgColor: "green.500",
             }}
           >
-            create new post
+            New Thread
+          </Box>
+          <Box
+            as="button"
+            boxShadow="lg"
+            marginTop="0.5rem"
+            p={["0.4rem", "0.5rem", "0.8rem", "1.2rem"]}
+            onClick={() => {
+              console.log("settings btn is clicked");
+            }}
+            textAlign="center"
+            bgColor="green.300"
+            color="Window"
+            fontSize={{ base: "0.9rem", md: "1.4rem" }}
+            borderRadius="-10px"
+            fontWeight="bold"
+            cursor="pointer"
+            _hover={{
+              bgColor: "green.500",
+            }}
+          >
+            settings
           </Box>
 
-          {/* <QuestionForm refetch={refetch} /> */}
+          <Box
+            as="button"
+            boxShadow="lg"
+            marginTop="0.5rem"
+            p={["0.4rem", "0.5rem", "0.8rem", "1.2rem"]}
+            onClick={() => {
+              console.log("settings btn is clicked");
+            }}
+            textAlign="center"
+            bgColor="green.300"
+            color="Window"
+            fontSize={{ base: "0.9rem", md: "1.4rem" }}
+            borderRadius="-10px"
+            fontWeight="bold"
+            cursor="pointer"
+            _hover={{
+              bgColor: "green.500",
+            }}
+          >
+            Dashboard
+          </Box>
         </Flex>
       </Flex>
     </>

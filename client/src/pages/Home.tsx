@@ -70,7 +70,7 @@ export const Home: React.FC<RouteComponentProps> = ({ history, location }) => {
           {ThreadsComp}
         </Flex>
 
-        <Flex flex="1"  flexDirection="column" marginX="5px">
+        <Flex flex="1"  flexDirection="column" marginX="10px">
           <Box
             p={["0.3rem", "0.4rem", "0.8rem", "0.8rem"]}
             shadow="base"

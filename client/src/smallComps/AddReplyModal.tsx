@@ -33,7 +33,7 @@ export const AddReplyModal: React.FC<AddReplyModalProps> = ({
     return () => {
       isMounted = false;
     };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const [addReplyReq] = useAddReplyMutation();
@@ -83,7 +83,10 @@ export const AddReplyModal: React.FC<AddReplyModalProps> = ({
   return (
     <Modal isOpen={showModal} onClose={onClose}>
       <ModalOverlay />
-      <ModalContent marginTop="14rem">
+      <ModalContent
+        marginTop="14rem"
+        w={{ base: "250px", md: "350px" }}
+      >
         {/* <ModalCloseButton /> */}
         <ModalBody marginTop="1.5rem">{Form}</ModalBody>
       </ModalContent>

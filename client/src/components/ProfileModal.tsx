@@ -30,7 +30,11 @@ export const ProfileModal: React.FC<ProfileModalProps> = ({
     <>
       <Modal isOpen={showModal} onClose={onClose}>
         <ModalOverlay />
-        <ModalContent marginTop="8rem">
+        <ModalContent
+          marginTop="8rem"
+          w={{ base: "250px", md: "350px" }}
+          maxH={{ base: "600px", md: "700px" }}
+        >
           <ModalCloseButton />
           <ModalBody margin="1rem">
             <QuestionForm
