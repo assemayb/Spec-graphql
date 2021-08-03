@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 
-import { Box, Divider, Flex } from "@chakra-ui/react";
+import { Box } from "@chakra-ui/react";
 
 
 

@@ -61,7 +61,6 @@ export const Home: React.FC<RouteComponentProps> = ({ history, location }) => {
 
       <Flex marginTop="1rem" minH="80vh">
         <Flex
-          // justifyContent="center"
           flexDirection="column"
           alignItems="center"
           flex="4"

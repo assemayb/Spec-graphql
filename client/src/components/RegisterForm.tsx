@@ -29,8 +29,8 @@ export const RegisterFrom: React.FC<RegisterFromProps> = () => {
   const [register] = useRegisterMutation({});
   const submitRegisterForm = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
-    if (!username || !email || !password) {
+    const isFieldEmpty =  !username || !email || !password
+    if (isFieldEmpty) {
       return console.log("enter some data");
     }
     const isUserSpec = specOptions.showField!;

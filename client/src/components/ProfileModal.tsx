@@ -1,15 +1,10 @@
 import React from "react";
 import {
-  Button,
   Modal,
   ModalBody,
   ModalCloseButton,
   ModalContent,
   ModalOverlay,
-  ModalHeader,
-  ModalFooter,
-  useDisclosure,
-  Heading,
 } from "@chakra-ui/react";
 
 import { QuestionForm } from "../smallComps/QuestionForm";

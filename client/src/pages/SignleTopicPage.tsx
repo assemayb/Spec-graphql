@@ -2,7 +2,7 @@ import { Box, Flex } from "@chakra-ui/react";
 import { useParams, useHistory } from "react-router-dom";
 import React, { useEffect } from "react";
 import { useQuery } from "@apollo/client";
-import { useListTopicThreadsLazyQuery, useListTopicThreadsQuery } from "../generated/graphql";
+import { useListTopicThreadsLazyQuery } from "../generated/graphql";
 import { QuestionBox } from "../smallComps/QuestionBox";
 import { FastBigSpinner } from "../smallComps/Spinners";
 import { topicsQuery } from "./Topics";

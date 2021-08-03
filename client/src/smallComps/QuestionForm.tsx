@@ -5,7 +5,7 @@ import {
   ListUserThreadsQuery,
   useCreateThreadMutation,
   useIsUserLoggedInLazyQuery,
-  useIsUserLoggedInQuery,
+  useMeLazyQuery,
 } from "../generated/graphql";
 
 import {
@@ -48,8 +48,8 @@ export const QuestionForm: React.FC<QuestionFormProps> = ({
   }, [topics.data]);
 
   const [createQuestion] = useCreateThreadMutation();
-  // const userLogginData = useIsUserLoggedInQuery();
   const [userLogginData, { data }] = useIsUserLoggedInLazyQuery();
+  
   useEffect(() => {
     let isMounted = true;
     if (isMounted) {

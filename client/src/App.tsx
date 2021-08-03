@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useContext, createContext } from "react";
 import { BrowserRouter } from "react-router-dom";
 import { setAccessToken } from "./accessToken";
 
@@ -6,11 +6,17 @@ import { Header2 } from "./components/Header2";
 import { Footer } from "./components/Footer";
 import { Skeleton } from "./smallComps/Skeleton";
 
-import { useIsUserLoggedInQuery } from "./generated/graphql";
+
 import { BaseRouter } from "./routes";
-import { Container, Spinner } from "@chakra-ui/react";
+import { Container } from "@chakra-ui/react";
 
 import {FastBigSpinner} from "./smallComps/Spinners"
+
+
+// const User = createContext(null)
+// const UserContext = () => {
+//   return useContext(User)
+// }
 
 function App() {
   const [appLoading, setAppLoading] = useState(true);

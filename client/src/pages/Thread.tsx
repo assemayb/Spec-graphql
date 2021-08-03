@@ -12,8 +12,8 @@ import {
 import { useParams } from "react-router-dom";
 import {
   useGetThreadDataLazyQuery,
-  useGetThreadDataQuery,
   useIsUserLoggedInLazyQuery,
+  useMeLazyQuery,
 } from "../generated/graphql";
 import { LikeSection } from "../smallComps/LikeSection";
 import { SortingButtonsSection } from "../smallComps/ThreadSortingBtns";
@@ -45,15 +45,16 @@ export const HeaderSection: React.FC<HeaderSectionProps> = ({ question }) => {
 
 interface ThreadProps {}
 export const Thread: React.FC<ThreadProps> = () => {
-  const params: {
-    threadId: string;
-  } = useParams();
+  const params: { threadId: string } = useParams();
   const [isUserLoggedInLazyQuery, isUserLoggedInLazyQueryData] =
     useIsUserLoggedInLazyQuery({
       fetchPolicy: "network-only",
     });
+  const [meQuery, meQueryoptions] = useMeLazyQuery({
+    fetchPolicy: "network-only",
+  });
+  const isLoggedUserSpec = meQueryoptions.data?.me?.isSpec!;
 
-  // const { data, refetch } = useGetThreadDataQuery({
   const [getThreadDataQuery, { data, refetch }] = useGetThreadDataLazyQuery({
     fetchPolicy: "network-only",
     variables: {
@@ -67,6 +68,7 @@ export const Thread: React.FC<ThreadProps> = () => {
     if (isMounted === true) {
       getThreadDataQuery();
       isUserLoggedInLazyQuery();
+      meQuery();
     }
     return () => {
       isMounted = false;
@@ -104,6 +106,7 @@ export const Thread: React.FC<ThreadProps> = () => {
   const addNewReply = () => {
     const isUserLoggedIn: boolean =
       isUserLoggedInLazyQueryData.data?.isUserLoggedIn === true;
+
     if (isUserLoggedIn) {
       return setShowModal(true);
     }
@@ -127,26 +130,29 @@ export const Thread: React.FC<ThreadProps> = () => {
       />
       <Flex align="center" justify="space-between" p="1.5rem">
         <HeaderSection question={data?.getThread?.question!} />
-        <Tooltip label="Add a reply to this thread">
-          <Flex
-            onClick={() => addNewReply()}
-            bg="green.300"
-            cursor="pointer"
-            color="white"
-            p="0.6rem"
-            marginBottom="0.8rem"
-            opacity="0.80"
-            boxShadow="lg"
-            borderRadius="-10px"
-            _hover={{
-              bg: "green.500",
-              opacity: "1",
-            }}
-            fontWeight="bold"
-          >
-            <Center>add reply</Center>
-          </Flex>
-        </Tooltip>
+        {isLoggedUserSpec && (
+          <Tooltip label="Add a reply to this thread">
+            <Flex
+              as="button"
+              onClick={() => addNewReply()}
+              bg="green.300"
+              cursor="pointer"
+              color="white"
+              p="0.6rem"
+              marginBottom="0.8rem"
+              opacity="0.80"
+              boxShadow="lg"
+              borderRadius="-10px"
+              _hover={{
+                bg: "green.500",
+                opacity: "1",
+              }}
+              fontWeight="bold"
+            >
+              <Center>add reply</Center>
+            </Flex>
+          </Tooltip>
+        )}
       </Flex>
       <Box>
         {showReplies === false ? (
