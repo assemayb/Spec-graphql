@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext, createContext } from "react";
 import { BrowserRouter } from "react-router-dom";
 import { setAccessToken } from "./accessToken";
 
-import { Header2 } from "./components/Header2";
+import { Header } from "./components/Header";
 import { Footer } from "./components/Footer";
 import { Skeleton } from "./smallComps/Skeleton";
 
@@ -41,8 +41,7 @@ function App() {
       ) : (
         <>
           <BrowserRouter>
-            {/* <Header /> */}
-            <Header2 />
+            <Header />
             <Skeleton>
               <BaseRouter />
             </Skeleton>

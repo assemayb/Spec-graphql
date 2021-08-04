@@ -4,6 +4,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import reportWebVitals from "./reportWebVitals";
 import { ChakraProvider } from "@chakra-ui/react";
+
 import {theme} from "./theme"
 
 
@@ -17,6 +18,7 @@ import {
   ApolloLink,
   Observable,
 } from "@apollo/client";
+import { WebSocketLink } from "@apollo/client/link/ws";
 import { onError } from "@apollo/client/link/error";
 import { TokenRefreshLink } from "apollo-link-token-refresh";
 import jwtDecode from "jwt-decode";
@@ -106,6 +108,13 @@ const tokenRefreshLink = new TokenRefreshLink({
   },
 });
 
+const wsLink = new WebSocketLink({
+  uri: "ws://localhost:8000/subscriptions",
+  options: {
+    reconnect: true,
+  },
+});
+
 export const client = new ApolloClient({
   cache,
 
@@ -126,6 +135,7 @@ export const client = new ApolloClient({
     tokenRefreshLink,
     requestLink,
     httpLink,
+    wsLink
   ]),
 });
 
