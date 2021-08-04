@@ -6,8 +6,11 @@ import {
   Query,
   UseMiddleware,
   Arg,
+  Subscription,
+  Root,
+  PubSub,
+  PubSubEngine,
 } from "type-graphql";
-
 
 import { Reply } from "../models/Reply";
 
@@ -16,7 +19,6 @@ import { MyContext } from "../utils/context";
 import { ReplyCreateType } from "./replyResolverTypes";
 import { ReplyType } from "./replyResolverTypes";
 
-
 const reply_channel = "replies_channel";
 @Resolver()
 export class ReplyResolver {
@@ -24,19 +26,20 @@ export class ReplyResolver {
   @Mutation(() => Boolean, { nullable: false })
   @UseMiddleware(isAuthenticated)
   async addReply(
+    @PubSub() pubSub: PubSubEngine,
     @Arg("options", () => ReplyCreateType) options: ReplyCreateType,
     @Ctx() { req, payload }: MyContext
   ) {
     try {
       const replySpecialistID = payload?.userId;
-      console.log("replySpecialistID", replySpecialistID);
-
       const { text, replySpecialist, replyThread } = options;
-      await Reply.create({
+      let reply = await Reply.create({
         text,
         replySpecialist: replySpecialistID as number,
         replyThread,
       });
+      let JSONReply = reply.toJSON();
+      await pubSub.publish(reply_channel, JSONReply);
       return true;
     } catch (error) {
       console.log(error.message);
@@ -44,6 +47,23 @@ export class ReplyResolver {
     }
   }
 
+  @Subscription(() => ReplyType, { topics: reply_channel })
+  // @UseMiddleware(isAuthenticated)
+  async onReplyCreated(
+    @Root() { id, replySpecialist, replyThread, text, upvotes }: ReplyType
+  ) // @Ctx() { payload }: MyContext
+  {
+    try {
+      console.log("=======>");
+      console.log({ id, replySpecialist, replyThread, text, upvotes });
+      console.log("=======>");
+      // console.log(payload?.userId, payload?.userName);
+
+      return { id, replySpecialist, replyThread, text, upvotes };
+    } catch (error) {
+      console.log(error);
+    }
+  }
   // list all all thread replies
   @Query(() => [ReplyType], { nullable: true })
   @UseMiddleware(isAuthenticated)

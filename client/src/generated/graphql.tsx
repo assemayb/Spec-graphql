@@ -28,6 +28,7 @@ export type Query = {
   listTopics: Array<Scalars['String']>;
   lisTopicThreads?: Maybe<Array<ThreadType>>;
   listThreadReplies?: Maybe<Array<ReplyType>>;
+  listAllReplies?: Maybe<Array<ReplyType>>;
 };
 
 
@@ -178,6 +179,12 @@ export type ReplyCreateType = {
   replySpecialist?: Maybe<Scalars['Int']>;
 };
 
+export type Subscription = {
+  __typename?: 'Subscription';
+  threadCreated: ThreadType;
+  onReplyCreated: ReplyType;
+};
+
 export type AddReplyMutationVariables = Exact<{
   text: Scalars['String'];
   replyThread: Scalars['Int'];
@@ -325,6 +332,17 @@ export type MeQuery = (
     { __typename?: 'UserType' }
     & Pick<UserType, 'id' | 'username' | 'email' | 'isSpec' | 'spec'>
   )> }
+);
+
+export type OnReplyCreatedSubscriptionVariables = Exact<{ [key: string]: never; }>;
+
+
+export type OnReplyCreatedSubscription = (
+  { __typename?: 'Subscription' }
+  & { onReplyCreated: (
+    { __typename?: 'ReplyType' }
+    & Pick<ReplyType, 'id' | 'text' | 'replyThread' | 'replySpecialist' | 'upvotes'>
+  ) }
 );
 
 export type RegisterMutationVariables = Exact<{
@@ -787,6 +805,38 @@ export function useMeLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MeQuery
 export type MeQueryHookResult = ReturnType<typeof useMeQuery>;
 export type MeLazyQueryHookResult = ReturnType<typeof useMeLazyQuery>;
 export type MeQueryResult = Apollo.QueryResult<MeQuery, MeQueryVariables>;
+export const OnReplyCreatedDocument = gql`
+    subscription onReplyCreated {
+  onReplyCreated {
+    id
+    text
+    replyThread
+    replySpecialist
+    upvotes
+  }
+}
+    `;
+
+/**
+ * __useOnReplyCreatedSubscription__
+ *
+ * To run a query within a React component, call `useOnReplyCreatedSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useOnReplyCreatedSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useOnReplyCreatedSubscription({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useOnReplyCreatedSubscription(baseOptions?: Apollo.SubscriptionHookOptions<OnReplyCreatedSubscription, OnReplyCreatedSubscriptionVariables>) {
+        return Apollo.useSubscription<OnReplyCreatedSubscription, OnReplyCreatedSubscriptionVariables>(OnReplyCreatedDocument, baseOptions);
+      }
+export type OnReplyCreatedSubscriptionHookResult = ReturnType<typeof useOnReplyCreatedSubscription>;
+export type OnReplyCreatedSubscriptionResult = Apollo.SubscriptionResult<OnReplyCreatedSubscription>;
 export const RegisterDocument = gql`
     mutation Register($username: String!, $email: String!, $password: String!, $isSpec: Boolean, $spec: String) {
   register(

@@ -1,0 +1,9 @@
+subscription onReplyCreated {
+  onReplyCreated {
+    id
+    text
+    replyThread
+    replySpecialist
+    upvotes
+  }
+}
