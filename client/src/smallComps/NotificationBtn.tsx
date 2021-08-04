@@ -4,27 +4,13 @@ import { BiBell } from "react-icons/bi";
 import { gql, useQuery, useSubscription } from "@apollo/client";
 import { useEffect } from "react";
 import {
-  useListThreadsLazyQuery,
-  useListThreadsQuery,
   useListUserThreadsLazyQuery,
   useMeLazyQuery,
   useOnReplyCreatedSubscription,
 } from "../generated/graphql";
 
-const NewThreadSubscription = gql`
-  subscription {
-    threadCreated {
-      id
-      question
-      threadCreator
-      specialization
-    }
-  }
-`;
-
 interface NotificationBtnProps {}
 export const NotificationBtn: React.FC<NotificationBtnProps> = () => {
-  // const { data, loading } = useSubscription(NewThreadSubscription);
   const [meQuery, meQueryOptions] = useMeLazyQuery({
     fetchPolicy: "network-only",
   });
@@ -35,16 +21,7 @@ export const NotificationBtn: React.FC<NotificationBtnProps> = () => {
   const { data, loading, variables } = useOnReplyCreatedSubscription({
     fetchPolicy: "network-only",
   });
-
   const toast = useToast();
-
-  //   const { data, loading,  subscribeToMore } = useListThreadsQuery({
-  //     fetchPolicy: "network-only",
-  //     variables: {
-  //       sortBy: "recent",
-  //     },
-  //   });
-
   useEffect(() => {
     let isMounted = true;
     if (isMounted === true) {
@@ -63,12 +40,15 @@ export const NotificationBtn: React.FC<NotificationBtnProps> = () => {
         userThreadsQueryOptions.data?.listUserThreads?.map(({ id }) => id);
 
       const addedReplyThreadID = data?.onReplyCreated.replyThread;
-      if (currentUserThreadsIDs?.includes(addedReplyThreadID)) {
-        console.log(data?.onReplyCreated.text);
+      const addedReplySpecID = data?.onReplyCreated.replySpecialist;
+      const anotherUserReplied =
+        meQueryOptions.data?.me?.id !== addedReplySpecID;
+      const doesAddedReplyBelongToUserThreads =
+        currentUserThreadsIDs?.includes(addedReplyThreadID);
 
+      if (doesAddedReplyBelongToUserThreads && anotherUserReplied) {
         toast({
           title: "some replied to your thread",
-          //   description: "We've created your account for you.",
           description: data?.onReplyCreated.text,
           status: "success",
           duration: 6000,

@@ -6,6 +6,7 @@ import {
   Button,
   Center,
   Container,
+  useToast,
 } from "@chakra-ui/react";
 import {
   IsUserLoggedInDocument,
@@ -22,12 +23,20 @@ export const LoginFrom = () => {
     show: false,
     value: "",
   });
+  const toast = useToast();
   const history = useHistory();
   const [login] = useLoginMutation({
     onCompleted: () => {
       setUsername("");
       setPassword("");
       history.push("/");
+      toast({
+        description: "you are logged in",
+        status: "success",
+        duration: 2000,
+        isClosable: true,
+        position: "bottom",
+      });
     },
   });
   const submitLoginForm = async (e: React.FormEvent) => {

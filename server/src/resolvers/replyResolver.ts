@@ -48,16 +48,12 @@ export class ReplyResolver {
   }
 
   @Subscription(() => ReplyType, { topics: reply_channel })
-  // @UseMiddleware(isAuthenticated)
   async onReplyCreated(
     @Root() { id, replySpecialist, replyThread, text, upvotes }: ReplyType
-  ) // @Ctx() { payload }: MyContext
-  {
+  ) {
     try {
-      console.log("=======>");
-      console.log({ id, replySpecialist, replyThread, text, upvotes });
-      console.log("=======>");
-      // console.log(payload?.userId, payload?.userName);
+      console.log("=======>>");
+      console.log("=======>>");
 
       return { id, replySpecialist, replyThread, text, upvotes };
     } catch (error) {
