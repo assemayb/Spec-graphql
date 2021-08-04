@@ -5,23 +5,22 @@ import ReactDOM from "react-dom";
 import reportWebVitals from "./reportWebVitals";
 import { ChakraProvider } from "@chakra-ui/react";
 
-import {theme} from "./theme"
-
+import { theme } from "./theme";
 
 import {
   ApolloProvider,
   ApolloClient,
   InMemoryCache,
-  gql,
-  createHttpLink,
   HttpLink,
   ApolloLink,
   Observable,
+  split,
 } from "@apollo/client";
 import { WebSocketLink } from "@apollo/client/link/ws";
 import { onError } from "@apollo/client/link/error";
 import { TokenRefreshLink } from "apollo-link-token-refresh";
 import jwtDecode from "jwt-decode";
+import { getMainDefinition } from "@apollo/client/utilities";
 
 import { getAccessToken, setAccessToken } from "./accessToken";
 
@@ -38,11 +37,29 @@ import { getAccessToken, setAccessToken } from "./accessToken";
 // });
 
 const cache = new InMemoryCache();
+
 const httpLink = new HttpLink({
   uri: "http://localhost:8000/graphql",
   credentials: "include",
-  // useGETForQueries: true,
 });
+const wsLink = new WebSocketLink({
+  uri: "ws://localhost:8000/subscriptions",
+  options: {
+    reconnect: true,
+  },
+});
+
+const link = split(
+  ({ query }) => {
+    const definition = getMainDefinition(query);
+    return (
+      definition.kind === "OperationDefinition" &&
+      definition.operation === "subscription"
+    );
+  },
+  wsLink,
+  httpLink
+);
 
 const requestLink = new ApolloLink(
   (operation, forward) =>
@@ -108,13 +125,6 @@ const tokenRefreshLink = new TokenRefreshLink({
   },
 });
 
-const wsLink = new WebSocketLink({
-  uri: "ws://localhost:8000/subscriptions",
-  options: {
-    reconnect: true,
-  },
-});
-
 export const client = new ApolloClient({
   cache,
 
@@ -134,11 +144,11 @@ export const client = new ApolloClient({
     }),
     tokenRefreshLink,
     requestLink,
-    httpLink,
-    wsLink
+    // httpLink,
+    // wsLink
+    link,
   ]),
 });
-
 
 ReactDOM.render(
   <React.StrictMode>
@@ -150,6 +160,5 @@ ReactDOM.render(
   </React.StrictMode>,
   document.getElementById("root")
 );
-
 
 reportWebVitals();

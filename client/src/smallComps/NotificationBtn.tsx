@@ -1,8 +1,34 @@
 import { Box, Button, Tooltip } from "@chakra-ui/react";
 import { BiBell } from "react-icons/bi";
+import { gql, useQuery, useSubscription } from "@apollo/client";
+import { useEffect } from "react";
+import { useListThreadsQuery } from "../generated/graphql";
+
+const NewThreadSubscription = gql`
+  subscription {
+    threadCreated {
+      id
+      question
+      threadCreator
+      specialization
+    }
+  }
+`;
 
 interface NotificationBtnProps {}
 export const NotificationBtn: React.FC<NotificationBtnProps> = () => {
+  //   const { data, loading } = useSubscription(NewThreadSubscription);
+  const { data, loading,  subscribeToMore } = useListThreadsQuery({
+    fetchPolicy: "network-only",
+    variables: {
+      sortBy: "recent",
+    },
+  });
+
+  useEffect(() => {
+    
+  }, []);
+
   return (
     <>
       <Tooltip label="show notifications">

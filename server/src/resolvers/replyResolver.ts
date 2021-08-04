@@ -8,15 +8,16 @@ import {
   Arg,
 } from "type-graphql";
 
-import { User, UserAttributes } from "../models/User";
-import { Thread, ThreadAttributes } from "../models/Thread";
-import { Reply, ReplyAttributes } from "../models/Reply";
+
+import { Reply } from "../models/Reply";
 
 import { isAuthenticated } from "../utils/isAuth";
 import { MyContext } from "../utils/context";
 import { ReplyCreateType } from "./replyResolverTypes";
 import { ReplyType } from "./replyResolverTypes";
 
+
+const reply_channel = "replies_channel";
 @Resolver()
 export class ReplyResolver {
   // add reply to a thread

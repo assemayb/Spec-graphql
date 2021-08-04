@@ -15,20 +15,17 @@ import {
 import {
   CreateThreadInput,
   ThreadType,
-  TopicType,
   UpdateThreadInput,
-  UserThreadType,
 } from "./threadResolverTypes";
 
-import { Thread, ThreadAttributes } from "../models/Thread";
+import { Thread } from "../models/Thread";
 import { MyContext } from "../utils/context";
 
 import { isAuthenticated } from "../utils/isAuth";
-import { dbConfig } from "../config/database";
-import sequelize from "sequelize";
 import { User } from "../models/User";
 
-const channel = "threads_channel";
+const thread_channel = "threads_channel";
+
 export class ThreadResolver {
   @Mutation(() => Boolean)
   @UseMiddleware(isAuthenticated)
@@ -45,8 +42,9 @@ export class ThreadResolver {
         threadCreator: payload?.userId,
       });
 
+      // puslish to subscription channel
       const JSONThread = thread.toJSON();
-      await pubSub.publish(channel, JSONThread);
+      await pubSub.publish(thread_channel, JSONThread);
 
       return true;
     } catch (error) {
@@ -54,13 +52,20 @@ export class ThreadResolver {
       return false;
     }
   }
-  
+
   // thread creation sub
-  @Subscription(() => ThreadType, { topics: channel })
+  @Subscription(() => ThreadType, { topics: thread_channel })
   async threadCreated(
     @Root()
     { id, question, specialization, threadCreator, createdAt }: ThreadType
   ) {
+    console.log({
+      id,
+      question,
+      specialization,
+      threadCreator,
+      createdAt,
+    });
     return { id, question, specialization, threadCreator, createdAt };
   }
 

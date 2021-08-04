@@ -15,7 +15,7 @@ export const ProfileButton: React.FC<ProfileButtonProps> = ({
   const { onClose } = useDisclosure({
     onClose: () => setShowModal(false),
   });
-  const [screenWidth, setScreenWidth] = useState(window.innerWidth);
+  const [screenWidth, setScreenWidth] = useState(() => window.innerWidth);
 
   const router = useHistory();
   const handleProfileClick = () => {
@@ -28,7 +28,6 @@ export const ProfileButton: React.FC<ProfileButtonProps> = ({
 
   useEffect(() => {
     const handleResize = () => {
-      console.log(window.innerWidth);
       setScreenWidth(window.innerWidth);
     };
 
