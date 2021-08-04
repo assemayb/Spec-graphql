@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Box, Button, Tooltip } from "@chakra-ui/react";
+import { Box, Button, Tooltip, useToast } from "@chakra-ui/react";
 import { BiBell } from "react-icons/bi";
 import { gql, useQuery, useSubscription } from "@apollo/client";
 import { useEffect } from "react";
@@ -35,6 +35,9 @@ export const NotificationBtn: React.FC<NotificationBtnProps> = () => {
   const { data, loading, variables } = useOnReplyCreatedSubscription({
     fetchPolicy: "network-only",
   });
+
+  const toast = useToast();
+
   //   const { data, loading,  subscribeToMore } = useListThreadsQuery({
   //     fetchPolicy: "network-only",
   //     variables: {
@@ -62,14 +65,18 @@ export const NotificationBtn: React.FC<NotificationBtnProps> = () => {
       const addedReplyThreadID = data?.onReplyCreated.replyThread;
       if (currentUserThreadsIDs?.includes(addedReplyThreadID)) {
         console.log(data?.onReplyCreated.text);
-      }
 
-      // meQueryOptions.data?.me?.id === data?.onReplyCreated.replyThread;
-      // if (doesReplyBelongToUser) {
-      //   console.log(data?.onReplyCreated);
-      // }
+        toast({
+          title: "some replied to your thread",
+          //   description: "We've created your account for you.",
+          description: data?.onReplyCreated.text,
+          status: "success",
+          duration: 6000,
+          isClosable: true,
+          position: "top-left",
+        });
+      }
     }
-    //   }, [data?.onReplyCreated]);
   }, [data?.onReplyCreated]);
 
   return (
