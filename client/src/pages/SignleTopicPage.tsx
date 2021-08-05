@@ -100,7 +100,7 @@ export const SignleTopicPage: React.FC<SignleTopicPageProps> = () => {
 
   return (
     <>
-      <HeaderComp threadsHeader={`${params.topicName} Threads`} />
+      <HeaderComp header={`${params.topicName} Threads`} />
 
       <Flex marginRight="auto" marginLeft="auto" marginTop="2rem">
         <Flex

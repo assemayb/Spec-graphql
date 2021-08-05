@@ -2,10 +2,10 @@ import { Box, Divider } from '@chakra-ui/react';
 import React from 'react'
 
 interface HeaderCompProps {
-    threadsHeader: string
+    header: string
 }
 
-export const HeaderComp: React.FC<HeaderCompProps> = ({ threadsHeader }) => {
+export const HeaderComp: React.FC<HeaderCompProps> = ({ header }) => {
     return (
         <Box
             marginLeft={{
@@ -20,7 +20,7 @@ export const HeaderComp: React.FC<HeaderCompProps> = ({ threadsHeader }) => {
             textShadow="lg"
             maxWidth={["150px", "200px", "500px", "500px"]}
         >
-            {threadsHeader}
+            {header}
             <Divider />
         </Box>
     );

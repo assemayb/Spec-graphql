@@ -1,8 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
+import { useEffect } from "react";
 import { Box, Button, Tooltip, useToast } from "@chakra-ui/react";
 import { BiBell } from "react-icons/bi";
-import { gql, useQuery, useSubscription } from "@apollo/client";
-import { useEffect } from "react";
+
 import {
   useListUserThreadsLazyQuery,
   useMeLazyQuery,
@@ -18,7 +18,7 @@ export const NotificationBtn: React.FC<NotificationBtnProps> = () => {
     useListUserThreadsLazyQuery({
       fetchPolicy: "network-only",
     });
-  const { data, loading, variables } = useOnReplyCreatedSubscription({
+  const { data } = useOnReplyCreatedSubscription({
     fetchPolicy: "network-only",
   });
   const toast = useToast();

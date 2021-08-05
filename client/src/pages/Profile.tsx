@@ -39,6 +39,14 @@ export const SideBtn: React.FC<SideBtnProps> = ({ onClick, text }) => {
   );
 };
 export const Profile = () => {
+  const [displayedSection, setDisplpayedSection] =
+    useState<string>("Dashboard");
+  const [sectionHeader, setSectionHeader] = useState("Dashboard");
+
+  useEffect(() => {
+    setSectionHeader(displayedSection);
+  }, [displayedSection]);
+
   const [showModal, setShowModal] = useState(false);
   const [showThreadOptions, setShowThreadOptions] = useState(false);
   const { onClose } = useDisclosure({
@@ -59,12 +67,6 @@ export const Profile = () => {
       isMounted = false;
     };
   }, []);
-
-  useEffect(() => {
-    console.log("the refetch function is called");
-  }, [refetch]);
-
-  const createNewThread = () => setShowModal(true);
 
   let ThreadSection: any = null;
   if (loading) {
@@ -97,29 +99,44 @@ export const Profile = () => {
         showModal={showModal}
         onClose={onClose}
       />
-      <HeaderComp threadsHeader={"Threads you created"} />
+      <HeaderComp header={sectionHeader!} />
       <Flex marginTop="1rem">
-        <Flex
-          flexDirection="column"
-          flex="5"
-          minH="80vh"
-          shadow="base"
-          p={["0.2rem", "0.4rem", "1rem", "1rem"]}
-        >
-          {ThreadSection}
-        </Flex>
+        {displayedSection === "Dashboard" ? (
+          <Flex
+            flexDirection="column"
+            flex="5"
+            minH="80vh"
+            shadow="base"
+            p={["0.2rem", "0.4rem", "1rem", "1rem"]}
+          >
+            {ThreadSection}
+          </Flex>
+        ) : (
+          <Flex
+            flexDirection="column"
+            flex="5"
+            minH="80vh"
+            shadow="base"
+            p={["0.2rem", "0.4rem", "1rem", "1rem"]}
+          >
+            <h1>Settings</h1>
+          </Flex>
+        )}
 
         <Flex
           flex="1"
           flexDirection="column"
           p={{ base: "0.4rem", md: "2rem" }}
         >
-          <SideBtn text="New Thread" onClick={() => createNewThread()} />
+          <SideBtn text="New Thread" onClick={() => setShowModal(true)} />
           <SideBtn
             text="settings"
-            onClick={() => console.log("settings btn is clicked")}
+            onClick={() => setDisplpayedSection("Settings")}
           />
-          <SideBtn text="Dashboard" onClick={() => console.log("dashhh")} />
+          <SideBtn
+            text="Dashboard"
+            onClick={() => setDisplpayedSection("Dashboard")}
+          />
         </Flex>
       </Flex>
     </>

@@ -26,7 +26,7 @@ export const Topics: React.FC<RouteComponentProps> = () => {
 
   return (
     <>
-      <HeaderComp threadsHeader={"Health Topics"} />
+      <HeaderComp header={"Health Topics"} />
       <Box
         
         p={["0.8rem", "0.8rem", "1rem", "1rem"]}
