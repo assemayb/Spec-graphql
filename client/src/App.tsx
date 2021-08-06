@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext, createContext } from "react";
+import React, { useState, useEffect } from "react";
 import { BrowserRouter } from "react-router-dom";
 import { setAccessToken } from "./accessToken";
 
@@ -6,12 +6,10 @@ import { Header } from "./components/Header";
 import { Footer } from "./components/Footer";
 import { Skeleton } from "./smallComps/Skeleton";
 
-
 import { BaseRouter } from "./routes";
 import { Container } from "@chakra-ui/react";
 
-import {FastBigSpinner} from "./smallComps/Spinners"
-
+import { FastBigSpinner } from "./smallComps/Spinners";
 
 // const User = createContext(null)
 // const UserContext = () => {

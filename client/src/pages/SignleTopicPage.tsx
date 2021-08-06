@@ -55,14 +55,15 @@ export const SideNavBox: React.FC<SideNavBoxProps> = ({ topics }) => {
 
 interface SignleTopicPageProps {}
 export const SignleTopicPage: React.FC<SignleTopicPageProps> = () => {
-  const params: any = useParams();
+  const params: { topicName: string } = useParams();
   const topicsArr = useQuery(topicsQuery);
-  const [ListTopicThreadsQuery, { data, loading }] = useListTopicThreadsLazyQuery({
-    fetchPolicy: "cache-and-network",
-    variables: {
-      topic: params.topicName,
-    },
-  });
+  const [ListTopicThreadsQuery, { data, loading }] =
+    useListTopicThreadsLazyQuery({
+      fetchPolicy: "cache-and-network",
+      variables: {
+        topic: params.topicName,
+      },
+    });
 
   useEffect(() => {
     let isMounted = true;

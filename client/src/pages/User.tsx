@@ -49,9 +49,9 @@ export const User: React.FC<UserProps> = ({}) => {
 
   return (
     <Flex
-      marginTop="2rem"
-      marginX="2rem"
-      p="3rem"
+      marginTop="3rem"
+      marginX="0.4rem"
+      p="1.5rem"
       boxShadow="lg"
       direction="column"
       justify="center"
