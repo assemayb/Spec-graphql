@@ -22,6 +22,7 @@ interface QuestionBoxProps {
   repliesCount?: number;
   showThreadOptions?: boolean;
   fromTopicPage?: boolean;
+  fromUserPage?: boolean;
   setShowThreadOptions?: React.Dispatch<React.SetStateAction<boolean>>;
   refetchProfileThreads?: () => Promise<
     ApolloQueryResult<ListUserThreadsQuery>
@@ -36,6 +37,7 @@ export const QuestionBox: React.FC<QuestionBoxProps> = ({
   specializtion,
   showThreadOptions,
   fromTopicPage,
+  fromUserPage,
   setShowThreadOptions,
   refetchProfileThreads,
 }) => {
@@ -86,8 +88,6 @@ export const QuestionBox: React.FC<QuestionBoxProps> = ({
           <Link to={`profiles/${username}`}>
             <Box ml="4px">{username}</Box>
           </Link>
-
-          
         </Heading>
       )}
       <Heading
@@ -130,34 +130,36 @@ export const QuestionBox: React.FC<QuestionBoxProps> = ({
 
       {!username && (
         <Flex marginLeft="6px" p="0.2rem" marginTop="6px">
-          <Button
-            onClick={() => deleteThread()}
-            bgColor="whiteAlpha.600"
-            width={{
-              base: "80px",
-              md: "120px",
-            }}
-            p={{
-              base: "0.4rem",
-              md: "1rem",
-            }}
-            height={{
-              base: "25px",
-              md: "40px",
-            }}
-            fontSize={{
-              base: "10px",
-              md: "1rem",
-            }}
-            borderRadius="-10px"
-            _hover={{
-              bgColor: "green.200",
-              color: "white",
-            }}
-          >
-            <FiTrash2 style={{ marginRight: "5px" }} />
-            delete
-          </Button>
+          {!fromUserPage && (
+            <Button
+              onClick={() => deleteThread()}
+              bgColor="whiteAlpha.600"
+              width={{
+                base: "80px",
+                md: "120px",
+              }}
+              p={{
+                base: "0.4rem",
+                md: "1rem",
+              }}
+              height={{
+                base: "25px",
+                md: "40px",
+              }}
+              fontSize={{
+                base: "10px",
+                md: "1rem",
+              }}
+              borderRadius="-10px"
+              _hover={{
+                bgColor: "green.200",
+                color: "white",
+              }}
+            >
+              <FiTrash2 style={{ marginRight: "5px" }} />
+              delete
+            </Button>
+          )}
           <Button
             onClick={() => goToThread()}
             bgColor="whiteAlpha.600"

@@ -24,6 +24,7 @@ export type Query = {
   test: Scalars['String'];
   getThread?: Maybe<ThreadType>;
   listUserThreads?: Maybe<Array<ThreadType>>;
+  listOtherUserThreads?: Maybe<Array<ThreadType>>;
   listThreads?: Maybe<Array<ThreadType>>;
   listTopics: Array<Scalars['String']>;
   lisTopicThreads?: Maybe<Array<ThreadType>>;
@@ -35,6 +36,11 @@ export type Query = {
 export type QueryGetThreadArgs = {
   sortBy: Scalars['String'];
   id: Scalars['Int'];
+};
+
+
+export type QueryListOtherUserThreadsArgs = {
+  username: Scalars['String'];
 };
 
 
@@ -250,6 +256,19 @@ export type IsUserLoggedInQueryVariables = Exact<{ [key: string]: never; }>;
 export type IsUserLoggedInQuery = (
   { __typename?: 'Query' }
   & Pick<Query, 'isUserLoggedIn'>
+);
+
+export type ListOtherUserThreadsQueryVariables = Exact<{
+  username: Scalars['String'];
+}>;
+
+
+export type ListOtherUserThreadsQuery = (
+  { __typename?: 'Query' }
+  & { listOtherUserThreads?: Maybe<Array<(
+    { __typename?: 'ThreadType' }
+    & Pick<ThreadType, 'id' | 'question' | 'specialization' | 'createdAt'>
+  )>> }
 );
 
 export type ListThreadsQueryVariables = Exact<{
@@ -580,6 +599,42 @@ export function useIsUserLoggedInLazyQuery(baseOptions?: Apollo.LazyQueryHookOpt
 export type IsUserLoggedInQueryHookResult = ReturnType<typeof useIsUserLoggedInQuery>;
 export type IsUserLoggedInLazyQueryHookResult = ReturnType<typeof useIsUserLoggedInLazyQuery>;
 export type IsUserLoggedInQueryResult = Apollo.QueryResult<IsUserLoggedInQuery, IsUserLoggedInQueryVariables>;
+export const ListOtherUserThreadsDocument = gql`
+    query listOtherUserThreads($username: String!) {
+  listOtherUserThreads(username: $username) {
+    id
+    question
+    specialization
+    createdAt
+  }
+}
+    `;
+
+/**
+ * __useListOtherUserThreadsQuery__
+ *
+ * To run a query within a React component, call `useListOtherUserThreadsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useListOtherUserThreadsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useListOtherUserThreadsQuery({
+ *   variables: {
+ *      username: // value for 'username'
+ *   },
+ * });
+ */
+export function useListOtherUserThreadsQuery(baseOptions: Apollo.QueryHookOptions<ListOtherUserThreadsQuery, ListOtherUserThreadsQueryVariables>) {
+        return Apollo.useQuery<ListOtherUserThreadsQuery, ListOtherUserThreadsQueryVariables>(ListOtherUserThreadsDocument, baseOptions);
+      }
+export function useListOtherUserThreadsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ListOtherUserThreadsQuery, ListOtherUserThreadsQueryVariables>) {
+          return Apollo.useLazyQuery<ListOtherUserThreadsQuery, ListOtherUserThreadsQueryVariables>(ListOtherUserThreadsDocument, baseOptions);
+        }
+export type ListOtherUserThreadsQueryHookResult = ReturnType<typeof useListOtherUserThreadsQuery>;
+export type ListOtherUserThreadsLazyQueryHookResult = ReturnType<typeof useListOtherUserThreadsLazyQuery>;
+export type ListOtherUserThreadsQueryResult = Apollo.QueryResult<ListOtherUserThreadsQuery, ListOtherUserThreadsQueryVariables>;
 export const ListThreadsDocument = gql`
     query listThreads($sortBy: String!) {
   listThreads(sortBy: $sortBy) {

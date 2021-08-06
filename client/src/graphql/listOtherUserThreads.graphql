@@ -1,0 +1,8 @@
+query listOtherUserThreads ($username: String!) {
+  listOtherUserThreads(username: $username) {
+    id
+    question
+    specialization
+    createdAt
+  }
+}
