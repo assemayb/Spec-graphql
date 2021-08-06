@@ -9,6 +9,7 @@ import { Profile } from "./pages/Profile";
 import { Topics } from "./pages/Topics";
 import { SignleTopicPage} from "./pages/SignleTopicPage";
 import { Thread } from "./pages/Thread";
+import { User } from "./pages/User";
 
 
 export const BaseRouter: React.FC = () => {
@@ -19,6 +20,7 @@ export const BaseRouter: React.FC = () => {
       <Route exact path="/register" component={Register} />
       <Route exact path="/login" component={Login} />
       <Route exact path="/profile" component={Profile} />
+      <Route exact path="/profiles/:username" component={User} />
       <Route path="/topics/:topicName" component={SignleTopicPage} />
       <Route exact path="/topics" component={Topics} />
       <Route path="/threads/:threadId" component={Thread} />

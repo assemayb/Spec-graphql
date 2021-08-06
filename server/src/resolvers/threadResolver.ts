@@ -151,6 +151,21 @@ export class ThreadResolver {
     return userThreads;
   }
 
+  @Query(() => [ThreadType], { nullable: true })
+  async listOtherUserThreads(@Arg("username", () => String) username: string) {
+    try {
+      const user = await User.findOne({ where: { username } });
+      const usernameID = user?.getDataValue("id");
+      const userThreads = await Thread.findAll({
+        where: {
+          threadCreator: usernameID,
+        },
+      });
+      return userThreads;
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  }
   // List all Threads
   @Query(() => [ThreadType], { nullable: true })
   async listThreads(@Arg("sortBy", () => String) sortBy: string) {

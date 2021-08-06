@@ -11,7 +11,7 @@ import {
 import { ApolloQueryResult } from "@apollo/client";
 import { InteractionsSection } from "../smallComps/InteractionsSection";
 import { FiTrash2 } from "react-icons/fi";
-import { useHistory } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 
 interface QuestionBoxProps {
   threadId?: number;
@@ -83,7 +83,11 @@ export const QuestionBox: React.FC<QuestionBoxProps> = ({
           alignItems="center"
         >
           <FiUser />
-          <Box ml="4px">{username}</Box>
+          <Link to={`profiles/${username}`}>
+            <Box ml="4px">{username}</Box>
+          </Link>
+
+          
         </Heading>
       )}
       <Heading
