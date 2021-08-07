@@ -3,11 +3,9 @@ import React, { useEffect, useState } from "react";
 import {
   Box,
   Flex,
-  Center,
   FormLabel,
   Input,
   useDisclosure,
-  VStack,
   FormControl,
   Button,
 } from "@chakra-ui/react";
@@ -53,20 +51,41 @@ export const SideBtn: React.FC<SideBtnProps> = ({ onClick, text }) => {
 };
 
 interface SettingsSectionProps {}
-export const SettingsSection = () => {
-  const [meQuery, { data, loading }] = useMeLazyQuery({
-    fetchPolicy: "cache-first",
+export const SettingsSection: React.FC<SettingsSectionProps> = () => {
+  const [meQuery, { data }] = useMeLazyQuery({
+    fetchPolicy: "network-only",
   });
-  const [userInfo, setUserInfo] = useState({
+  type UserInfo =  {
+    username: string;
+    email: string;
+    spec: string | undefined;
+  }
+  const [userInfo, setUserInfo] = useState<UserInfo>({
     username: "",
     email: "",
+    spec: undefined,
   });
 
   useEffect(() => {
-    setUserInfo({
-      username: data?.me?.username!,
-      email: data?.me?.email!,
-    });
+    if (data?.me) {
+      setUserInfo((prevData) => ({
+        ...prevData,
+        username: data?.me?.username!,
+        email: data?.me?.email!,
+      }));
+
+      if (data?.me.isSpec === true) {
+        setUserInfo((prevData) => ({
+          ...prevData,
+          spec: data?.me?.spec!,
+        }));
+      } else {
+        setUserInfo((prevData) => ({
+          ...prevData,
+          spec: undefined,
+        }));
+      }
+    }
   }, [data]);
 
   useEffect(() => {
@@ -125,27 +144,42 @@ export const SettingsSection = () => {
           }
         />
       </FormControl>
-      {/* {data?.me?.isSpec && (
+      {data?.me?.isSpec && (
         <FormControl id="spec" color="green.400" fontWeight="bold" my="5px">
-          <FormLabel>specialization</FormLabel>
+          <FormLabel
+            marginLeft="10px"
+            fontSize="20px"
+            color="#718096"
+            fontWeight="bold"
+          >
+            specialization
+          </FormLabel>
           <Input
-            value={data.me.spec!}
-            // onChange={(e) =>
-            //   setUserInfo((prevData) => ({
-            //     ...prevData,
-            //     username: e.target.value,
-            //   }))
-            // }
+            borderRadius="-10px"
+            type="email"
+            color="black"
+            p="1.3rem"
+            value={userInfo.spec}
+            onChange={(e) =>
+              setUserInfo((prevData) => ({
+                ...prevData,
+                spec: e.target.value,
+              }))
+            }
           />
         </FormControl>
-      )} */}
+      )}
 
       <Button
         marginTop="1.6rem"
         borderRadius="-10px"
-        // my="10px"
         p="10px"
         type="submit"
+        color="white"
+        bg="green.300"
+        _hover={{
+          bg: "green.500",
+        }}
       >
         update
       </Button>
@@ -244,12 +278,12 @@ export const Profile = () => {
         >
           <SideBtn text="New Thread" onClick={() => setShowModal(true)} />
           <SideBtn
-            text="settings"
-            onClick={() => setDisplpayedSection("Settings")}
-          />
-          <SideBtn
             text="Dashboard"
             onClick={() => setDisplpayedSection("Dashboard")}
+          />
+          <SideBtn
+            text="settings"
+            onClick={() => setDisplpayedSection("Settings")}
           />
         </Flex>
       </Flex>

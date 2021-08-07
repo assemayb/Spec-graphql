@@ -7,7 +7,7 @@ import { FastBigSpinner } from "../smallComps/Spinners";
 
 interface UserProps {}
 
-export const User: React.FC<UserProps> = ({}) => {
+export const User: React.FC<UserProps> = () => {
   const params: { username: string } = useParams();
   const [listOtherThreads, { loading, data }] =
     useListOtherUserThreadsLazyQuery({

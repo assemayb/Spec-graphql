@@ -17,8 +17,8 @@ export const TopicBox: React.FC<TopicBoxProps> = ({ topic }) => {
       w="100%"
       h="100px"
       bg="gray.100"
-      shadow="md"
-      borderRadius="-10px"
+      shadow="inner"
+      borderRadius="-20px"
       _hover={{
         color: "green.400",
         bg: "gray.300",

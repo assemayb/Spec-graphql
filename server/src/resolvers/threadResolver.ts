@@ -157,9 +157,7 @@ export class ThreadResolver {
       const user = await User.findOne({ where: { username } });
       const usernameID = user?.getDataValue("id");
       const userThreads = await Thread.findAll({
-        where: {
-          threadCreator: usernameID,
-        },
+        where: { threadCreator: usernameID },
       });
       return userThreads;
     } catch (error) {
