@@ -1,0 +1,7 @@
+mutation updateUser ($username: String!, $email: String!, $spec: String!) {
+    updateUserInfo(options : {
+        username: $username,
+        email: $email,
+        spec: $spec
+    })
+}

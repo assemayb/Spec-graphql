@@ -53,14 +53,14 @@ export const SideBtn: React.FC<SideBtnProps> = ({ onClick, text }) => {
 interface SettingsSectionProps {}
 export const SettingsSection: React.FC<SettingsSectionProps> = () => {
   const [meQuery, { data }] = useMeLazyQuery({
-    fetchPolicy: "network-only",
+    fetchPolicy: "cache-and-network",
   });
-  type UserInfo =  {
+  type User =  {
     username: string;
     email: string;
     spec: string | undefined;
   }
-  const [userInfo, setUserInfo] = useState<UserInfo>({
+  const [userInfo, setUserInfo] = useState<User>({
     username: "",
     email: "",
     spec: undefined,
@@ -144,7 +144,7 @@ export const SettingsSection: React.FC<SettingsSectionProps> = () => {
           }
         />
       </FormControl>
-      {data?.me?.isSpec && (
+      {userInfo.spec !== undefined && (
         <FormControl id="spec" color="green.400" fontWeight="bold" my="5px">
           <FormLabel
             marginLeft="10px"

@@ -161,12 +161,14 @@ export class UserResolver {
     }
 
     @Mutation(() => Boolean)
-    async updateUserInfo(@Arg("id", () => Int) id: number,
+    @UseMiddleware(isAuthenticated)
+    async updateUserInfo(
+        @Ctx() {payload }: MyContext,
         @Arg("options", () => UserUpdateInputType) options: UserUpdateInputType) {
         try {
             await User.update(options, {
                 where: {
-                    id
+                    id: payload?.userId
                 }
             })
             return true;
