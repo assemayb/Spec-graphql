@@ -380,7 +380,7 @@ export type RegisterMutation = (
 export type UpdateUserMutationVariables = Exact<{
   username: Scalars['String'];
   email: Scalars['String'];
-  spec: Scalars['String'];
+  spec?: Maybe<Scalars['String']>;
 }>;
 
 
@@ -944,7 +944,7 @@ export type RegisterMutationHookResult = ReturnType<typeof useRegisterMutation>;
 export type RegisterMutationResult = Apollo.MutationResult<RegisterMutation>;
 export type RegisterMutationOptions = Apollo.BaseMutationOptions<RegisterMutation, RegisterMutationVariables>;
 export const UpdateUserDocument = gql`
-    mutation updateUser($username: String!, $email: String!, $spec: String!) {
+    mutation updateUser($username: String!, $email: String!, $spec: String) {
   updateUserInfo(options: {username: $username, email: $email, spec: $spec})
 }
     `;
