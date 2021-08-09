@@ -1,7 +1,7 @@
-import React, { useState , useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import { useListThreadsLazyQuery } from "../generated/graphql";
 import { RouteComponentProps } from "react-router-dom";
-import { Box, Flex } from "@chakra-ui/react";
+import { Box, Button, Flex } from "@chakra-ui/react";
 
 import { QuestionForm } from "../smallComps/QuestionForm";
 import { QuestionBox } from "../smallComps/QuestionBox";
@@ -10,16 +10,20 @@ import { BiBarChartAlt } from "react-icons/bi";
 import { FiClock } from "react-icons/fi";
 import { HeaderComp } from "../smallComps/HeaderComp";
 
-
 export const Home: React.FC<RouteComponentProps> = ({ history, location }) => {
   const [threadsHeader, setThreadsHeader] = useState("Most trendy threads");
-  const [ListThreadsQuery, { data, loading, refetch }] =
+  const [ListThreadsQuery, { data, loading, refetch, client }] =
     useListThreadsLazyQuery({
       fetchPolicy: "cache-and-network",
+      notifyOnNetworkStatusChange: true,
       variables: {
         sortBy: threadsHeader.split(" ")[1],
       },
     });
+
+  useEffect(() => {
+    console.log(data?.listThreads);
+  }, [data]);
 
   useEffect(() => {
     let isMounted = true;
@@ -68,9 +72,17 @@ export const Home: React.FC<RouteComponentProps> = ({ history, location }) => {
           p={["5px", "5px", "1rem", "1rem"]}
         >
           {ThreadsComp}
+          <Button
+            p="1.5rem"
+            marginTop="1.2rem"
+            borderRadius="-20px"
+            bg="gray.300"
+          >
+            load more
+          </Button>
         </Flex>
 
-        <Flex flex="1"  flexDirection="column" marginX="10px">
+        <Flex flex="1" flexDirection="column" marginX="10px">
           <Box
             p={["0.3rem", "0.4rem", "0.8rem", "0.8rem"]}
             shadow="base"

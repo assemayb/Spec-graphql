@@ -22,6 +22,7 @@ interface QuestionBoxProps {
   repliesCount?: number;
   showThreadOptions?: boolean;
   fromTopicPage?: boolean;
+  fromSingleTopicPage?: boolean;
   fromUserPage?: boolean;
   setShowThreadOptions?: React.Dispatch<React.SetStateAction<boolean>>;
   refetchProfileThreads?: () => Promise<
@@ -37,6 +38,7 @@ export const QuestionBox: React.FC<QuestionBoxProps> = ({
   specializtion,
   showThreadOptions,
   fromTopicPage,
+  fromSingleTopicPage,
   fromUserPage,
   setShowThreadOptions,
   refetchProfileThreads,
@@ -85,11 +87,12 @@ export const QuestionBox: React.FC<QuestionBoxProps> = ({
           alignItems="center"
         >
           <FiUser />
-          <Link to={`profiles/${username}`}>
+          <Link to={`/profiles/${username}`}>
             <Box ml="4px">{username}</Box>
           </Link>
         </Heading>
       )}
+      
       <Heading
         as="button"
         w="100%"
@@ -113,6 +116,7 @@ export const QuestionBox: React.FC<QuestionBoxProps> = ({
       >
         {question}
       </Heading>
+
       {!fromTopicPage && (
         <Badge
           variant="subtle"
@@ -171,10 +175,12 @@ export const QuestionBox: React.FC<QuestionBoxProps> = ({
               base: "10px",
               md: "1rem",
             }}
+            
             height={{
               base: "25px",
               md: "40px",
             }}
+
             borderRadius="-10px"
             marginLeft="4px"
             p={{

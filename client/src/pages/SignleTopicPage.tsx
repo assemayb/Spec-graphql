@@ -92,6 +92,7 @@ export const SignleTopicPage: React.FC<SignleTopicPageProps> = () => {
               username={thread.threadCreator}
               createdAt={thread.createdAt}
               repliesCount={thread.replies?.length}
+              fromSingleTopicPage={true}
             />
           );
         })}

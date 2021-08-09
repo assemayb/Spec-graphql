@@ -103,8 +103,8 @@ export class UserResolver {
         @Arg("password", () => String) password: string,
         @Ctx() { res }: MyContext
     ) {
-
         let transaction = await dbConfig.transaction()
+
         let user = await User.findOne({
             where: {
                 username,

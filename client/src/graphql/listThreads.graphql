@@ -1,5 +1,5 @@
-query listThreads($sortBy: String!) {
-  listThreads(sortBy: $sortBy) {
+query listThreads($sortBy: String!, $offset: String!, $limit: String!) {
+  listThreads(sortBy: $sortBy, offset: $offset, limit: $limit) {
     id
     question
     specialization
