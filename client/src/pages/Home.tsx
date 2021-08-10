@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { useListThreadsLazyQuery } from "../generated/graphql";
+import {
+  useGetThreadsNumLazyQuery,
+  useListThreadsLazyQuery,
+} from "../generated/graphql";
 import { RouteComponentProps } from "react-router-dom";
 import { Box, Button, Flex } from "@chakra-ui/react";
 
@@ -9,10 +12,19 @@ import { FastBigSpinner } from "../smallComps/Spinners";
 import { BiBarChartAlt } from "react-icons/bi";
 import { FiClock } from "react-icons/fi";
 import { HeaderComp } from "../smallComps/HeaderComp";
+import { gql, useQuery } from "@apollo/client";
 
 export const Home: React.FC<RouteComponentProps> = ({ history, location }) => {
   const [threadsHeader, setThreadsHeader] = useState("Most trendy threads");
   const [offset, setOffset] = useState(0);
+  const [threadsNum, threadsNumOptions] = useGetThreadsNumLazyQuery({
+    fetchPolicy: "network-only",
+  });
+
+  useEffect(() => {
+    console.log(threadsNumOptions.data?.getThreadsNum);
+  }, [threadsNumOptions.data?.getThreadsNum]);
+
   const [ListThreadsQuery, { data, loading, refetch, subscribeToMore }] =
     useListThreadsLazyQuery({
       fetchPolicy: "cache-and-network",
@@ -25,8 +37,6 @@ export const Home: React.FC<RouteComponentProps> = ({ history, location }) => {
     });
 
   useEffect(() => {
-    console.log(offset);
-    
     if (data?.listThreads) {
       refetch!({
         sortBy: threadsHeader.split(" ")[1],
@@ -34,12 +44,13 @@ export const Home: React.FC<RouteComponentProps> = ({ history, location }) => {
         limit: 5,
       });
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [offset ,setOffset]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [offset, setOffset]);
 
   useEffect(() => {
     let isMounted = true;
     if (isMounted === true) {
+      threadsNum();
       ListThreadsQuery();
     }
     return () => {
@@ -67,15 +78,27 @@ export const Home: React.FC<RouteComponentProps> = ({ history, location }) => {
             />
           );
         })}
-        <Button
-          onClick={() => setOffset((prevOffset) => prevOffset + 5 )}
-          p="1.5rem"
-          marginTop="1.2rem"
-          borderRadius="-20px"
-          bg="gray.300"
-        >
-          load more
-        </Button>
+        <Flex align="center">
+        {threadsNumOptions.data &&
+          Array(Math.ceil(threadsNumOptions.data?.getThreadsNum! / 5))
+            .fill("")
+            .map((_, idx) => {
+              return (
+                <Button
+                  key={idx}
+                  marginX="2px"
+                  bg={Math.ceil(threadsNumOptions.data?.getThreadsNum! / 5) === idx + 1 ? "green.400":  "green.100"}
+                  onClick={() => setOffset((prevOffset) => idx * 5)}
+                  p="1.5rem"
+                  marginTop="1.2rem"
+                  borderRadius="-20px"
+                  // bg="gray.300"
+                >
+                  {idx + 1}
+                </Button>
+              );
+            })}
+          </Flex>
       </>
     );
   }
