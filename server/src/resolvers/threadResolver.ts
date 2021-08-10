@@ -166,16 +166,24 @@ export class ThreadResolver {
   }
   // List all Threads
   @Query(() => [ThreadType], { nullable: true })
-  async listThreads(@Arg("sortBy", () => String) sortBy: string) {
+  async listThreads(
+    @Arg("sortBy", () => String) sortBy: string,
+    @Arg("offset", () => Int) offset: number,
+    @Arg("limit", () => Int) limit: number
+  ) {
     let threads;
+    console.log(limit, offset);
+
     try {
       if (sortBy == "recent") {
         threads = await Thread.findAll({
           include: "replies",
           order: [["id", "DESC"]],
+          offset,
+          limit,
         });
       } else {
-        threads = await Thread.findAll({ include: "replies" });
+        threads = await Thread.findAll({ include: "replies", offset, limit });
         const repliesCount = (thread: any): number => {
           return thread.getDataValue("replies").length;
         };
@@ -197,6 +205,17 @@ export class ThreadResolver {
         idx += 1;
       }
       return threads;
+    } catch (error) {
+      console.error(error.message);
+      return null;
+    }
+  }
+
+  @Query(() => Int, { nullable: false })
+  async getThreadsNum() {
+    try {
+      const threadsNum = await Thread.count();
+      return threadsNum;
     } catch (error) {
       console.error(error.message);
       return null;

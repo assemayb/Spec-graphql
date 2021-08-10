@@ -1,4 +1,4 @@
-query listThreads($sortBy: String!, $offset: String!, $limit: String!) {
+query listThreads($sortBy: String!, $offset: Int!, $limit: Int!) {
   listThreads(sortBy: $sortBy, offset: $offset, limit: $limit) {
     id
     question

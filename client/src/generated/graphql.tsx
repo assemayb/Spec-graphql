@@ -45,6 +45,8 @@ export type QueryListOtherUserThreadsArgs = {
 
 
 export type QueryListThreadsArgs = {
+  limit: Scalars['Int'];
+  offset: Scalars['Int'];
   sortBy: Scalars['String'];
 };
 
@@ -272,6 +274,8 @@ export type ListOtherUserThreadsQuery = (
 
 export type ListThreadsQueryVariables = Exact<{
   sortBy: Scalars['String'];
+  offset: Scalars['Int'];
+  limit: Scalars['Int'];
 }>;
 
 
@@ -647,8 +651,8 @@ export type ListOtherUserThreadsQueryHookResult = ReturnType<typeof useListOther
 export type ListOtherUserThreadsLazyQueryHookResult = ReturnType<typeof useListOtherUserThreadsLazyQuery>;
 export type ListOtherUserThreadsQueryResult = Apollo.QueryResult<ListOtherUserThreadsQuery, ListOtherUserThreadsQueryVariables>;
 export const ListThreadsDocument = gql`
-    query listThreads($sortBy: String!) {
-  listThreads(sortBy: $sortBy) {
+    query listThreads($sortBy: String!, $offset: Int!, $limit: Int!) {
+  listThreads(sortBy: $sortBy, offset: $offset, limit: $limit) {
     id
     question
     specialization
@@ -678,6 +682,8 @@ export const ListThreadsDocument = gql`
  * const { data, loading, error } = useListThreadsQuery({
  *   variables: {
  *      sortBy: // value for 'sortBy'
+ *      offset: // value for 'offset'
+ *      limit: // value for 'limit'
  *   },
  * });
  */

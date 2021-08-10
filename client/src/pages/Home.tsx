@@ -12,18 +12,30 @@ import { HeaderComp } from "../smallComps/HeaderComp";
 
 export const Home: React.FC<RouteComponentProps> = ({ history, location }) => {
   const [threadsHeader, setThreadsHeader] = useState("Most trendy threads");
-  const [ListThreadsQuery, { data, loading, refetch, client }] =
+  const [offset, setOffset] = useState(0);
+  const [ListThreadsQuery, { data, loading, refetch, subscribeToMore }] =
     useListThreadsLazyQuery({
       fetchPolicy: "cache-and-network",
       notifyOnNetworkStatusChange: true,
       variables: {
         sortBy: threadsHeader.split(" ")[1],
+        offset,
+        limit: 5,
       },
     });
 
   useEffect(() => {
-    console.log(data?.listThreads);
-  }, [data]);
+    console.log(offset);
+    
+    if (data?.listThreads) {
+      refetch!({
+        sortBy: threadsHeader.split(" ")[1],
+        offset,
+        limit: 5,
+      });
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [offset ,setOffset]);
 
   useEffect(() => {
     let isMounted = true;
@@ -55,6 +67,15 @@ export const Home: React.FC<RouteComponentProps> = ({ history, location }) => {
             />
           );
         })}
+        <Button
+          onClick={() => setOffset((prevOffset) => prevOffset + 5 )}
+          p="1.5rem"
+          marginTop="1.2rem"
+          borderRadius="-20px"
+          bg="gray.300"
+        >
+          load more
+        </Button>
       </>
     );
   }
@@ -72,14 +93,6 @@ export const Home: React.FC<RouteComponentProps> = ({ history, location }) => {
           p={["5px", "5px", "1rem", "1rem"]}
         >
           {ThreadsComp}
-          <Button
-            p="1.5rem"
-            marginTop="1.2rem"
-            borderRadius="-20px"
-            bg="gray.300"
-          >
-            load more
-          </Button>
         </Flex>
 
         <Flex flex="1" flexDirection="column" marginX="10px">
