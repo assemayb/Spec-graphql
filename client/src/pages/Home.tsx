@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from "react";
 import {
   useGetThreadsNumLazyQuery,
@@ -12,18 +13,16 @@ import { FastBigSpinner } from "../smallComps/Spinners";
 import { BiBarChartAlt } from "react-icons/bi";
 import { FiClock } from "react-icons/fi";
 import { HeaderComp } from "../smallComps/HeaderComp";
-import { gql, useQuery } from "@apollo/client";
+import { Pagination } from "../smallComps/PagintationSection";
 
+const PageSize = 5;
 export const Home: React.FC<RouteComponentProps> = ({ history, location }) => {
   const [threadsHeader, setThreadsHeader] = useState("Most trendy threads");
-  const [offset, setOffset] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [offset, setOffset] = useState(1); /** current page offset */
   const [threadsNum, threadsNumOptions] = useGetThreadsNumLazyQuery({
     fetchPolicy: "network-only",
   });
-
-  useEffect(() => {
-    console.log(threadsNumOptions.data?.getThreadsNum);
-  }, [threadsNumOptions.data?.getThreadsNum]);
 
   const [ListThreadsQuery, { data, loading, refetch, subscribeToMore }] =
     useListThreadsLazyQuery({
@@ -31,7 +30,7 @@ export const Home: React.FC<RouteComponentProps> = ({ history, location }) => {
       notifyOnNetworkStatusChange: true,
       variables: {
         sortBy: threadsHeader.split(" ")[1],
-        offset,
+        offset: offset - 1,
         limit: 5,
       },
     });
@@ -44,7 +43,6 @@ export const Home: React.FC<RouteComponentProps> = ({ history, location }) => {
         limit: 5,
       });
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [offset, setOffset]);
 
   useEffect(() => {
@@ -56,7 +54,6 @@ export const Home: React.FC<RouteComponentProps> = ({ history, location }) => {
     return () => {
       isMounted = false;
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   let ThreadsComp: any = null;
@@ -78,7 +75,18 @@ export const Home: React.FC<RouteComponentProps> = ({ history, location }) => {
             />
           );
         })}
-        <Flex align="center">
+
+        {data.listThreads && (
+          <Pagination
+            pageSize={PageSize}
+            currentPage={currentPage}
+            totalCount={threadsNumOptions.data?.getThreadsNum!}
+            onPageChange={(page) => setCurrentPage(page)}
+            siblingCount={1}
+          />
+        )}
+
+        {/* <Flex align="center">
           {threadsNumOptions.data &&
             Array(Math.ceil(threadsNumOptions.data?.getThreadsNum! / 5))
               .fill("")
@@ -100,7 +108,7 @@ export const Home: React.FC<RouteComponentProps> = ({ history, location }) => {
                   </Button>
                 );
               })}
-        </Flex>
+        </Flex> */}
       </>
     );
   }
