@@ -9,6 +9,7 @@ import { ProfileModal } from "../components/ProfileModal";
 import { HeaderComp } from "../smallComps/HeaderComp";
 import { SettingsSection } from "../smallComps/SettingsSections";
 
+
 interface SideBtnProps {
   text: string;
   onClick: () => any;
@@ -45,6 +46,7 @@ export const Profile = () => {
     useState<string>("Dashboard");
   const [sectionHeader, setSectionHeader] = useState("Dashboard");
 
+  
   useEffect(() => {
     setSectionHeader(displayedSection);
   }, [displayedSection]);

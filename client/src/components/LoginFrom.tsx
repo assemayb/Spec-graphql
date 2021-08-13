@@ -71,7 +71,7 @@ export const LoginFrom = () => {
     <Container padding="0.4rem" color="green.400">
       <form onSubmit={(e) => submitLoginForm(e)}>
         <FormControl id="username" isRequired my="5px">
-          <FormLabel>Username</FormLabel>
+          <FormLabel>username</FormLabel>
           <Input
             value={username}
             onChange={(e) => setUsername(e.target.value)}
@@ -79,7 +79,7 @@ export const LoginFrom = () => {
         </FormControl>
 
         <FormControl id="password" isRequired my="5px">
-          <FormLabel>Password</FormLabel>
+          <FormLabel>password</FormLabel>
           <Input
             type="password"
             value={password}

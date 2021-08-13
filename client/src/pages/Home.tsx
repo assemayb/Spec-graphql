@@ -79,26 +79,28 @@ export const Home: React.FC<RouteComponentProps> = ({ history, location }) => {
           );
         })}
         <Flex align="center">
-        {threadsNumOptions.data &&
-          Array(Math.ceil(threadsNumOptions.data?.getThreadsNum! / 5))
-            .fill("")
-            .map((_, idx) => {
-              return (
-                <Button
-                  key={idx}
-                  marginX="2px"
-                  bg={Math.ceil(threadsNumOptions.data?.getThreadsNum! / 5) === idx + 1 ? "green.400":  "green.100"}
-                  onClick={() => setOffset((prevOffset) => idx * 5)}
-                  p="1.5rem"
-                  marginTop="1.2rem"
-                  borderRadius="-20px"
-                  // bg="gray.300"
-                >
-                  {idx + 1}
-                </Button>
-              );
-            })}
-          </Flex>
+          {threadsNumOptions.data &&
+            Array(Math.ceil(threadsNumOptions.data?.getThreadsNum! / 5))
+              .fill("")
+              .map((_, idx) => {
+                return (
+                  <Button
+                    key={idx}
+                    marginX="2px"
+                    onClick={() => setOffset(idx * 5)}
+                    p="1.5rem"
+                    marginTop="1.2rem"
+                    borderRadius="-20px"
+                    // bgColor={off}
+                    bgColor="green.200"
+                    color="white"
+                    fontWeight="bold"
+                  >
+                    {idx + 1}
+                  </Button>
+                );
+              })}
+        </Flex>
       </>
     );
   }
