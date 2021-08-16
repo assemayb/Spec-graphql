@@ -5,7 +5,7 @@ import {
   useListThreadsLazyQuery,
 } from "../generated/graphql";
 import { RouteComponentProps } from "react-router-dom";
-import { Box, Button, Flex } from "@chakra-ui/react";
+import { Box, Flex } from "@chakra-ui/react";
 
 import { QuestionForm } from "../smallComps/QuestionForm";
 import { QuestionBox } from "../smallComps/QuestionBox";
@@ -15,14 +15,15 @@ import { FiClock } from "react-icons/fi";
 import { HeaderComp } from "../smallComps/HeaderComp";
 import { Pagination } from "../smallComps/PagintationSection";
 
-const PageSize = 5;
+const PageSize = 4;
 export const Home: React.FC<RouteComponentProps> = ({ history, location }) => {
   const [threadsHeader, setThreadsHeader] = useState("Most trendy threads");
-  const [currentPage, setCurrentPage] = useState(1);
-  const [offset, setOffset] = useState(1); /** current page offset */
   const [threadsNum, threadsNumOptions] = useGetThreadsNumLazyQuery({
     fetchPolicy: "network-only",
   });
+  const [currentPage, setCurrentPage] = useState(1);
+  // const [offset, setOffset] = useState(0); /** fetched list offset offset */
+  
 
   const [ListThreadsQuery, { data, loading, refetch, subscribeToMore }] =
     useListThreadsLazyQuery({
@@ -30,20 +31,38 @@ export const Home: React.FC<RouteComponentProps> = ({ history, location }) => {
       notifyOnNetworkStatusChange: true,
       variables: {
         sortBy: threadsHeader.split(" ")[1],
-        offset: offset - 1,
-        limit: 5,
+        // offset,
+        offset: (currentPage - 1 )* PageSize ,
+        limit: PageSize,
       },
     });
+  
+  // useEffect(() => {
+  //   console.log("currentPage ==>", currentPage);
+  //   // if(currentPage === 1) {
+  //   //   setOffset(0)
+  //   // } else {
+  //   //   setOffset(currentPage)
+  //   // }
+  //     setOffset((currentPage - 1) * PageSize)
+    
+  // }, [currentPage]);
+
+  // useEffect(() => {
+  //   console.log("current offset ==>", offset);
+  // }, [offset, setOffset]);
 
   useEffect(() => {
+    console.log("the current page ===>", currentPage);
+    
     if (data?.listThreads) {
       refetch!({
         sortBy: threadsHeader.split(" ")[1],
-        offset,
-        limit: 5,
+        offset: (currentPage - 1) * PageSize,
+        limit: PageSize,
       });
     }
-  }, [offset, setOffset]);
+  }, [currentPage, setCurrentPage]);
 
   useEffect(() => {
     let isMounted = true;
@@ -82,7 +101,6 @@ export const Home: React.FC<RouteComponentProps> = ({ history, location }) => {
             currentPage={currentPage}
             totalCount={threadsNumOptions.data?.getThreadsNum!}
             onPageChange={(page) => setCurrentPage(page)}
-            siblingCount={1}
           />
         )}
 

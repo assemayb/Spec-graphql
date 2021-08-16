@@ -1,20 +1,18 @@
-import { Button, UnorderedList } from "@chakra-ui/react";
 import React from "react";
-import { BiChevronLeft, BiChevronRight } from "react-icons/bi";
+import { Box, Button } from "@chakra-ui/react";
 import { usePagination, DOTS } from "../hooks/usePagintation";
 
-interface PagintationProps {
+type PagintationProps  = {
   currentPage: number;
   onPageChange: (value: number) => any;
   totalCount: number;
   pageSize: number;
-  siblingCount: number;
+  siblingCount?: number;
 }
 
 export const Pagination = (props: PagintationProps) => {
   const { onPageChange, totalCount, siblingCount, currentPage, pageSize } =
     props;
-
   const paginationRange = usePagination({
     currentPage,
     totalCount,
@@ -22,66 +20,67 @@ export const Pagination = (props: PagintationProps) => {
     pageSize,
   })!;
 
+  let firstPage = 1
+  let lastPage = paginationRange[paginationRange.length - 1];
+  
+  React.useEffect(() => {
+    console.log("currentPage", currentPage);
+    console.log("paginationRange", paginationRange);
+
+  }, [paginationRange, totalCount, currentPage]);
+
   if (currentPage === 0 || paginationRange.length < 2) {
     return null;
   }
 
-  const onNext = () => {
-    onPageChange(currentPage + 1);
-  };
-
-  const onPrevious = () => {
-    onPageChange(currentPage - 1);
-  };
-
-  let lastPage = paginationRange[paginationRange.length - 1];
   return (
-    <UnorderedList display="flex" p="0.5rem" marginTop="10px">
-      <li>
-        <Button
-          borderRadius="-20px"
-          bg="green.200"
-          color="white"
-          isDisabled={currentPage === 5}
-          onClick={onPrevious}
-        >
-          <BiChevronLeft size="25px" />
-        </Button>
-      </li>
-      {paginationRange.map((pageNumber, idx) => {
+    <Box
+      display="flex"
+      p="1rem"
+      bg="green.50"
+      marginTop="10px"
+      boxShadow="inner"
+    >
+      <Button
+        borderRadius="-15px"
+        bg="green.300"
+        marginX="2px"
+        color="white"
+        isDisabled={currentPage === firstPage}
+        onClick={() => onPageChange(currentPage - 1)}
+      >
+        previous
+      </Button>
+
+      {paginationRange && paginationRange.map((pageNumber, idx) => {
         if (pageNumber === DOTS) {
-          return <li className="pagination-item dots">&#8230;</li>;
+          return <li key={idx}>&#8230;</li>;
         }
 
         return (
-          <li
+          <Button
             key={idx}
-            // className={classnames("pagination-item", {
-            //   selected: pageNumber === currentPage,
-            // })}
+            borderRadius="-20px"
+            bg={pageNumber === currentPage ? "blue.700" : "green.400"}
+            color="white"
+            marginX="2px"
+            onClick={() => onPageChange(pageNumber as number)}
           >
-            <Button
-              borderRadius="-20px"
-              bg="green.400"
-              color="white"
-              onClick={() => onPageChange(pageNumber as any)}
-            >
-              {pageNumber}
-            </Button>
-          </li>
+            {pageNumber}
+          </Button>
         );
       })}
-      <li>
-        <Button
-          borderRadius="-20px"
-          bg="green.200"
-          color="white"
-          isDisabled={currentPage === lastPage}
-          onClick={onNext}
-        >
-          <BiChevronRight size="25px" />
-        </Button>
-      </li>
-    </UnorderedList>
+      <Button
+        borderRadius="-15px"
+        bg="green.300"
+        color="white"
+        marginX="2px"
+        isDisabled={currentPage === lastPage}
+        onClick={() => onPageChange(currentPage + 1)}
+      >
+        {/* <BiChevronRight size="25px" /> */}
+        next
+      </Button>
+    </Box>
   );
 };
