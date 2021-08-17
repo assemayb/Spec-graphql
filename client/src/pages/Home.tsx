@@ -21,10 +21,8 @@ export const Home: React.FC<RouteComponentProps> = ({ history, location }) => {
   const [threadsNum, threadsNumOptions] = useGetThreadsNumLazyQuery({
     fetchPolicy: "network-only",
   });
-  const [currentPage, setCurrentPage] = useState(1);
-  // const [offset, setOffset] = useState(0); /** fetched list offset offset */
-  
 
+  const [currentPage, setCurrentPage] = useState(1);
   const [ListThreadsQuery, { data, loading, refetch, subscribeToMore }] =
     useListThreadsLazyQuery({
       fetchPolicy: "cache-and-network",
@@ -32,38 +30,11 @@ export const Home: React.FC<RouteComponentProps> = ({ history, location }) => {
       variables: {
         sortBy: threadsHeader.split(" ")[1],
         // offset,
-        offset: (currentPage - 1 )* PageSize ,
+        offset: (currentPage - 1) * PageSize,
         limit: PageSize,
       },
     });
-  
-  // useEffect(() => {
-  //   console.log("currentPage ==>", currentPage);
-  //   // if(currentPage === 1) {
-  //   //   setOffset(0)
-  //   // } else {
-  //   //   setOffset(currentPage)
-  //   // }
-  //     setOffset((currentPage - 1) * PageSize)
-    
-  // }, [currentPage]);
-
-  // useEffect(() => {
-  //   console.log("current offset ==>", offset);
-  // }, [offset, setOffset]);
-
-  useEffect(() => {
-    console.log("the current page ===>", currentPage);
-    
-    if (data?.listThreads) {
-      refetch!({
-        sortBy: threadsHeader.split(" ")[1],
-        offset: (currentPage - 1) * PageSize,
-        limit: PageSize,
-      });
-    }
-  }, [currentPage, setCurrentPage]);
-
+  // this useEffect and use of lazy query is to fix apollo-related issue 
   useEffect(() => {
     let isMounted = true;
     if (isMounted === true) {
@@ -74,6 +45,35 @@ export const Home: React.FC<RouteComponentProps> = ({ history, location }) => {
       isMounted = false;
     };
   }, []);
+
+  // useEffect(() => {
+  //   console.log("currentPage ==>", currentPage);
+  //   // if(currentPage === 1) {
+  //   //   setOffset(0)
+  //   // } else {
+  //   //   setOffset(currentPage)
+  //   // }
+  //     setOffset((currentPage - 1) * PageSize)
+
+  // }, [currentPage]);
+
+  // useEffect(() => {
+  //   console.log("current offset ==>", offset);
+  // }, [offset, setOffset]);
+
+  useEffect(() => {
+    console.log("the current page ===>", currentPage);
+
+    if (data?.listThreads) {
+      refetch!({
+        sortBy: threadsHeader.split(" ")[1],
+        offset: (currentPage - 1) * PageSize,
+        limit: PageSize,
+      });
+    }
+    console.log(data?.listThreads);
+    
+  }, [currentPage, setCurrentPage]);
 
   let ThreadsComp: any = null;
   if (loading) {
