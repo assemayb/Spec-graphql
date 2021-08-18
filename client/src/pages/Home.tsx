@@ -23,7 +23,7 @@ export const Home: React.FC<RouteComponentProps> = ({ history, location }) => {
   });
 
   const [currentPage, setCurrentPage] = useState(1);
-  const [ListThreadsQuery, { data, loading, refetch, subscribeToMore }] =
+  const [ListThreadsQuery, { data, loading, refetch }] =
     useListThreadsLazyQuery({
       fetchPolicy: "cache-and-network",
       notifyOnNetworkStatusChange: true,
@@ -34,7 +34,7 @@ export const Home: React.FC<RouteComponentProps> = ({ history, location }) => {
         limit: PageSize,
       },
     });
-  // this useEffect and use of lazy query is to fix apollo-related issue 
+  // this useEffect and use of lazy query is to fix apollo-related issue
   useEffect(() => {
     let isMounted = true;
     if (isMounted === true) {
@@ -46,24 +46,7 @@ export const Home: React.FC<RouteComponentProps> = ({ history, location }) => {
     };
   }, []);
 
-  // useEffect(() => {
-  //   console.log("currentPage ==>", currentPage);
-  //   // if(currentPage === 1) {
-  //   //   setOffset(0)
-  //   // } else {
-  //   //   setOffset(currentPage)
-  //   // }
-  //     setOffset((currentPage - 1) * PageSize)
-
-  // }, [currentPage]);
-
-  // useEffect(() => {
-  //   console.log("current offset ==>", offset);
-  // }, [offset, setOffset]);
-
   useEffect(() => {
-    console.log("the current page ===>", currentPage);
-
     if (data?.listThreads) {
       refetch!({
         sortBy: threadsHeader.split(" ")[1],
@@ -71,8 +54,6 @@ export const Home: React.FC<RouteComponentProps> = ({ history, location }) => {
         limit: PageSize,
       });
     }
-    console.log(data?.listThreads);
-    
   }, [currentPage, setCurrentPage]);
 
   let ThreadsComp: any = null;
@@ -103,30 +84,6 @@ export const Home: React.FC<RouteComponentProps> = ({ history, location }) => {
             onPageChange={(page) => setCurrentPage(page)}
           />
         )}
-
-        {/* <Flex align="center">
-          {threadsNumOptions.data &&
-            Array(Math.ceil(threadsNumOptions.data?.getThreadsNum! / 5))
-              .fill("")
-              .map((_, idx) => {
-                return (
-                  <Button
-                    key={idx}
-                    marginX="2px"
-                    onClick={() => setOffset(idx * 5)}
-                    p="1.5rem"
-                    marginTop="1.2rem"
-                    borderRadius="-20px"
-                    // bgColor={off}
-                    bgColor="green.200"
-                    color="white"
-                    fontWeight="bold"
-                  >
-                    {idx + 1}
-                  </Button>
-                );
-              })}
-        </Flex> */}
       </>
     );
   }

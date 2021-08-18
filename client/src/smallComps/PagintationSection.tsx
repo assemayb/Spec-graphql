@@ -12,8 +12,8 @@ type PagintationProps = {
 };
 
 export const Pagination = (props: PagintationProps) => {
-  const { onPageChange, totalCount, siblingCount, currentPage, pageSize } =
-    props;
+  const { onPageChange, totalCount, siblingCount, currentPage, pageSize } = props;
+
   const paginationRange = usePagination({
     currentPage,
     totalCount,
@@ -24,7 +24,7 @@ export const Pagination = (props: PagintationProps) => {
   let firstPage = 1;
   let lastPage = paginationRange[paginationRange.length - 1];
 
-  if (currentPage === 0 || paginationRange.length < 2) {
+  if (currentPage === 0 || ( paginationRange.length < 2)) {
     return null;
   }
 
@@ -45,7 +45,7 @@ export const Pagination = (props: PagintationProps) => {
         paginationRange.map((pageNumber, idx) => {
           if (pageNumber === DOTS)
             return (
-              <Center>
+              <Center key={idx}>
                 <BsThreeDots size="30" />
               </Center>
             );

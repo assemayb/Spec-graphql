@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
 import { Box, Flex, useDisclosure } from "@chakra-ui/react";
+// import InfiniteScroll from 'react-infinite-scroller';
 
 import { QuestionBox } from "../smallComps/QuestionBox";
 import { FastBigSpinner } from "../smallComps/Spinners";
@@ -45,8 +46,6 @@ export const Profile = () => {
   const [displayedSection, setDisplpayedSection] =
     useState<string>("Dashboard");
   const [sectionHeader, setSectionHeader] = useState("Dashboard");
-
-  
   useEffect(() => {
     setSectionHeader(displayedSection);
   }, [displayedSection]);
@@ -78,6 +77,10 @@ export const Profile = () => {
   } else if (data) {
     ThreadSection = (
       <>
+      {/* <InfiniteScroll>
+
+      </InfiniteScroll>
+       */}
         {data.listUserThreads?.map((thread, idx) => {
           return (
             <QuestionBox

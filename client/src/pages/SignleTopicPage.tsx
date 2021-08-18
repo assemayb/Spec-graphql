@@ -1,12 +1,13 @@
 import { Box, Flex } from "@chakra-ui/react";
 import { useParams, useHistory } from "react-router-dom";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useQuery } from "@apollo/client";
 import { useListTopicThreadsLazyQuery } from "../generated/graphql";
 import { QuestionBox } from "../smallComps/QuestionBox";
 import { FastBigSpinner } from "../smallComps/Spinners";
 import { topicsQuery } from "./Topics";
 import { HeaderComp } from "../smallComps/HeaderComp";
+import { Pagination } from "../smallComps/PagintationSection";
 
 interface SideNavBoxProps {
   topics?: string[];
@@ -14,6 +15,7 @@ interface SideNavBoxProps {
 
 export const SideNavBox: React.FC<SideNavBoxProps> = ({ topics }) => {
   const router = useHistory();
+
   return (
     <Flex
       flex="1"
@@ -57,6 +59,7 @@ interface SignleTopicPageProps {}
 export const SignleTopicPage: React.FC<SignleTopicPageProps> = () => {
   const params: { topicName: string } = useParams();
   const topicsArr = useQuery(topicsQuery);
+  const [currentPage, setCurrentPage] = useState(1);
   const [ListTopicThreadsQuery, { data, loading }] =
     useListTopicThreadsLazyQuery({
       fetchPolicy: "cache-and-network",
@@ -100,6 +103,19 @@ export const SignleTopicPage: React.FC<SignleTopicPageProps> = () => {
     );
   }
 
+  let PaginationSection = (
+    <>
+      {data?.lisTopicThreads && (
+        <Pagination
+          pageSize={3}
+          currentPage={currentPage}
+          totalCount={data.lisTopicThreads?.length}
+          onPageChange={(page) => setCurrentPage(page)}
+        />
+      )}
+    </>
+  );
+
   return (
     <>
       <HeaderComp header={`${params.topicName} Threads`} />
@@ -113,6 +129,7 @@ export const SignleTopicPage: React.FC<SignleTopicPageProps> = () => {
           p="1rem"
         >
           {ThreadsComp}
+          <div>{PaginationSection}</div>
         </Flex>
         {topicsArr.data && <SideNavBox topics={topicsArr.data.listTopics} />}
       </Flex>

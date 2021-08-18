@@ -19,10 +19,6 @@ import { setAccessToken } from "../accessToken";
 export const LoginFrom = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [showMessage, setShowMessage] = useState({
-    show: false,
-    value: "",
-  });
   const toast = useToast();
   const history = useHistory();
   const [login] = useLoginMutation({
@@ -63,7 +59,6 @@ export const LoginFrom = () => {
         setAccessToken(response.data.loginUser?.accessToken!);
       }
     } catch (error) {
-      setShowMessage({ show: true, value: error.message });
       console.log(error);
     }
   };
