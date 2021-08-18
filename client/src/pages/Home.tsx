@@ -29,7 +29,6 @@ export const Home: React.FC<RouteComponentProps> = ({ history, location }) => {
       notifyOnNetworkStatusChange: true,
       variables: {
         sortBy: threadsHeader.split(" ")[1],
-        // offset,
         offset: (currentPage - 1) * PageSize,
         limit: PageSize,
       },
