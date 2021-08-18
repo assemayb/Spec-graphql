@@ -60,13 +60,25 @@ export const SignleTopicPage: React.FC<SignleTopicPageProps> = () => {
   const params: { topicName: string } = useParams();
   const topicsArr = useQuery(topicsQuery);
   const [currentPage, setCurrentPage] = useState(1);
-  const [ListTopicThreadsQuery, { data, loading }] =
+  const [ListTopicThreadsQuery, { data, loading, refetch }] =
     useListTopicThreadsLazyQuery({
       fetchPolicy: "cache-and-network",
       variables: {
         topic: params.topicName,
+        offset: (currentPage - 1) * 3,
+        limit: 3,
       },
     });
+
+  useEffect(() => {
+    if (data?.lisTopicThreads) {
+      refetch!({
+        topic: params.topicName,
+        offset: (currentPage - 1) * 3,
+        limit: 3,
+      });
+    }
+  }, [currentPage, setCurrentPage]);
 
   useEffect(() => {
     let isMounted = true;
@@ -129,7 +141,7 @@ export const SignleTopicPage: React.FC<SignleTopicPageProps> = () => {
           p="1rem"
         >
           {ThreadsComp}
-          <div>{PaginationSection}</div>
+          {PaginationSection}
         </Flex>
         {topicsArr.data && <SideNavBox topics={topicsArr.data.listTopics} />}
       </Flex>

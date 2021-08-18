@@ -236,13 +236,19 @@ export class ThreadResolver {
 
   // list topic-related threads
   @Query(() => [ThreadType], { nullable: true })
-  async lisTopicThreads(@Arg("topic", () => String) topic: string) {
+  async lisTopicThreads(
+    @Arg("topic", () => String) topic: string,
+    @Arg("offset", () => Int) offset: number,
+    @Arg("limit", () => Int) limit: number
+  ) {
     let topicsThreads;
     try {
       topicsThreads = await Thread.findAll({
         where: {
           specialization: topic,
         },
+        offset,
+        limit,
         include: "replies",
       });
       let idx = 0;
@@ -261,6 +267,23 @@ export class ThreadResolver {
       throw new Error(error.message);
     }
     return topicsThreads;
+  }
+
+  @Query(() => Int, { nullable: false })
+  async getTopicThreadsNum(
+    @Arg("topic", () => String) topic: string
+  ) {
+    try {
+      const threadsNum = await Thread.count({
+        where: {
+          specialization: topic
+        }
+      });
+      return threadsNum;
+    } catch (error) {
+      console.error(error.message);
+      return null;
+    }
   }
 
   @Mutation(() => Boolean, { nullable: true })

@@ -53,6 +53,8 @@ export type QueryListThreadsArgs = {
 
 
 export type QueryLisTopicThreadsArgs = {
+  limit: Scalars['Int'];
+  offset: Scalars['Int'];
   topic: Scalars['String'];
 };
 
@@ -302,6 +304,8 @@ export type ListThreadsQuery = (
 
 export type ListTopicThreadsQueryVariables = Exact<{
   topic: Scalars['String'];
+  offset: Scalars['Int'];
+  limit: Scalars['Int'];
 }>;
 
 
@@ -736,8 +740,8 @@ export type ListThreadsQueryHookResult = ReturnType<typeof useListThreadsQuery>;
 export type ListThreadsLazyQueryHookResult = ReturnType<typeof useListThreadsLazyQuery>;
 export type ListThreadsQueryResult = Apollo.QueryResult<ListThreadsQuery, ListThreadsQueryVariables>;
 export const ListTopicThreadsDocument = gql`
-    query listTopicThreads($topic: String!) {
-  lisTopicThreads(topic: $topic) {
+    query listTopicThreads($topic: String!, $offset: Int!, $limit: Int!) {
+  lisTopicThreads(topic: $topic, offset: $offset, limit: $limit) {
     id
     question
     threadCreator
@@ -766,6 +770,8 @@ export const ListTopicThreadsDocument = gql`
  * const { data, loading, error } = useListTopicThreadsQuery({
  *   variables: {
  *      topic: // value for 'topic'
+ *      offset: // value for 'offset'
+ *      limit: // value for 'limit'
  *   },
  * });
  */

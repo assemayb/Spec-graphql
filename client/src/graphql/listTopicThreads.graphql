@@ -1,5 +1,5 @@
-query listTopicThreads($topic: String!) {
-  lisTopicThreads(topic: $topic) {
+query listTopicThreads($topic: String!, $offset: Int!, $limit: Int!) {
+  lisTopicThreads(topic: $topic, offset: $offset, limit: $limit) {
     id
     question
     threadCreator
