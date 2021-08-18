@@ -29,6 +29,7 @@ export type Query = {
   getThreadsNum: Scalars['Int'];
   listTopics: Array<Scalars['String']>;
   lisTopicThreads?: Maybe<Array<ThreadType>>;
+  getTopicThreadsNum: Scalars['Int'];
   listThreadReplies?: Maybe<Array<ReplyType>>;
   listAllReplies?: Maybe<Array<ReplyType>>;
 };
@@ -55,6 +56,11 @@ export type QueryListThreadsArgs = {
 export type QueryLisTopicThreadsArgs = {
   limit: Scalars['Int'];
   offset: Scalars['Int'];
+  topic: Scalars['String'];
+};
+
+
+export type QueryGetTopicThreadsNumArgs = {
   topic: Scalars['String'];
 };
 
@@ -252,6 +258,16 @@ export type GetThreadsNumQueryVariables = Exact<{ [key: string]: never; }>;
 export type GetThreadsNumQuery = (
   { __typename?: 'Query' }
   & Pick<Query, 'getThreadsNum'>
+);
+
+export type GetTopicThreadsNumQueryVariables = Exact<{
+  topic: Scalars['String'];
+}>;
+
+
+export type GetTopicThreadsNumQuery = (
+  { __typename?: 'Query' }
+  & Pick<Query, 'getTopicThreadsNum'>
 );
 
 export type HelloQueryVariables = Exact<{ [key: string]: never; }>;
@@ -597,6 +613,37 @@ export function useGetThreadsNumLazyQuery(baseOptions?: Apollo.LazyQueryHookOpti
 export type GetThreadsNumQueryHookResult = ReturnType<typeof useGetThreadsNumQuery>;
 export type GetThreadsNumLazyQueryHookResult = ReturnType<typeof useGetThreadsNumLazyQuery>;
 export type GetThreadsNumQueryResult = Apollo.QueryResult<GetThreadsNumQuery, GetThreadsNumQueryVariables>;
+export const GetTopicThreadsNumDocument = gql`
+    query getTopicThreadsNum($topic: String!) {
+  getTopicThreadsNum(topic: $topic)
+}
+    `;
+
+/**
+ * __useGetTopicThreadsNumQuery__
+ *
+ * To run a query within a React component, call `useGetTopicThreadsNumQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetTopicThreadsNumQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetTopicThreadsNumQuery({
+ *   variables: {
+ *      topic: // value for 'topic'
+ *   },
+ * });
+ */
+export function useGetTopicThreadsNumQuery(baseOptions: Apollo.QueryHookOptions<GetTopicThreadsNumQuery, GetTopicThreadsNumQueryVariables>) {
+        return Apollo.useQuery<GetTopicThreadsNumQuery, GetTopicThreadsNumQueryVariables>(GetTopicThreadsNumDocument, baseOptions);
+      }
+export function useGetTopicThreadsNumLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetTopicThreadsNumQuery, GetTopicThreadsNumQueryVariables>) {
+          return Apollo.useLazyQuery<GetTopicThreadsNumQuery, GetTopicThreadsNumQueryVariables>(GetTopicThreadsNumDocument, baseOptions);
+        }
+export type GetTopicThreadsNumQueryHookResult = ReturnType<typeof useGetTopicThreadsNumQuery>;
+export type GetTopicThreadsNumLazyQueryHookResult = ReturnType<typeof useGetTopicThreadsNumLazyQuery>;
+export type GetTopicThreadsNumQueryResult = Apollo.QueryResult<GetTopicThreadsNumQuery, GetTopicThreadsNumQueryVariables>;
 export const HelloDocument = gql`
     query Hello {
   hello

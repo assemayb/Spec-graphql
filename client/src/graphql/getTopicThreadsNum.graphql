@@ -1,0 +1,3 @@
+query getTopicThreadsNum($topic: String!) {
+  getTopicThreadsNum(topic: $topic)
+}
