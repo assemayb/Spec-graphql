@@ -20,7 +20,7 @@ import { WebSocketLink } from "@apollo/client/link/ws";
 import { onError } from "@apollo/client/link/error";
 import { TokenRefreshLink } from "apollo-link-token-refresh";
 import jwtDecode from "jwt-decode";
-import { getMainDefinition } from "@apollo/client/utilities";
+import { getMainDefinition, offsetLimitPagination } from "@apollo/client/utilities";
 
 import { getAccessToken, setAccessToken } from "./accessToken";
 
@@ -36,7 +36,15 @@ import { getAccessToken, setAccessToken } from "./accessToken";
 //   return forward(operation);
 // });
 
-const cache = new InMemoryCache();
+const cache = new InMemoryCache({
+  typePolicies: {
+    Query: {
+      fields: {
+        listUserThreads: offsetLimitPagination()      
+      },
+    }
+  }
+});
 
 const httpLink = new HttpLink({
   uri: "http://localhost:8000/graphql",

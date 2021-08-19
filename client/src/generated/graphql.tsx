@@ -41,6 +41,12 @@ export type QueryGetThreadArgs = {
 };
 
 
+export type QueryListUserThreadsArgs = {
+  limit: Scalars['Int'];
+  offset: Scalars['Int'];
+};
+
+
 export type QueryListOtherUserThreadsArgs = {
   username: Scalars['String'];
 };
@@ -337,7 +343,10 @@ export type ListTopicThreadsQuery = (
   )>> }
 );
 
-export type ListUserThreadsQueryVariables = Exact<{ [key: string]: never; }>;
+export type ListUserThreadsQueryVariables = Exact<{
+  offset: Scalars['Int'];
+  limit: Scalars['Int'];
+}>;
 
 
 export type ListUserThreadsQuery = (
@@ -832,8 +841,8 @@ export type ListTopicThreadsQueryHookResult = ReturnType<typeof useListTopicThre
 export type ListTopicThreadsLazyQueryHookResult = ReturnType<typeof useListTopicThreadsLazyQuery>;
 export type ListTopicThreadsQueryResult = Apollo.QueryResult<ListTopicThreadsQuery, ListTopicThreadsQueryVariables>;
 export const ListUserThreadsDocument = gql`
-    query listUserThreads {
-  listUserThreads {
+    query listUserThreads($offset: Int!, $limit: Int!) {
+  listUserThreads(offset: $offset, limit: $limit) {
     id
     question
     specialization
@@ -854,10 +863,12 @@ export const ListUserThreadsDocument = gql`
  * @example
  * const { data, loading, error } = useListUserThreadsQuery({
  *   variables: {
+ *      offset: // value for 'offset'
+ *      limit: // value for 'limit'
  *   },
  * });
  */
-export function useListUserThreadsQuery(baseOptions?: Apollo.QueryHookOptions<ListUserThreadsQuery, ListUserThreadsQueryVariables>) {
+export function useListUserThreadsQuery(baseOptions: Apollo.QueryHookOptions<ListUserThreadsQuery, ListUserThreadsQueryVariables>) {
         return Apollo.useQuery<ListUserThreadsQuery, ListUserThreadsQueryVariables>(ListUserThreadsDocument, baseOptions);
       }
 export function useListUserThreadsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ListUserThreadsQuery, ListUserThreadsQueryVariables>) {

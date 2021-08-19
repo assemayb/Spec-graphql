@@ -11,7 +11,7 @@ export const topicsQuery = gql`
   }
 `;
 
-export const Topics: React.FC<RouteComponentProps> = () => {
+const TopicsComp: React.FC<RouteComponentProps> = () => {
   const { data } = useQuery(topicsQuery);
   const [topcis, setTopics] = useState([]);
   const [dummieArr] = useState(new Array(12).fill(""));
@@ -20,7 +20,7 @@ export const Topics: React.FC<RouteComponentProps> = () => {
     if (data) {
       setTimeout(() => {
         setTopics(data.listTopics);
-      }, 200);
+      }, 100);
     }
   }, [data]);
 
@@ -54,3 +54,5 @@ export const Topics: React.FC<RouteComponentProps> = () => {
     </>
   );
 };
+
+export const Topics =  React.memo(TopicsComp)

@@ -1,5 +1,5 @@
-query listUserThreads {
-    listUserThreads {
+query listUserThreads($offset: Int!, $limit: Int!) {
+    listUserThreads(offset: $offset, limit: $limit) {
         id
         question
         specialization

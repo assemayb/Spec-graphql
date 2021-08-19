@@ -12,7 +12,6 @@ import { FastBigSpinner } from "../smallComps/Spinners";
 import { HeaderComp } from "../smallComps/HeaderComp";
 import { Pagination } from "../smallComps/PagintationSection";
 import { SideTopicsSection } from "../smallComps/SideNavSection";
-import { log } from "console";
 
 const pageSize = 3;
 interface SignleTopicPageProps {}
@@ -40,7 +39,6 @@ export const SignleTopicPage: React.FC<SignleTopicPageProps> = () => {
     });
 
   useEffect(() => {
-    console.log(location.pathname)
     let isMounted = true;
     if (isMounted === true) {
       getTopicThreadsNum();
@@ -59,7 +57,6 @@ export const SignleTopicPage: React.FC<SignleTopicPageProps> = () => {
   }, [params.topicName]);
 
   useEffect(() => {
-    console.log(currentPage);
     if (data?.lisTopicThreads) {
       refetch!({
         topic: params.topicName,

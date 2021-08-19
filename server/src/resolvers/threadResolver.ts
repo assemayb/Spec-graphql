@@ -136,19 +136,26 @@ export class ThreadResolver {
   // List a User threads
   @Query(() => [ThreadType], { nullable: true })
   @UseMiddleware(isAuthenticated)
-  async listUserThreads(@Ctx() { req, payload }: MyContext) {
-    let userThreads;
+  async listUserThreads(
+    @Ctx() { req, payload }: MyContext,
+    @Arg("offset", () => Int) offset: number,
+    @Arg("limit", () => Int) limit: number
+
+    ) {
+
     const loggedUserId = payload?.userId;
     try {
-      userThreads = await Thread.findAll({
+      const userThreads = await Thread.findAll({
         where: {
           threadCreator: loggedUserId as number,
         },
+        offset,
+        limit
       });
+      return userThreads 
     } catch (error) {
       throw new Error(error.message);
     }
-    return userThreads;
   }
 
   @Query(() => [ThreadType], { nullable: true })
@@ -184,6 +191,7 @@ export class ThreadResolver {
         });
       } else {
         threads = await Thread.findAll({ include: "replies", offset, limit });
+
         const repliesCount = (thread: any): number => {
           return thread.getDataValue("replies").length;
         };
@@ -271,13 +279,13 @@ export class ThreadResolver {
 
   @Query(() => Int, { nullable: false })
   async getTopicThreadsNum(
-    @Arg("topic", () => String, {nullable: false}) topic: string
+    @Arg("topic", () => String, { nullable: false }) topic: string
   ) {
     try {
       const threadsNum = await Thread.count({
         where: {
-          specialization: topic
-        }
+          specialization: topic,
+        },
       });
       return threadsNum;
     } catch (error) {

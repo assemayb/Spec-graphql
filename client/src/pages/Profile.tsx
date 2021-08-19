@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
-import { Box, Flex, useDisclosure } from "@chakra-ui/react";
+import { Box, Button, Flex, useDisclosure } from "@chakra-ui/react";
 // import InfiniteScroll from 'react-infinite-scroller';
 
 import { QuestionBox } from "../smallComps/QuestionBox";
@@ -59,7 +59,7 @@ export const Profile = () => {
   });
   const [listUserQuery, { data, loading, refetch }] =
     useListUserThreadsLazyQuery({
-      fetchPolicy: "network-only",
+    fetchPolicy: "network-only",
     });
   useEffect(() => {
     let isMounted = true;
@@ -95,6 +95,11 @@ export const Profile = () => {
             />
           );
         })}
+
+        <Flex justify="center" p="1rem" marginTop="!rem">
+          <Button p="0.5rem" color="blue.300" borderRadius="-20px">load more</Button>
+        </Flex>
+      
       </>
     );
   }
