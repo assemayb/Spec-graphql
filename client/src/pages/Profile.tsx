@@ -10,7 +10,7 @@ import { ProfileModal } from "../components/ProfileModal";
 import { HeaderComp } from "../smallComps/HeaderComp";
 import { SettingsSection } from "../smallComps/SettingsSections";
 
-
+const QuerySize = 3;
 interface SideBtnProps {
   text: string;
   onClick: () => any;
@@ -57,9 +57,13 @@ export const Profile = () => {
       setShowModal(false);
     },
   });
-  const [listUserQuery, { data, loading, refetch }] =
+  const [listUserQuery, { data, loading, fetchMore, refetch }] =
     useListUserThreadsLazyQuery({
-    fetchPolicy: "network-only",
+      fetchPolicy: "network-only",
+      variables: {
+        offset: 0,
+        limit: QuerySize,
+      },
     });
   useEffect(() => {
     let isMounted = true;
@@ -71,13 +75,21 @@ export const Profile = () => {
     };
   }, []);
 
+  const loadMore = () => {
+    fetchMore!({
+      variables: {
+        offset: data?.listUserThreads?.length,
+      },
+    });
+  };
+
   let ThreadSection: any = null;
   if (loading) {
     ThreadSection = <FastBigSpinner />;
   } else if (data) {
     ThreadSection = (
       <>
-      {/* <InfiniteScroll>
+        {/* <InfiniteScroll>
 
       </InfiniteScroll>
        */}
@@ -97,9 +109,16 @@ export const Profile = () => {
         })}
 
         <Flex justify="center" p="1rem" marginTop="!rem">
-          <Button p="0.5rem" color="blue.300" borderRadius="-20px">load more</Button>
+          <Button
+            onClick={loadMore}
+            p="1.5rem"
+            bg="blue.300"
+            color="white"
+            borderRadius="-20px"
+          >
+            load more
+          </Button>
         </Flex>
-      
       </>
     );
   }

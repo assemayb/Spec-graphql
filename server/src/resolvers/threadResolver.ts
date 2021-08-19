@@ -152,6 +152,8 @@ export class ThreadResolver {
         offset,
         limit
       });
+      console.log(userThreads.length);
+      
       return userThreads 
     } catch (error) {
       throw new Error(error.message);
