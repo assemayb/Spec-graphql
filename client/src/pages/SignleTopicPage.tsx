@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { Flex } from "@chakra-ui/react";
-import { useParams } from "react-router-dom";
+import { useParams, useLocation } from "react-router-dom";
+
 import React, { useEffect, useState } from "react";
 import {
   useGetTopicThreadsNumLazyQuery,
@@ -11,25 +12,25 @@ import { FastBigSpinner } from "../smallComps/Spinners";
 import { HeaderComp } from "../smallComps/HeaderComp";
 import { Pagination } from "../smallComps/PagintationSection";
 import { SideTopicsSection } from "../smallComps/SideNavSection";
+import { log } from "console";
 
 const pageSize = 3;
 interface SignleTopicPageProps {}
-
 export const SignleTopicPage: React.FC<SignleTopicPageProps> = () => {
   const params: { topicName: string } = useParams();
+  const location = useLocation()
   const [currentPage, setCurrentPage] = useState(1);
-
   const [getTopicThreadsNum, getTopicThreadsNumOptions] =
     useGetTopicThreadsNumLazyQuery({
-      // fetchPolicy: "network-only",
+      fetchPolicy: "network-only",
       variables: {
         topic: params.topicName,
       },
     });
 
-  const [ListTopicThreadsQuery, { data, loading, refetch }] =
+  const [ListTopicThreadsQuery, { data, loading, refetch, fetchMore }] =
     useListTopicThreadsLazyQuery({
-      fetchPolicy: "cache-and-network",
+      fetchPolicy: "network-only",
       notifyOnNetworkStatusChange: true,
       variables: {
         topic: params.topicName,
@@ -39,17 +40,26 @@ export const SignleTopicPage: React.FC<SignleTopicPageProps> = () => {
     });
 
   useEffect(() => {
+    console.log(location.pathname)
     let isMounted = true;
     if (isMounted === true) {
-      ListTopicThreadsQuery();
       getTopicThreadsNum();
+      ListTopicThreadsQuery();
     }
     return () => {
       isMounted = false;
+      setCurrentPage(1);
     };
   }, []);
 
   useEffect(() => {
+    return () => {
+      setCurrentPage(1);
+    };
+  }, [params.topicName]);
+
+  useEffect(() => {
+    console.log(currentPage);
     if (data?.lisTopicThreads) {
       refetch!({
         topic: params.topicName,

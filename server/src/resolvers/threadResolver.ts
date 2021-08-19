@@ -271,7 +271,7 @@ export class ThreadResolver {
 
   @Query(() => Int, { nullable: false })
   async getTopicThreadsNum(
-    @Arg("topic", () => String) topic: string
+    @Arg("topic", () => String, {nullable: false}) topic: string
   ) {
     try {
       const threadsNum = await Thread.count({

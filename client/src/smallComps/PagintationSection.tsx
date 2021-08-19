@@ -12,7 +12,8 @@ type PagintationProps = {
 };
 
 export const Pagination = (props: PagintationProps) => {
-  const { onPageChange, totalCount, siblingCount, currentPage, pageSize } = props;
+  const { onPageChange, totalCount, siblingCount, currentPage, pageSize } =
+    props;
 
   const paginationRange = usePagination({
     currentPage,
@@ -23,9 +24,11 @@ export const Pagination = (props: PagintationProps) => {
 
   let firstPage = 1;
   let lastPage = paginationRange[paginationRange.length - 1];
+  // console.log("paginationRange", paginationRange);
 
   if (currentPage === 0 || ( paginationRange.length < 2)) {
-    return null;
+    // return <div></div>;
+    return null
   }
 
   return (
