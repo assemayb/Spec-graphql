@@ -5,7 +5,10 @@ import { Box, Button, Flex, useDisclosure } from "@chakra-ui/react";
 
 import { QuestionBox } from "../smallComps/QuestionBox";
 import { FastBigSpinner } from "../smallComps/Spinners";
-import { useListUserThreadsLazyQuery } from "../generated/graphql";
+import {
+  useGetUserThreadsNumberLazyQuery,
+  useListUserThreadsLazyQuery,
+} from "../generated/graphql";
 import { ProfileModal } from "../components/ProfileModal";
 import { HeaderComp } from "../smallComps/HeaderComp";
 import { SettingsSection } from "../smallComps/SettingsSections";
@@ -52,11 +55,14 @@ export const Profile = () => {
 
   const [showModal, setShowModal] = useState(false);
   const [showThreadOptions, setShowThreadOptions] = useState(false);
+  const [hideLoadMoreBtn, setHideLoadMoreBtn] = useState(false);
   const { onClose } = useDisclosure({
     onClose: () => {
       setShowModal(false);
     },
   });
+  const [getUserThreadsNum, userThreadsNumOptions] =
+    useGetUserThreadsNumberLazyQuery({ fetchPolicy: "network-only" });
   const [listUserQuery, { data, loading, fetchMore, refetch }] =
     useListUserThreadsLazyQuery({
       fetchPolicy: "network-only",
@@ -68,12 +74,27 @@ export const Profile = () => {
   useEffect(() => {
     let isMounted = true;
     if (isMounted) {
+      getUserThreadsNum();
       listUserQuery();
     }
     return () => {
       isMounted = false;
     };
   }, []);
+
+  useEffect(() => {
+    if (data) {
+      const queriedThreadsCount = data?.listUserThreads?.length;
+
+      if (
+        queriedThreadsCount === userThreadsNumOptions.data?.getUserThreadsNumber
+      ) {
+        console.log("===========================>");
+
+        setHideLoadMoreBtn(true);
+      }
+    }
+  }, [data]);
 
   const loadMore = () => {
     fetchMore!({
@@ -109,15 +130,17 @@ export const Profile = () => {
         })}
 
         <Flex justify="center" p="1rem" marginTop="!rem">
-          <Button
-            onClick={loadMore}
-            p="1.5rem"
-            bg="blue.300"
-            color="white"
-            borderRadius="-20px"
-          >
-            load more
-          </Button>
+          {hideLoadMoreBtn === false && (
+            <Button
+              onClick={loadMore}
+              p="1.5rem"
+              bg="blue.300"
+              color="white"
+              borderRadius="-20px"
+            >
+              load more
+            </Button>
+          )}
         </Flex>
       </>
     );

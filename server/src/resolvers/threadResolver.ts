@@ -135,16 +135,14 @@ export class ThreadResolver {
 
   @Query(() => Int)
   @UseMiddleware(isAuthenticated)
-  async getUserThreads(
-    @Ctx() {payload}: MyContext
-  ) {
+  async getUserThreadsNumber(@Ctx() { payload }: MyContext) {
     try {
       const threadsNum = await Thread.count({
         where: {
-          id: payload?.userId as number
-        }
-
+          threadCreator: payload?.userId,
+        },
       });
+
       return threadsNum;
     } catch (error) {
       console.error(error.message);
