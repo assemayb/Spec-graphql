@@ -26,13 +26,16 @@ export const Pagination = (props: PagintationProps) => {
   let lastPage = paginationRange[paginationRange.length - 1];
   // console.log("paginationRange", paginationRange);
 
-  if (currentPage === 0 || ( paginationRange.length < 2)) {
+  if (currentPage === 0 || paginationRange.length < 2) {
     // return <div></div>;
-    return null
+    return null;
   }
 
   return (
-    <Box display="flex" p="0.5rem" marginTop="10px">
+    <Box
+      display="flex"
+      marginTop="10px"
+    >
       <Button
         borderRadius="-15px"
         bg="green.300"
@@ -49,7 +52,7 @@ export const Pagination = (props: PagintationProps) => {
           if (pageNumber === DOTS)
             return (
               <Center key={idx}>
-                <BsThreeDots size="30" />
+                <BsThreeDots size="15" />
               </Center>
             );
 

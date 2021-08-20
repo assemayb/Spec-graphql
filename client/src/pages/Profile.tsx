@@ -89,8 +89,6 @@ export const Profile = () => {
       if (
         queriedThreadsCount === userThreadsNumOptions.data?.getUserThreadsNumber
       ) {
-        console.log("===========================>");
-
         setHideLoadMoreBtn(true);
       }
     }
@@ -129,12 +127,13 @@ export const Profile = () => {
           );
         })}
 
-        <Flex justify="center" p="1rem" marginTop="!rem">
+        <Flex justify="center" p="1rem" marginTop="0.2rem">
           {hideLoadMoreBtn === false && (
             <Button
-              onClick={loadMore}
-              p="1.5rem"
-              bg="blue.300"
+              onClick={() => loadMore()}
+              p="1rem"
+              fontWeight="semibold"
+              bg="green.300"
               color="white"
               borderRadius="-20px"
             >
