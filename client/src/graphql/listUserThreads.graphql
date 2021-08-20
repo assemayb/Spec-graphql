@@ -1,4 +1,4 @@
-query listUserThreads($offset: Int, $limit: Int) {
+query listUserThreads($offset: Int!, $limit: Int) {
     listUserThreads(offset: $offset, limit: $limit) {
         id
         question

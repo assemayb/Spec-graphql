@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState, useLayoutEffect } from "react";
 import { Box, Button, Flex, useDisclosure } from "@chakra-ui/react";
 // import InfiniteScroll from 'react-infinite-scroller';
@@ -13,9 +12,7 @@ import { ProfileModal } from "../components/ProfileModal";
 import { HeaderComp } from "../smallComps/HeaderComp";
 import { SettingsSection } from "../smallComps/SettingsSections";
 import { getAccessToken } from "../accessToken";
-import { useHistory } from "react-router-dom";
 
-const QuerySize = 3;
 interface SideBtnProps {
   text: string;
   onClick: () => any;
@@ -47,27 +44,21 @@ export const SideBtn: React.FC<SideBtnProps> = ({ onClick, text }) => {
   );
 };
 
-
-
+const QuerySize = 3;
 
 export const Profile = () => {
-  const [displayedSection, setDisplpayedSection] =
-    useState<string>("Dashboard");
-  const [sectionHeader, setSectionHeader] = useState("Dashboard");
-  useEffect(() => {
-    setSectionHeader(displayedSection);
-  }, [displayedSection]);
+  const [displayedSection, setDisplpayedSection] = useState("Dashboard");
+  useEffect(() => setSectionHeader(displayedSection), [displayedSection]);
 
+  const [sectionHeader, setSectionHeader] = useState("Dashboard");
   const [showModal, setShowModal] = useState(false);
   const [showThreadOptions, setShowThreadOptions] = useState(false);
   const [hideLoadMoreBtn, setHideLoadMoreBtn] = useState(false);
-  const { onClose } = useDisclosure({
-    onClose: () => {
-      setShowModal(false);
-    },
-  });
+
   const [getUserThreadsNum, userThreadsNumOptions] =
-    useGetUserThreadsNumberLazyQuery({ fetchPolicy: "network-only" });
+    useGetUserThreadsNumberLazyQuery({
+      fetchPolicy: "network-only",
+    });
   const [listUserQuery, { data, loading, fetchMore, refetch }] =
     useListUserThreadsLazyQuery({
       fetchPolicy: "network-only",
@@ -76,43 +67,62 @@ export const Profile = () => {
         limit: QuerySize,
       },
     });
+
   useEffect(() => {
     let isMounted = true;
     if (isMounted) {
       getUserThreadsNum();
+      // listUserQuery();
+    }
+    return () => {
+      isMounted = false;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    let isMounted = true;
+    if (isMounted) {
       listUserQuery();
     }
     return () => {
       isMounted = false;
     };
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [userThreadsNumOptions]);
+
 
   useEffect(() => {
     if (data) {
-      const queriedThreadsCount = data?.listUserThreads?.length;
-
-      if (
-        queriedThreadsCount === userThreadsNumOptions.data?.getUserThreadsNumber
-      ) {
-        setHideLoadMoreBtn(true);
-      }
+      const fetchedThreadsCount = data?.listUserThreads?.length;
+      const userThreadsNum = userThreadsNumOptions.data?.getUserThreadsNumber;
+      if (fetchedThreadsCount === userThreadsNum) setHideLoadMoreBtn(true);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
 
+  // if the "profile" path was typed in the address
   useLayoutEffect(() => {
-    const token = getAccessToken()
-    if(token === "") {
-      document.location.assign("/")
+    const token = getAccessToken();
+    if (token === "") {
+      document.location.assign("/");
     }
-  }, [])
+  }, []);
 
-  const loadMore = () => {
+  // after creating a new thread
+  const { onClose } = useDisclosure({ onClose: () => setShowModal(false) });
+
+  function loadMore() {
+    const fetchedThreadsCount = data?.listUserThreads?.length;
+    console.log("fetchedThreadsCount", fetchedThreadsCount);
+
     fetchMore!({
       variables: {
-        offset: data?.listUserThreads?.length,
+        offset: fetchedThreadsCount,
+        limit: QuerySize,
       },
     });
-  };
+  }
 
   let ThreadSection: any = null;
   if (loading) {
@@ -120,10 +130,6 @@ export const Profile = () => {
   } else if (data) {
     ThreadSection = (
       <>
-        {/* <InfiniteScroll>
-
-      </InfiniteScroll>
-       */}
         {data.listUserThreads?.map((thread, idx) => {
           return (
             <QuestionBox

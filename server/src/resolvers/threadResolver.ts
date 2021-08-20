@@ -48,7 +48,7 @@ export class ThreadResolver {
 
       return true;
     } catch (error) {
-      console.log(error);
+      console.log(error.message);
       return false;
     }
   }
@@ -149,37 +149,34 @@ export class ThreadResolver {
       return null;
     }
   }
-  // List a User threads
+  // List user threads
   @Query(() => [ThreadType], { nullable: true })
   @UseMiddleware(isAuthenticated)
   async listUserThreads(
     @Ctx() { req, payload }: MyContext,
-    @Arg("offset", () => Int, { nullable: true }) offset: number | null,
-    @Arg("limit", () => Int, { nullable: true }) limit: number | null
+    @Arg("offset", () => Int) offset: number,
+    @Arg("limit", () => Int, {nullable: true} ) limit: number 
   ) {
-    const loggedUserId = payload?.userId;
+    const loggedUserId = payload?.userId as number;
     try {
-      const userThreadsCount = await Thread.count({
-        where: {
-          threadCreator: loggedUserId as number,
-        },
-      });
-      let userThreads;
-      if (offset && limit) {
-        userThreads = await Thread.findAll({
+      if(limit == null) {
+        console.log("LIMIT IS NULL");
+        
+        const userThreads = await Thread.findAll({
           where: {
-            threadCreator: loggedUserId as number,
-          },
-          offset,
-          limit,
-        });
-      } else {
-        userThreads = await Thread.findAll({
-          where: {
-            threadCreator: loggedUserId as number,
+            threadCreator: loggedUserId,
           },
         });
+        return userThreads;
       }
+      console.log("LIMIT IS NOOOOOOOOOOOOOOOOOOOT NULL");
+      const userThreads = await Thread.findAll({
+        where: {
+          threadCreator: loggedUserId,
+        },
+        offset,
+        limit
+      });
       return userThreads;
     } catch (error) {
       throw new Error(error.message);

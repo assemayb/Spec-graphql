@@ -4,6 +4,7 @@ import { Box, Button, Tooltip, useToast } from "@chakra-ui/react";
 import { BiBell } from "react-icons/bi";
 
 import {
+  useGetUserThreadsNumberLazyQuery,
   useListUserThreadsLazyQuery,
   useMeLazyQuery,
   useOnReplyCreatedSubscription,
@@ -11,17 +12,27 @@ import {
 
 interface NotificationBtnProps {}
 export const NotificationBtn: React.FC<NotificationBtnProps> = () => {
+  const toast = useToast();
+
   const [meQuery, meQueryOptions] = useMeLazyQuery({
     fetchPolicy: "network-only",
   });
+  // const [getThreadsNum, userThreadsNumOptions] = useGetUserThreadsNumberLazyQuery({ fetchPolicy: "network-only" });
+  // const currUserNumOfThreads = userThreadsNumOptions.data?.getUserThreadsNumber!;
+
   const [userThreadsQuery, userThreadsQueryOptions] =
     useListUserThreadsLazyQuery({
       fetchPolicy: "network-only",
+      variables: {
+        offset: 0,
+        limit: null,
+      },
     });
+
   const { data } = useOnReplyCreatedSubscription({
     fetchPolicy: "network-only",
   });
-  const toast = useToast();
+
   useEffect(() => {
     let isMounted = true;
     if (isMounted === true) {
@@ -31,17 +42,19 @@ export const NotificationBtn: React.FC<NotificationBtnProps> = () => {
     return () => {
       isMounted = false;
     };
-  }, []);
+  }, [data?.onReplyCreated]);
 
   useEffect(() => {
     if (data?.onReplyCreated) {
       console.log(userThreadsQueryOptions.data?.listUserThreads);
-      const currentUserThreadsIDs = userThreadsQueryOptions.data?.listUserThreads?.map(({ id }) => id);
-      
+      const currentUserThreadsIDs =
+        userThreadsQueryOptions.data?.listUserThreads?.map(({ id }) => id);
       const addedReplyThreadID = data?.onReplyCreated.replyThread;
       const addedReplySpecID = data?.onReplyCreated.replySpecialist;
-      const anotherUserReplied = meQueryOptions.data?.me?.id !== addedReplySpecID;
-      const doesAddedReplyBelongToUserThreads = currentUserThreadsIDs?.includes(addedReplyThreadID);
+      const anotherUserReplied =
+        meQueryOptions.data?.me?.id !== addedReplySpecID;
+      const doesAddedReplyBelongToUserThreads =
+        currentUserThreadsIDs?.includes(addedReplyThreadID);
 
       if (doesAddedReplyBelongToUserThreads && anotherUserReplied) {
         toast({
