@@ -12,7 +12,7 @@ export class ThreadType {
     @Field(() => String)
     specialization?: string
 
-    @Field(() => String)
+    @Field(() => String!)
     threadCreator?: string
 
     @Field(() => Date)
@@ -35,6 +35,7 @@ export class UserThreadType {
 
     @Field(() => Date)
     createdAt?: string
+
 }
 
 @InputType()
