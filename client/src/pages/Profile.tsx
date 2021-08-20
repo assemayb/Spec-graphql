@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useLayoutEffect } from "react";
 import { Box, Button, Flex, useDisclosure } from "@chakra-ui/react";
 // import InfiniteScroll from 'react-infinite-scroller';
 
@@ -12,6 +12,8 @@ import {
 import { ProfileModal } from "../components/ProfileModal";
 import { HeaderComp } from "../smallComps/HeaderComp";
 import { SettingsSection } from "../smallComps/SettingsSections";
+import { getAccessToken } from "../accessToken";
+import { useHistory } from "react-router-dom";
 
 const QuerySize = 3;
 interface SideBtnProps {
@@ -44,6 +46,9 @@ export const SideBtn: React.FC<SideBtnProps> = ({ onClick, text }) => {
     </Box>
   );
 };
+
+
+
 
 export const Profile = () => {
   const [displayedSection, setDisplpayedSection] =
@@ -93,6 +98,13 @@ export const Profile = () => {
       }
     }
   }, [data]);
+
+  useLayoutEffect(() => {
+    const token = getAccessToken()
+    if(token === "") {
+      document.location.assign("/")
+    }
+  }, [])
 
   const loadMore = () => {
     fetchMore!({
