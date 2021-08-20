@@ -154,8 +154,8 @@ export class ThreadResolver {
   @UseMiddleware(isAuthenticated)
   async listUserThreads(
     @Ctx() { req, payload }: MyContext,
-    @Arg("offset", () => Int) offset: number,
-    @Arg("limit", () => Int) limit: number
+    @Arg("offset", () => Int, { nullable: true }) offset: number | null,
+    @Arg("limit", () => Int, { nullable: true }) limit: number | null
   ) {
     const loggedUserId = payload?.userId;
     try {
@@ -164,15 +164,22 @@ export class ThreadResolver {
           threadCreator: loggedUserId as number,
         },
       });
-
-      const userThreads = await Thread.findAll({
-        where: {
-          threadCreator: loggedUserId as number,
-        },
-        offset,
-        limit,
-      });
-
+      let userThreads;
+      if (offset && limit) {
+        userThreads = await Thread.findAll({
+          where: {
+            threadCreator: loggedUserId as number,
+          },
+          offset,
+          limit,
+        });
+      } else {
+        userThreads = await Thread.findAll({
+          where: {
+            threadCreator: loggedUserId as number,
+          },
+        });
+      }
       return userThreads;
     } catch (error) {
       throw new Error(error.message);

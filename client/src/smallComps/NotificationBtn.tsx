@@ -28,7 +28,6 @@ export const NotificationBtn: React.FC<NotificationBtnProps> = () => {
       meQuery();
       userThreadsQuery();
     }
-
     return () => {
       isMounted = false;
     };
@@ -36,15 +35,13 @@ export const NotificationBtn: React.FC<NotificationBtnProps> = () => {
 
   useEffect(() => {
     if (data?.onReplyCreated) {
-      const currentUserThreadsIDs =
-        userThreadsQueryOptions.data?.listUserThreads?.map(({ id }) => id);
-
+      console.log(userThreadsQueryOptions.data?.listUserThreads);
+      const currentUserThreadsIDs = userThreadsQueryOptions.data?.listUserThreads?.map(({ id }) => id);
+      
       const addedReplyThreadID = data?.onReplyCreated.replyThread;
       const addedReplySpecID = data?.onReplyCreated.replySpecialist;
-      const anotherUserReplied =
-        meQueryOptions.data?.me?.id !== addedReplySpecID;
-      const doesAddedReplyBelongToUserThreads =
-        currentUserThreadsIDs?.includes(addedReplyThreadID);
+      const anotherUserReplied = meQueryOptions.data?.me?.id !== addedReplySpecID;
+      const doesAddedReplyBelongToUserThreads = currentUserThreadsIDs?.includes(addedReplyThreadID);
 
       if (doesAddedReplyBelongToUserThreads && anotherUserReplied) {
         toast({

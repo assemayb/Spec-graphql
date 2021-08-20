@@ -27,8 +27,8 @@ export const Pagination = (props: PagintationProps) => {
   // console.log("paginationRange", paginationRange);
 
   if (currentPage === 0 || paginationRange.length < 2) {
-    // return <div></div>;
-    return null;
+    return <div></div>;
+    // return null;
   }
 
   return (

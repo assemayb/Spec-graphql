@@ -52,9 +52,6 @@ export class ReplyResolver {
     @Root() { id, replySpecialist, replyThread, text, upvotes }: ReplyType
   ) {
     try {
-      console.log("=======>>");
-      console.log("=======>>");
-
       return { id, replySpecialist, replyThread, text, upvotes };
     } catch (error) {
       console.log(error);
