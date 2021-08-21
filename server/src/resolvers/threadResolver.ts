@@ -155,29 +155,19 @@ export class ThreadResolver {
   async listUserThreads(
     @Ctx() { req, payload }: MyContext,
     @Arg("offset", () => Int) offset: number,
-    @Arg("limit", () => Int, {nullable: true} ) limit: number 
+    @Arg("limit", () => Int, { nullable: true }) limit: number
   ) {
     const loggedUserId = payload?.userId as number;
     try {
-      if(limit == null) {
-        console.log("LIMIT IS NULL");
-        
-        const userThreads = await Thread.findAll({
-          where: {
-            threadCreator: loggedUserId,
-          },
-        });
-        return userThreads;
-      }
-      console.log("LIMIT IS NOOOOOOOOOOOOOOOOOOOT NULL");
       const userThreads = await Thread.findAll({
         where: {
           threadCreator: loggedUserId,
         },
         offset,
-        limit
+        limit,
       });
       return userThreads;
+
     } catch (error) {
       throw new Error(error.message);
     }

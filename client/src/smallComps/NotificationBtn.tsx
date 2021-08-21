@@ -10,27 +10,19 @@ import {
   useOnReplyCreatedSubscription,
 } from "../generated/graphql";
 
-import { useGetUserThreads } from "../hooks/useGetUserThreads"
+import { useGetUserThreads } from "../hooks/useGetUserThreads";
 interface NotificationBtnProps {}
 export const NotificationBtn: React.FC<NotificationBtnProps> = () => {
   const toast = useToast();
-  const userThreads = useGetUserThreads()
-  console.log(userThreads);
-  
   const [meQuery, meQueryOptions] = useMeLazyQuery({
     fetchPolicy: "network-only",
   });
-  // const [getThreadsNum, userThreadsNumOptions] = useGetUserThreadsNumberLazyQuery({ fetchPolicy: "network-only" });
-  // const currUserNumOfThreads = userThreadsNumOptions.data?.getUserThreadsNumber!;
+  const userThreads =
+    useGetUserThreads(); /** using rest because of cache issues affecting profile query*/
 
-  const [userThreadsQuery, userThreadsQueryOptions] =
-    useListUserThreadsLazyQuery({
-      fetchPolicy: "network-only",
-      variables: {
-        offset: 0,
-        limit: null,
-      },
-    });
+  useEffect(() => {
+    console.log(userThreads?.threads);
+  }, [userThreads?.threads]);
 
   const { data } = useOnReplyCreatedSubscription({
     fetchPolicy: "network-only",
@@ -40,19 +32,20 @@ export const NotificationBtn: React.FC<NotificationBtnProps> = () => {
     let isMounted = true;
     if (isMounted === true) {
       meQuery();
-      // userThreadsQuery();
     }
     return () => {
       isMounted = false;
     };
-  }, [data?.onReplyCreated]);
+  }, []);
 
   useEffect(() => {
     if (data?.onReplyCreated) {
-      console.log(userThreadsQueryOptions.data?.listUserThreads);
       const currentUserThreadsIDs =
-        userThreadsQueryOptions.data?.listUserThreads?.map(({ id }) => id);
-      const addedReplyThreadID = data?.onReplyCreated.replyThread;
+        userThreads &&
+        userThreads?.threads.map((thread: { id: number }) => thread.id);
+      console.log(currentUserThreadsIDs);
+
+      const addedReplyThreadID: any = data?.onReplyCreated.replyThread;
       const addedReplySpecID = data?.onReplyCreated.replySpecialist;
       const anotherUserReplied =
         meQueryOptions.data?.me?.id !== addedReplySpecID;
@@ -70,7 +63,7 @@ export const NotificationBtn: React.FC<NotificationBtnProps> = () => {
         });
       }
     }
-  }, [data?.onReplyCreated]);
+  }, [data?.onReplyCreated, userThreads]);
 
   return (
     <>

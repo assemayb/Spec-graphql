@@ -22,6 +22,6 @@ export const useGetUserThreads = () => {
     };
     getData();
   }, []);
-  
-  return threads;
+
+  return threads?.threads && threads;
 };
