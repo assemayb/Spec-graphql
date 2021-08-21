@@ -1,11 +1,15 @@
 import React, { useEffect, useState } from "react";
 
 export const useGetUserThreads = () => {
-  const [threads, setThreads] = useState([]) 
+  const [threads, setThreads] = useState<{
+    count: number;
+    threads: [];
+  }>();
+
   useEffect(() => {
     const getData = async () => {
       const url = "http://localhost:8000/get_user_threads";
-      const x = await fetch(url, {
+      const data = await fetch(url, {
         method: "GET",
         credentials: "include",
         cache: "no-cache",
@@ -13,9 +17,11 @@ export const useGetUserThreads = () => {
           "Content-Type": "application/json",
         },
       });
-      console.log(x.json());
+      const json = await data.json();
+      setThreads(json)
     };
     getData();
   }, []);
-  return null
+  
+  return threads;
 };
