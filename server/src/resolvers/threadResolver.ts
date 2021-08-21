@@ -167,7 +167,7 @@ export class ThreadResolver {
         limit,
       });
       return userThreads;
-
+      
     } catch (error) {
       throw new Error(error.message);
     }

@@ -1,5 +1,5 @@
 import "reflect-metadata";
-import experss, { Response, Request } from "express";
+import experss from "express";
 import cors from "cors";
 import * as dotenv from "dotenv";
 import morgan from "morgan";
@@ -7,19 +7,12 @@ import cookieParser from "cookie-parser";
 import { dbConfig } from "./config/database";
 import { ApolloServer } from "apollo-server-express";
 import { createServer } from "http";
-
 import { buildSchema } from "type-graphql";
-import { verify } from "jsonwebtoken";
-
 import { HelloResolver } from "./resolvers/helloResolver";
 import { UserResolver } from "./resolvers/userResolver";
 import { ThreadResolver } from "./resolvers/threadResolver";
 import { ReplyResolver } from "./resolvers/replyResolver";
 
-import { User } from "./models/User";
-import { sendRefreshToken } from "./utils/sendRefreshToken";
-import { createRefreshToken, createAccessToken } from "./utils/auth";
-import { Thread } from "./models/Thread";
 import { getCurrentUserThreads } from "./utils/restEndpoints/getCurrentUserThreads";
 import { sendRefreshTokenWhenAppReloads } from "./utils/restEndpoints/sendRefreshTokenWhenRelods";
 
@@ -40,7 +33,9 @@ import { sendRefreshTokenWhenAppReloads } from "./utils/restEndpoints/sendRefres
   };
   app.use(cors(corsOptions));
 
-  app.post("/refresh_token", (res, req) => sendRefreshTokenWhenAppReloads(res, req));
+  app.post("/refresh_token", (res, req) =>
+    sendRefreshTokenWhenAppReloads(res, req)
+  );
   app.get("/get_user_threads", (res, req) => getCurrentUserThreads(res, req));
 
   // connection the database

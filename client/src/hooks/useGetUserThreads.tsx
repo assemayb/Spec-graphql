@@ -17,7 +17,7 @@ export const useGetUserThreads = () => {
           "Content-Type": "application/json",
         },
       });
-      const json = await data.json();
+      const json = data.ok && await data.json();
       setThreads(json);
     };
     getData();

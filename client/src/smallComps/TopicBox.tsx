@@ -5,6 +5,7 @@ import { useHistory } from "react-router";
 interface TopicBoxProps {
   topic: string;
 }
+
 export const TopicBox: React.FC<TopicBoxProps> = ({ topic }) => {
   const router = useHistory();
   const goToTopic = () => {
@@ -13,7 +14,7 @@ export const TopicBox: React.FC<TopicBoxProps> = ({ topic }) => {
   return (
     <Box
       as="button"
-      onClick={() => goToTopic()}
+      onClick={goToTopic}
       w="100%"
       h="100px"
       bg="gray.100"
