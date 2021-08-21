@@ -20,32 +20,8 @@ import { User } from "./models/User";
 import { sendRefreshToken } from "./utils/sendRefreshToken";
 import { createRefreshToken, createAccessToken } from "./utils/auth";
 import { Thread } from "./models/Thread";
-
-const sendRefreshTokenWhenAppReloads = async (req: Request, res: Response) => {
-  const token = req.cookies["jid"];
-  if (!token) {
-    return res.json({ ok: false, accessToken: "" });
-  }
-  try {
-    let payload: any = verify(token, process.env.REFRESH_TOKEN_SECRET!);
-    console.log("================>");
-    console.log(payload);
-    console.log("================>");
-
-    let user = await User.findOne({ where: { id: payload.userId } });
-    if (!user) {
-      res.json({ ok: false, accessToken: "" });
-    }
-    sendRefreshToken(res, createRefreshToken(user as any));
-    return res.json({
-      ok: true,
-      accessToken: createAccessToken(user as any),
-    });
-  } catch (error) {
-    console.log(error);
-    return res.json({ ok: false, accessToken: "" });
-  }
-};
+import { getCurrentUserThreads } from "./utils/restEndpoints/getCurrentUserThreads";
+import { sendRefreshTokenWhenAppReloads } from "./utils/restEndpoints/sendRefreshTokenWhenRelods";
 
 (async () => {
   const app = experss();
@@ -64,33 +40,8 @@ const sendRefreshTokenWhenAppReloads = async (req: Request, res: Response) => {
   };
   app.use(cors(corsOptions));
 
-  app.post("/refresh_token", (req, res) =>
-    sendRefreshTokenWhenAppReloads(req, res)
-  );
-
-  app.get("/get_user_threads", async (req, res) => {
-    try {
-      const token = req.cookies["jid"];
-      let payload: any = verify(token, process.env.REFRESH_TOKEN_SECRET!);
-      const userId: number = payload.userId!;
-      const userThreads = await Thread.findAll({
-        where: {
-          threadCreator: userId,
-        },
-      });
-      console.log(userThreads);
-      return res.status(200).json({
-        count: userThreads.length,
-        threads: userThreads,
-      })
-      // return {
-      //   count: userThreads.length,
-      //   threads: userThreads,
-      // };
-    } catch (error) {
-      console.log(error.message);
-    }
-  });
+  app.post("/refresh_token", (res, req) => sendRefreshTokenWhenAppReloads(res, req));
+  app.get("/get_user_threads", (res, req) => getCurrentUserThreads(res, req));
 
   // connection the database
   dbConfig

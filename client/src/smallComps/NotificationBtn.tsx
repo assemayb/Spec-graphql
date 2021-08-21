@@ -17,16 +17,13 @@ export const NotificationBtn: React.FC<NotificationBtnProps> = () => {
   const [meQuery, meQueryOptions] = useMeLazyQuery({
     fetchPolicy: "network-only",
   });
-  const userThreads =
-    useGetUserThreads(); /** using rest because of cache issues affecting profile query*/
-
-  useEffect(() => {
-    console.log(userThreads?.threads);
-  }, [userThreads?.threads]);
-
   const { data } = useOnReplyCreatedSubscription({
     fetchPolicy: "network-only",
   });
+
+  const userThreads =
+    useGetUserThreads(); /** using rest because of cache issues affecting profile query*/
+
 
   useEffect(() => {
     let isMounted = true;

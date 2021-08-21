@@ -4,7 +4,7 @@ export const useGetUserThreads = () => {
   const [threads, setThreads] = useState<{
     count: number;
     threads: [];
-  }>();
+  }>({ count: -1, threads: [] });
 
   useEffect(() => {
     const getData = async () => {
@@ -18,7 +18,7 @@ export const useGetUserThreads = () => {
         },
       });
       const json = await data.json();
-      setThreads(json)
+      setThreads(json);
     };
     getData();
   }, []);
