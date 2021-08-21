@@ -10,10 +10,13 @@ import {
   useOnReplyCreatedSubscription,
 } from "../generated/graphql";
 
+import { useGetUserThreads } from "../hooks/useGetUserThreads"
 interface NotificationBtnProps {}
 export const NotificationBtn: React.FC<NotificationBtnProps> = () => {
   const toast = useToast();
-
+  const userThreads = useGetUserThreads()
+  console.log(userThreads);
+  
   const [meQuery, meQueryOptions] = useMeLazyQuery({
     fetchPolicy: "network-only",
   });
@@ -37,7 +40,7 @@ export const NotificationBtn: React.FC<NotificationBtnProps> = () => {
     let isMounted = true;
     if (isMounted === true) {
       meQuery();
-      userThreadsQuery();
+      // userThreadsQuery();
     }
     return () => {
       isMounted = false;

@@ -72,7 +72,8 @@ export const Profile = () => {
     let isMounted = true;
     if (isMounted) {
       getUserThreadsNum();
-      // listUserQuery();
+      listUserQuery();
+      
     }
     return () => {
       isMounted = false;
@@ -80,16 +81,16 @@ export const Profile = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  useEffect(() => {
-    let isMounted = true;
-    if (isMounted) {
-      listUserQuery();
-    }
-    return () => {
-      isMounted = false;
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [userThreadsNumOptions]);
+  // useEffect(() => {
+  //   let isMounted = true;
+  //   if (isMounted) {
+  //     listUserQuery();
+  //   }
+  //   return () => {
+  //     isMounted = false;
+  //   };
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [userThreadsNumOptions]);
 
 
   useEffect(() => {

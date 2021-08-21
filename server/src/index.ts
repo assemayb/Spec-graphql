@@ -19,6 +19,7 @@ import { ReplyResolver } from "./resolvers/replyResolver";
 import { User } from "./models/User";
 import { sendRefreshToken } from "./utils/sendRefreshToken";
 import { createRefreshToken, createAccessToken } from "./utils/auth";
+import { Thread } from "./models/Thread";
 
 const sendRefreshTokenWhenAppReloads = async (req: Request, res: Response) => {
   const token = req.cookies["jid"];
@@ -66,6 +67,30 @@ const sendRefreshTokenWhenAppReloads = async (req: Request, res: Response) => {
   app.post("/refresh_token", (req, res) =>
     sendRefreshTokenWhenAppReloads(req, res)
   );
+
+  app.get("/get_user_threads", async (req, res) => {
+    try {
+      const token = req.cookies["jid"];
+      let payload: any = verify(token, process.env.REFRESH_TOKEN_SECRET!);
+      const userId: number = payload.userId!;
+      const userThreads = await Thread.findAll({
+        where: {
+          threadCreator: userId,
+        },
+      });
+      console.log(userThreads);
+      return res.status(200).json({
+        count: userThreads.length,
+        threads: userThreads,
+      })
+      // return {
+      //   count: userThreads.length,
+      //   threads: userThreads,
+      // };
+    } catch (error) {
+      console.log(error.message);
+    }
+  });
 
   // connection the database
   dbConfig
