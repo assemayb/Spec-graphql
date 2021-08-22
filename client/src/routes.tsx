@@ -10,6 +10,7 @@ import { Topics } from "./pages/Topics";
 import { SignleTopicPage} from "./pages/SignleTopicPage";
 import { Thread } from "./pages/Thread";
 import { User } from "./pages/User";
+import { Notifications} from "./pages/Notifications";
 
 
 export const BaseRouter: React.FC = () => {
@@ -24,6 +25,7 @@ export const BaseRouter: React.FC = () => {
       <Route path="/topics/:topicName" component={SignleTopicPage} />
       <Route exact path="/topics" component={Topics} />
       <Route path="/threads/:threadId" component={Thread} />
+      <Route path="/notifications/:userId" component={Notifications} />
     </Switch>
   );
 };

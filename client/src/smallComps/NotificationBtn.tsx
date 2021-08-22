@@ -11,6 +11,7 @@ import {
 } from "../generated/graphql";
 
 import { useGetUserThreads } from "../hooks/useGetUserThreads";
+import { useHistory } from "react-router-dom";
 interface NotificationBtnProps {}
 export const NotificationBtn: React.FC<NotificationBtnProps> = () => {
   const toast = useToast();
@@ -62,11 +63,17 @@ export const NotificationBtn: React.FC<NotificationBtnProps> = () => {
     }
   }, [data?.onReplyCreated, userThreads]);
 
+  const router  = useHistory()
+  const goToNotificationsPage = () => {
+    const currUserId = meQueryOptions.data?.me?.id
+    router.push(`/notifications/${currUserId}`)
+  }
+
   return (
     <>
       <Tooltip label="show notifications">
         <Button
-          onClick={() => console.log("notifyyyyyyy")}
+          onClick={goToNotificationsPage}
           height={["30%", "30%", "50%", "50%"]}
           fontSize={["sm", "sm", "medium", "medium"]}
           fontWeight="bold"
