@@ -90,6 +90,7 @@ export const Home: React.FC<RouteComponentProps> = ({ history, location }) => {
   return (
     <>
       <HeaderComp header={threadsHeader} />
+      
       <Flex marginTop="1rem" minH="80vh">
         <Flex
           flexDirection="column"

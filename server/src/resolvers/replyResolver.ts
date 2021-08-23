@@ -32,16 +32,16 @@ export class ReplyResolver {
   ) {
     try {
       const replySpecialistID = payload?.userId;
+      const replySpecialistUsername = payload?.userName
+
       const { text, replySpecialist, replyThread } = options;
       let reply = await Reply.create({
         text,
         replySpecialist: replySpecialistID as number,
         replyThread,
       });
-
+      reply.setDataValue("replySpecialist", replySpecialistUsername!)
       let JSONReply = reply.toJSON();
-      console.log(JSONReply);
-      
       await pubSub.publish(reply_channel, JSONReply);
 
       return true;
@@ -56,6 +56,9 @@ export class ReplyResolver {
     @Root() { id, replySpecialist, replyThread, text, upvotes }: ReplyType
   ) {
     try {
+      console.log("===========================================>>");
+      console.log("===========================================>>");
+      console.log({ id, replySpecialist, replyThread, text, upvotes });
       return { id, replySpecialist, replyThread, text, upvotes };
     } catch (error) {
       console.log(error);

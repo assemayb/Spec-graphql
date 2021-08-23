@@ -5,7 +5,7 @@ export interface ReplyAttributes {
   id: number;
   text: string;
   upvotes: number;
-  replySpecialist: number;
+  replySpecialist: number | string;
   replyThread: number;
 }
 

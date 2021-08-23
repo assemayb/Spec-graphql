@@ -53,4 +53,5 @@ User.hasMany(Thread, {
 
 User.hasMany(Reply, {
     foreignKey: "replySpecialist",
+    keyType: DataTypes.INTEGER() || DataTypes.STRING()
 })

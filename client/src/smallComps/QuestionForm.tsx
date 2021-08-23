@@ -41,18 +41,13 @@ export const QuestionForm: React.FC<QuestionFormProps> = ({
 }) => {
   const [question, setQuestion] = useState("");
   const [specilization, setSpecilization] = useState("");
+
   const topics = useQuery(topicsQuery);
-  const [topicsArr, setTopicsArr] = useState([]);  
-  
+  const [topicsArr, setTopicsArr] = useState([]);    
   useEffect(() => {
     setTopicsArr(topics.data && topics.data.listTopics);
   }, [topics.data]);
 
-
-  const [triggerReload, setTriggerReload] = useState(false)
-  const userThreads = useGetUserThreads({
-    subData: triggerReload,
-  }); /** using rest because of cache issues affecting profile query*/
 
   const [createQuestion] = useCreateThreadMutation();
   const [userLogginData, { data }] = useIsUserLoggedInLazyQuery();
@@ -75,9 +70,9 @@ export const QuestionForm: React.FC<QuestionFormProps> = ({
           question,
           spec: specilization,
         },
-        update: () => {
-          setTriggerReload(prevVal => !prevVal)
-        }
+        // update: () => {
+        //   setTriggerReload(prevVal => !prevVal)
+        // }
       });
 
       if (refetchProfileThreads !== undefined) {

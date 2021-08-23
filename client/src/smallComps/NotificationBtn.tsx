@@ -20,9 +20,8 @@ export const NotificationBtn: React.FC<NotificationBtnProps> = () => {
   const { data } = useOnReplyCreatedSubscription({
     fetchPolicy: "network-only",
   });
-
   const userThreads = useGetUserThreads({
-    subData: data?.onReplyCreated.id,
+    subData: data?.onReplyCreated,
   }); /** using rest because of cache issues affecting profile query*/
 
   useEffect(() => {
@@ -60,6 +59,7 @@ export const NotificationBtn: React.FC<NotificationBtnProps> = () => {
       }
     }
   }, [data?.onReplyCreated.id]);
+  
 
   const router = useHistory();
   const goToNotificationsPage = () => {
