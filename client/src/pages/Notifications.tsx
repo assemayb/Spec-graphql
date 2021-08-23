@@ -9,20 +9,20 @@ import { HeaderComp } from "../smallComps/HeaderComp";
 export const NotifItem = () => {
   return (
     <Flex
-      p="1.2rem"
+      p="1.5rem"
       borderRadius="-20px"
       bgColor="gray.100"
-      shadow="md"
+      shadow="lg"
       fontSize="medium"
       fontWeight="bold"
-    //   color="green.600"
       color="#335344"
-      borderLeft="8px solid black"
+      borderLeft="8px solid #718096"
+      // borderLeft="8px solid red"
       borderLeftRadius="4px"
       _hover={{
         bgColor: "gray.200",
       }}
-      my="0.3rem"
+      my="0.4rem"
       pos="relative"
     >
       sasfasfkasmfklasmfklsmfklsmflasmf
@@ -48,7 +48,7 @@ export const Notifications: React.FC<NotificationsProps> = ({}) => {
           flexDirection="column"
           flex="5"
           minH="80vh"
-          shadow="base"
+
           p={["0.2rem", "0.4rem", "1rem", "1rem"]}
         >
           {Array.from({ length: 10 }, (v, k) => k).map((value, idx) => (

@@ -1,12 +1,16 @@
 import React, { useEffect, useState } from "react";
 
-export const useGetUserThreads = () => {
+type UseGetUserThreadsProps = {
+  subData?: any
+}
+export const useGetUserThreads = ( { subData }: UseGetUserThreadsProps ) => {
   const [threads, setThreads] = useState<{
     count: number;
     threads: [];
   }>({ count: -1, threads: [] });
 
-  useEffect(() => {
+  useEffect(() => { 
+    console.log("props is changed =============>", subData);
     const getData = async () => {
       const url = "http://localhost:8000/get_user_threads";
       const data = await fetch(url, {
@@ -21,7 +25,8 @@ export const useGetUserThreads = () => {
       setThreads(json);
     };
     getData();
-  }, []);
+
+  }, [subData]);
 
   return threads?.threads && threads;
 };

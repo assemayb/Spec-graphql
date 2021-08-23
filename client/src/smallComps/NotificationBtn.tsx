@@ -10,6 +10,7 @@ import {
 
 import { useGetUserThreads } from "../hooks/useGetUserThreads";
 import { useHistory } from "react-router-dom";
+
 interface NotificationBtnProps {}
 export const NotificationBtn: React.FC<NotificationBtnProps> = () => {
   const toast = useToast();
@@ -20,8 +21,9 @@ export const NotificationBtn: React.FC<NotificationBtnProps> = () => {
     fetchPolicy: "network-only",
   });
 
-  const userThreads =
-    useGetUserThreads(); /** using rest because of cache issues affecting profile query*/
+  const userThreads = useGetUserThreads({
+    subData: data?.onReplyCreated.id,
+  }); /** using rest because of cache issues affecting profile query*/
 
   useEffect(() => {
     let isMounted = true;
@@ -34,12 +36,11 @@ export const NotificationBtn: React.FC<NotificationBtnProps> = () => {
   }, []);
 
   useEffect(() => {
-    if (data?.onReplyCreated) {
+    if (data?.onReplyCreated && userThreads.threads.length !== 0) {
+      console.log("A reply has been added");
       const currentUserThreadsIDs =
         userThreads &&
         userThreads?.threads.map((thread: { id: number }) => thread.id);
-      console.log(currentUserThreadsIDs);
-
       const addedReplyThreadID: any = data?.onReplyCreated.replyThread;
       const addedReplySpecID = data?.onReplyCreated.replySpecialist;
       const anotherUserReplied =
@@ -58,7 +59,7 @@ export const NotificationBtn: React.FC<NotificationBtnProps> = () => {
         });
       }
     }
-  }, [data?.onReplyCreated, userThreads]);
+  }, [data?.onReplyCreated.id]);
 
   const router = useHistory();
   const goToNotificationsPage = () => {
