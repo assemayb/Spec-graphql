@@ -14,10 +14,24 @@ type PagintationProps = {
 export const Pagination = (props: PagintationProps) => {
   const { onPageChange, totalCount, siblingCount, currentPage, pageSize } =
     props;
-  const [showNumberedSection, setShowNumberedSection] = useState(true);
-  useLayoutEffect(() => {
-    if (window.innerWidth < 800) setShowNumberedSection(false);
+  const [showNumberedSection, setShowNumberedSection] = useState(() => {
+    if (window.innerWidth < 800)  return false;
+    if (window.innerWidth > 800)  return true;
   });
+
+  useLayoutEffect(() => {
+    const setterFunc = () => {
+      if (window.innerWidth < 800) {
+        setShowNumberedSection(false)
+      } else {
+        setShowNumberedSection(true)
+      }
+    };
+    window.addEventListener("resize", setterFunc);
+    return () => {
+      window.removeEventListener("resize", setterFunc);
+    };
+  }, []);
 
   const paginationRange = usePagination({
     currentPage,
