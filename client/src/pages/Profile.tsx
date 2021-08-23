@@ -73,25 +73,12 @@ export const Profile = () => {
     if (isMounted) {
       getUserThreadsNum();
       listUserQuery();
-      
     }
     return () => {
       isMounted = false;
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  // useEffect(() => {
-  //   let isMounted = true;
-  //   if (isMounted) {
-  //     listUserQuery();
-  //   }
-  //   return () => {
-  //     isMounted = false;
-  //   };
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [userThreadsNumOptions]);
-
 
   useEffect(() => {
     if (data) {
@@ -115,8 +102,6 @@ export const Profile = () => {
 
   function loadMore() {
     const fetchedThreadsCount = data?.listUserThreads?.length;
-    console.log("fetchedThreadsCount", fetchedThreadsCount);
-
     fetchMore!({
       variables: {
         offset: fetchedThreadsCount,

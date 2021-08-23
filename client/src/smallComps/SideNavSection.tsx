@@ -1,7 +1,6 @@
 import { Box, Flex } from "@chakra-ui/react";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useQuery } from "@apollo/client";
-
 import { topicsQuery } from "../pages/Topics";
 import { useHistory } from "react-router-dom";
 
@@ -17,6 +16,7 @@ const SideNavBox: React.FC<SideNavBoxProps> = ({ topics }) => {
       p="0.5rem"
       flexDirection="column"
       h="auto"
+      fontWeight="extrabold"
       marginX="8px"
       shadow="base"
     >
@@ -34,6 +34,7 @@ const SideNavBox: React.FC<SideNavBoxProps> = ({ topics }) => {
               bgColor="green.300"
               color="white"
               borderRadius="-20px"
+              fontWeight="bold"
               cursor="pointer"
               _hover={{
                 bgColor: "blue.200",
@@ -52,9 +53,9 @@ const SideNavBox: React.FC<SideNavBoxProps> = ({ topics }) => {
 
 export const SideTopicsSection = () => {
   const topicsArr = useQuery(topicsQuery, { fetchPolicy: "network-only" });
-  if(topicsArr.data ) {
-      return <SideNavBox topics={topicsArr.data.listTopics} />;
+  if (topicsArr.data) {
+    return <SideNavBox topics={topicsArr.data.listTopics} />;
   } else {
-      return <div></div>
+    return <div></div>;
   }
 };

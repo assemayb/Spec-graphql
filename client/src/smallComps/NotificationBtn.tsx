@@ -4,8 +4,6 @@ import { Box, Button, Tooltip, useToast } from "@chakra-ui/react";
 import { BiBell } from "react-icons/bi";
 
 import {
-  useGetUserThreadsNumberLazyQuery,
-  useListUserThreadsLazyQuery,
   useMeLazyQuery,
   useOnReplyCreatedSubscription,
 } from "../generated/graphql";
@@ -24,7 +22,6 @@ export const NotificationBtn: React.FC<NotificationBtnProps> = () => {
 
   const userThreads =
     useGetUserThreads(); /** using rest because of cache issues affecting profile query*/
-
 
   useEffect(() => {
     let isMounted = true;
@@ -63,11 +60,11 @@ export const NotificationBtn: React.FC<NotificationBtnProps> = () => {
     }
   }, [data?.onReplyCreated, userThreads]);
 
-  const router  = useHistory()
+  const router = useHistory();
   const goToNotificationsPage = () => {
-    const currUserId = meQueryOptions.data?.me?.id
-    router.push(`/notifications/${currUserId}`)
-  }
+    const currUserId = meQueryOptions.data?.me?.id;
+    router.push(`/notifications/${currUserId}`);
+  };
 
   return (
     <>

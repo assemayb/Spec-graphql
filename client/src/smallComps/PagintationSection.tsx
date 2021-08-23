@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState, useLayoutEffect } from "react";
 import { Box, Button, Center } from "@chakra-ui/react";
 import { usePagination, DOTS } from "../hooks/usePagintation";
 import { BsThreeDots } from "react-icons/bs";
@@ -14,6 +14,10 @@ type PagintationProps = {
 export const Pagination = (props: PagintationProps) => {
   const { onPageChange, totalCount, siblingCount, currentPage, pageSize } =
     props;
+  const [showNumberedSection, setShowNumberedSection] = useState(true);
+  useLayoutEffect(() => {
+    if (window.innerWidth < 800) setShowNumberedSection(false);
+  });
 
   const paginationRange = usePagination({
     currentPage,
@@ -32,10 +36,7 @@ export const Pagination = (props: PagintationProps) => {
   }
 
   return (
-    <Box
-      display="flex"
-      marginTop="10px"
-    >
+    <Box display="flex" marginTop="10px" width="auto">
       <Button
         borderRadius="-15px"
         bg="green.300"
@@ -47,7 +48,8 @@ export const Pagination = (props: PagintationProps) => {
         previous
       </Button>
 
-      {paginationRange &&
+      {showNumberedSection === true &&
+        paginationRange &&
         paginationRange.map((pageNumber, idx) => {
           if (pageNumber === DOTS)
             return (
@@ -62,6 +64,7 @@ export const Pagination = (props: PagintationProps) => {
               borderRadius="-20px"
               bg={pageNumber === currentPage ? "green.900" : "green.400"}
               color="white"
+              fontSize="1rem"
               marginX="2px"
               onClick={() => onPageChange(pageNumber as number)}
             >

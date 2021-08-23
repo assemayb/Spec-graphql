@@ -13,6 +13,12 @@ export const NotifItem = () => {
       borderRadius="-20px"
       bgColor="gray.100"
       shadow="md"
+      fontSize="medium"
+      fontWeight="bold"
+    //   color="green.600"
+      color="#335344"
+      borderLeft="8px solid black"
+      borderLeftRadius="4px"
       _hover={{
         bgColor: "gray.200",
       }}

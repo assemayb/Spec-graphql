@@ -38,8 +38,12 @@ export class ReplyResolver {
         replySpecialist: replySpecialistID as number,
         replyThread,
       });
+
       let JSONReply = reply.toJSON();
+      console.log(JSONReply);
+      
       await pubSub.publish(reply_channel, JSONReply);
+
       return true;
     } catch (error) {
       console.log(error.message);
@@ -68,7 +72,6 @@ export class ReplyResolver {
           replyThread: threadId,
         },
       });
-      console.log(replies);
     } catch (error) {
       throw new Error(error.message);
     }
