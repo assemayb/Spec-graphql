@@ -5,7 +5,7 @@ import {
   useListThreadsLazyQuery,
 } from "../generated/graphql";
 import { RouteComponentProps } from "react-router-dom";
-import { Box, Flex } from "@chakra-ui/react";
+import { Box, Flex, Skeleton, Stack, VStack } from "@chakra-ui/react";
 
 import { QuestionForm } from "../smallComps/QuestionForm";
 import { QuestionBox } from "../smallComps/QuestionBox";
@@ -14,6 +14,24 @@ import { BiBarChartAlt } from "react-icons/bi";
 import { FiClock } from "react-icons/fi";
 import { HeaderComp } from "../smallComps/HeaderComp";
 import { Pagination } from "../smallComps/PagintationSection";
+
+export const LoadingSkeleton = () => (
+  <Flex direction="column" width="100%">
+    {Array.from({ length: 4 }, (val, key) => {
+      return (
+        <Skeleton
+          key={key}
+          pos="relative"
+          p="0.5rem"
+          my="5px"
+          height="150px"
+          width="100%"
+          color="green.100"
+        />
+      );
+    })}
+  </Flex>
+);
 
 const PageSize = 4;
 export const Home: React.FC<RouteComponentProps> = ({ history, location }) => {
@@ -57,7 +75,9 @@ export const Home: React.FC<RouteComponentProps> = ({ history, location }) => {
 
   let ThreadsComp: any = null;
   if (loading) {
-    ThreadsComp = <FastBigSpinner />;
+    console.log("loading...............");
+
+    ThreadsComp = <LoadingSkeleton />;
   } else if (data) {
     ThreadsComp = (
       <>
@@ -90,7 +110,7 @@ export const Home: React.FC<RouteComponentProps> = ({ history, location }) => {
   return (
     <>
       <HeaderComp header={threadsHeader} />
-      
+
       <Flex marginTop="1rem" minH="80vh">
         <Flex
           flexDirection="column"
