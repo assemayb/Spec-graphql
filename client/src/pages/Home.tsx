@@ -5,33 +5,15 @@ import {
   useListThreadsLazyQuery,
 } from "../generated/graphql";
 import { RouteComponentProps } from "react-router-dom";
-import { Box, Flex, Skeleton, Stack, VStack } from "@chakra-ui/react";
+import { Box, Flex} from "@chakra-ui/react";
 
 import { QuestionForm } from "../smallComps/QuestionForm";
 import { QuestionBox } from "../smallComps/QuestionBox";
-import { FastBigSpinner } from "../smallComps/Spinners";
 import { BiBarChartAlt } from "react-icons/bi";
 import { FiClock } from "react-icons/fi";
 import { HeaderComp } from "../smallComps/HeaderComp";
 import { Pagination } from "../smallComps/PagintationSection";
-
-export const LoadingSkeleton = () => (
-  <Flex direction="column" width="100%">
-    {Array.from({ length: 4 }, (val, key) => {
-      return (
-        <Skeleton
-          key={key}
-          pos="relative"
-          p="0.5rem"
-          my="5px"
-          height="150px"
-          width="100%"
-          color="green.100"
-        />
-      );
-    })}
-  </Flex>
-);
+import { LoadingSkeleton } from "../smallComps/LoadingSkeleton";
 
 const PageSize = 4;
 export const Home: React.FC<RouteComponentProps> = ({ history, location }) => {
@@ -74,9 +56,8 @@ export const Home: React.FC<RouteComponentProps> = ({ history, location }) => {
   }, [currentPage, setCurrentPage]);
 
   let ThreadsComp: any = null;
-  if (loading) {
-    console.log("loading...............");
 
+  if (loading) {
     ThreadsComp = <LoadingSkeleton />;
   } else if (data) {
     ThreadsComp = (
@@ -115,7 +96,7 @@ export const Home: React.FC<RouteComponentProps> = ({ history, location }) => {
         <Flex
           flexDirection="column"
           alignItems="center"
-          flex="4"
+          flex="6"
           shadow="base"
           p={["5px", "5px", "1rem", "1rem"]}
         >

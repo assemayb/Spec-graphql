@@ -42,11 +42,10 @@ export const Pagination = (props: PagintationProps) => {
 
   let firstPage = 1;
   let lastPage = paginationRange[paginationRange.length - 1];
-  // console.log("paginationRange", paginationRange);
-
+  
   if (currentPage === 0 || paginationRange.length < 2) {
-    return <div></div>;
-    // return null;
+    // return <div></div>;
+    return null;
   }
 
   return (
@@ -64,7 +63,7 @@ export const Pagination = (props: PagintationProps) => {
 
       {showNumberedSection === true &&
         paginationRange &&
-        paginationRange.map((pageNumber, idx) => {
+        paginationRange.map((pageNumber: any, idx: number) => {
           if (pageNumber === DOTS)
             return (
               <Center key={idx}>
