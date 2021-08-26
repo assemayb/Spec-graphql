@@ -72,9 +72,6 @@ import { sendRefreshTokenWhenAppReloads } from "./utils/restEndpoints/sendRefres
     console.error(err);
   }
 
-  // app.listen(() => {
-  //   console.log(`server is running at port 8000`);
-  // });
   httpServer.listen(8000, () => {
     console.log(`server is running at port 8000`);
   });

@@ -59,19 +59,24 @@ export class ReplyResolver {
   async onReplyCreated(
     @Root() { id, replySpecialist, replyThread, text, upvotes }: ReplyType
   ) {
-    try {
-      // console.log({ id, replySpecialist, replyThread, text, upvotes });
-      const threadCreator = await Thread.findOne({
-          where: {id: replyThread}
-      })
-      console.log(threadCreator?.toJSON());
-      
-      // let notif = await Notification.create({
-      //     replyId: id
-      // })
 
-      // console.log(notif);
-      
+    console.log("========================================>>");
+    console.log("========================================>>");
+    console.log("========================================>>");
+    console.log("========================================>>");
+    console.log("the reply sub is triggered");
+    
+    try {
+      const threadData = await Thread.findOne({
+        where: { id: replyThread },
+      });
+      const threadCreatorId = threadData?.getDataValue("threadCreator");
+
+      await Notification.create({
+        replyId: id,
+        userId: threadCreatorId,
+      });
+
       return { id, replySpecialist, replyThread, text, upvotes };
     } catch (error) {
       console.log(error);
@@ -94,7 +99,6 @@ export class ReplyResolver {
   //   return notifications;
   // }
 
-  
   // list all all thread replies
   @Query(() => [ReplyType], { nullable: true })
   @UseMiddleware(isAuthenticated)

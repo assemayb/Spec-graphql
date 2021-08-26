@@ -4,8 +4,8 @@ import {Reply} from "./Reply"
 export interface NotificationAttributes {
   id: number;
   opened: boolean
-  userId: number
   replyId: number
+  userId:  number
 }
 
 // export interface ReplyCreationAttributes extends Optional<ReplyAttributes> { }
@@ -18,7 +18,8 @@ export const Notification: ModelDefined<NotificationAttributes, {}> = dbConfig.d
       autoIncrement: true,
     },
     userId: {
-      type: DataTypes.INTEGER(),
+      type: DataTypes.INTEGER(),  
+      allowNull: false,
     },
     opened: {
         type: DataTypes.BOOLEAN,

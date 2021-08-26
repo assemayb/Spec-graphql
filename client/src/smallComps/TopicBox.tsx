@@ -39,7 +39,7 @@ export const TopicBox: React.FC<TopicBoxProps> = ({ topic }) => {
           <img
             src={topic === "Cancer" ? `${topic}.png` : `${topic}.svg`}
             width={topic === "Cancer" ? "35px" : ""}
-            alt=""
+            alt={topic}
           />
         </Center>
       </Box>
