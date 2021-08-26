@@ -51,11 +51,8 @@ export class ReplyResolver {
       await pubSub.publish(reply_channel, JSONReply);
 
       // add to notifs table
-      const threadData = await Thread.findOne({
-        where: {
-          id: replyThread,
-        },
-      });
+      
+      const threadData = await Thread.findByPk(replyThread)
       const threadCreatorId = threadData?.getDataValue("threadCreator");
       await Notification.create({
         replyId: reply.getDataValue("id"),
