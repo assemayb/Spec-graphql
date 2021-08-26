@@ -13,14 +13,16 @@ import {
 } from "type-graphql";
 
 import { Reply } from "../models/Reply";
+import { Notification } from "../models/Notification";
 
 import { isAuthenticated } from "../utils/isAuth";
 import { MyContext } from "../utils/context";
 import { ReplyCreateType } from "./replyResolverTypes";
 import { ReplyType } from "./replyResolverTypes";
+import { User } from "../models/User";
+import { Thread } from "../models/Thread";
 
 const reply_channel = "replies_channel";
-
 
 @Resolver()
 export class ReplyResolver {
@@ -34,7 +36,7 @@ export class ReplyResolver {
   ) {
     try {
       const replySpecialistID = payload?.userId;
-      const replySpecialistUsername = payload?.userName
+      const replySpecialistUsername = payload?.userName;
 
       const { text, replySpecialist, replyThread } = options;
       let reply = await Reply.create({
@@ -42,7 +44,7 @@ export class ReplyResolver {
         replySpecialist: replySpecialistID as number,
         replyThread,
       });
-      reply.setDataValue("replySpecialist", replySpecialistUsername!)
+      reply.setDataValue("replySpecialist", replySpecialistUsername!);
       let JSONReply = reply.toJSON();
       await pubSub.publish(reply_channel, JSONReply);
 
@@ -58,14 +60,41 @@ export class ReplyResolver {
     @Root() { id, replySpecialist, replyThread, text, upvotes }: ReplyType
   ) {
     try {
-      console.log("===========================================>>");
-      console.log("===========================================>>");
-      console.log({ id, replySpecialist, replyThread, text, upvotes });
+      // console.log({ id, replySpecialist, replyThread, text, upvotes });
+      const threadCreator = await Thread.findOne({
+          where: {id: replyThread}
+      })
+      console.log(threadCreator?.toJSON());
+      
+      // let notif = await Notification.create({
+      //     replyId: id
+      // })
+
+      // console.log(notif);
+      
       return { id, replySpecialist, replyThread, text, upvotes };
     } catch (error) {
       console.log(error);
     }
   }
+
+  // @Query(() => [], { nullable: true })
+  // @UseMiddleware(isAuthenticated)
+  // async listUserNotifs(@Arg("threadId", () => Int) threadId: number) {
+  //   let notifications;
+  //   try {
+  //     notifications = await Notification.findAll({
+  //       where: {
+
+  //       },
+  //     });
+  //   } catch (error) {
+  //     throw new Error(error.message);
+  //   }
+  //   return notifications;
+  // }
+
+  
   // list all all thread replies
   @Query(() => [ReplyType], { nullable: true })
   @UseMiddleware(isAuthenticated)

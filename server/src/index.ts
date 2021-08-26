@@ -54,7 +54,9 @@ import { sendRefreshTokenWhenAppReloads } from "./utils/restEndpoints/sendRefres
         validate: false,
       }),
       subscriptions: {
+        // path: "/subscriptions",
         path: "/subscriptions",
+        
         onConnect: () => {
           console.log("Client connected for subscriptions");
         },

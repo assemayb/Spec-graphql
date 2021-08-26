@@ -1,12 +1,11 @@
-import { DataTypes, ModelDefined, Optional } from "sequelize";
+import { DataTypes, ModelDefined, Optional,  } from "sequelize";
 import { dbConfig } from "../config/database";
-
+import {Reply} from "./Reply"
 export interface NotificationAttributes {
   id: number;
   opened: boolean
-  threadCreator: number
-  replySpecialist: number;
-  replyThread: number;
+  userId: number
+  replyId: number
 }
 
 // export interface ReplyCreationAttributes extends Optional<ReplyAttributes> { }
@@ -18,10 +17,9 @@ export const Notification: ModelDefined<NotificationAttributes, {}> = dbConfig.d
       primaryKey: true,
       autoIncrement: true,
     },
-    // text: {
-    //   type: DataTypes.STRING(800),
-    //   allowNull: false,
-    // },
+    userId: {
+      type: DataTypes.INTEGER(),
+    },
     opened: {
         type: DataTypes.BOOLEAN,
         allowNull: false,
@@ -32,3 +30,8 @@ export const Notification: ModelDefined<NotificationAttributes, {}> = dbConfig.d
     tableName: "notifications",
   }
 );
+
+
+Reply.hasOne(Notification, {
+  foreignKey: "replyId"
+})

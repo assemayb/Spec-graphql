@@ -4,9 +4,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import reportWebVitals from "./reportWebVitals";
 import { ChakraProvider } from "@chakra-ui/react";
-
-// import { theme } from "./theme";
-
+import { theme } from "./theme";
 import {
   ApolloProvider,
   ApolloClient,
@@ -20,7 +18,10 @@ import { WebSocketLink } from "@apollo/client/link/ws";
 import { onError } from "@apollo/client/link/error";
 import { TokenRefreshLink } from "apollo-link-token-refresh";
 import jwtDecode from "jwt-decode";
-import { getMainDefinition, offsetLimitPagination } from "@apollo/client/utilities";
+import {
+  getMainDefinition,
+  offsetLimitPagination,
+} from "@apollo/client/utilities";
 
 import { getAccessToken, setAccessToken } from "./accessToken";
 
@@ -40,10 +41,10 @@ const cache = new InMemoryCache({
   typePolicies: {
     Query: {
       fields: {
-        listUserThreads: offsetLimitPagination()      
+        listUserThreads: offsetLimitPagination(),
       },
-    }
-  }
+    },
+  },
 });
 
 const httpLink = new HttpLink({
@@ -52,9 +53,10 @@ const httpLink = new HttpLink({
 });
 const wsLink = new WebSocketLink({
   uri: "ws://localhost:8000/subscriptions",
-  options: {
-    reconnect: true,
-  },
+  // options: {
+  //   reconnect: true,
+    
+  // },
 });
 
 const link = split(
@@ -160,8 +162,7 @@ export const client = new ApolloClient({
 
 ReactDOM.render(
   <React.StrictMode>
-    {/* <ChakraProvider theme={theme}> */}
-    <ChakraProvider >
+    <ChakraProvider theme={theme}>
       <ApolloProvider client={client}>
         <App />
       </ApolloProvider>
