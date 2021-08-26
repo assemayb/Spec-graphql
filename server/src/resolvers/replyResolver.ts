@@ -21,6 +21,7 @@ import { ReplyCreateType } from "./replyResolverTypes";
 import { ReplyType } from "./replyResolverTypes";
 import { User } from "../models/User";
 import { Thread } from "../models/Thread";
+import { not } from "sequelize/types/lib/operators";
 
 const reply_channel = "replies_channel";
 
@@ -38,15 +39,28 @@ export class ReplyResolver {
       const replySpecialistID = payload?.userId;
       const replySpecialistUsername = payload?.userName;
 
-      const { text, replySpecialist, replyThread } = options;
+      const { text, replyThread } = options;
       let reply = await Reply.create({
         text,
         replySpecialist: replySpecialistID as number,
         replyThread,
       });
       reply.setDataValue("replySpecialist", replySpecialistUsername!);
+
       let JSONReply = reply.toJSON();
       await pubSub.publish(reply_channel, JSONReply);
+
+      // add to notifs table
+      const threadData = await Thread.findOne({
+        where: {
+          id: replyThread,
+        },
+      });
+      const threadCreatorId = threadData?.getDataValue("threadCreator");
+      await Notification.create({
+        replyId: reply.getDataValue("id"),
+        userId: threadCreatorId,
+      });
 
       return true;
     } catch (error) {
@@ -59,24 +73,7 @@ export class ReplyResolver {
   async onReplyCreated(
     @Root() { id, replySpecialist, replyThread, text, upvotes }: ReplyType
   ) {
-
-    console.log("========================================>>");
-    console.log("========================================>>");
-    console.log("========================================>>");
-    console.log("========================================>>");
-    console.log("the reply sub is triggered");
-    
     try {
-      const threadData = await Thread.findOne({
-        where: { id: replyThread },
-      });
-      const threadCreatorId = threadData?.getDataValue("threadCreator");
-
-      await Notification.create({
-        replyId: id,
-        userId: threadCreatorId,
-      });
-
       return { id, replySpecialist, replyThread, text, upvotes };
     } catch (error) {
       console.log(error);
