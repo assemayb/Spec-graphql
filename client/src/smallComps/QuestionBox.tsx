@@ -28,6 +28,7 @@ interface QuestionBoxProps {
   refetchProfileThreads?: () => Promise<
     ApolloQueryResult<ListUserThreadsQuery>
   >;
+  
 }
 export const QuestionBox: React.FC<QuestionBoxProps> = ({
   threadId,
@@ -45,16 +46,16 @@ export const QuestionBox: React.FC<QuestionBoxProps> = ({
 }) => {
   // const currentUser = useMeQuery();
   const router = useHistory();
-  const [deleteReq] = useDeleteThreadMutation({
-    update: () => {
-      refetchProfileThreads!();
-    },
-  });
 
-  const deleteThread = () => {
-    deleteReq({
+  const [deleteReq] = useDeleteThreadMutation({});
+
+  const deleteThread = async () => {
+    await deleteReq({
       variables: {
         id: threadId!,
+      },
+      update: async () => {
+        await refetchProfileThreads!();
       },
     });
   };
@@ -92,7 +93,7 @@ export const QuestionBox: React.FC<QuestionBoxProps> = ({
           </Link>
         </Heading>
       )}
-      
+
       <Heading
         as="button"
         w="100%"
@@ -175,12 +176,10 @@ export const QuestionBox: React.FC<QuestionBoxProps> = ({
               base: "10px",
               md: "1rem",
             }}
-            
             height={{
               base: "25px",
               md: "40px",
             }}
-
             borderRadius="-10px"
             marginLeft="4px"
             p={{

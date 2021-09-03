@@ -37,7 +37,7 @@ import { sendRefreshTokenWhenAppReloads } from "./utils/restEndpoints/sendRefres
     sendRefreshTokenWhenAppReloads(res, req)
   );
   app.get("/get_user_threads", (res, req) => getCurrentUserThreads(res, req));
-
+  
   // connection the database
   dbConfig
     .authenticate()
@@ -56,7 +56,7 @@ import { sendRefreshTokenWhenAppReloads } from "./utils/restEndpoints/sendRefres
       subscriptions: {
         // path: "/subscriptions",
         path: "/subscriptions",
-        
+
         onConnect: () => {
           console.log("Client connected for subscriptions");
         },

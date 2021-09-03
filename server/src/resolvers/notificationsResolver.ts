@@ -22,6 +22,7 @@ import { ReplyType } from "./replyResolverTypes";
 import { User } from "../models/User";
 import { Thread } from "../models/Thread";
 import { not } from "sequelize/types/lib/operators";
+import { NotificationType } from "./notificationsTypes";
 
 @Resolver()
 export class NotificationResolver {
@@ -43,12 +44,13 @@ export class NotificationResolver {
   }
 
   // list user notifications
+  @Query(() => [NotificationType])
+  @UseMiddleware(isAuthenticated)
   async listUserNotifs(@Ctx() { payload }: MyContext) {
     try {
       const notifs = await Notification.findAll({
         where: {
           userId: payload?.userId,
-          
         },
       });
       return notifs;

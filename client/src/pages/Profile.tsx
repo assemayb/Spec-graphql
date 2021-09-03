@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState, useLayoutEffect } from "react";
 import { Box, Button, Flex, useDisclosure } from "@chakra-ui/react";
 // import InfiniteScroll from 'react-infinite-scroller';
@@ -12,6 +13,7 @@ import { ProfileModal } from "../components/ProfileModal";
 import { HeaderComp } from "../smallComps/HeaderComp";
 import { SettingsSection } from "../smallComps/SettingsSections";
 import { getAccessToken } from "../accessToken";
+import { LoadingSkeleton } from "../smallComps/LoadingSkeleton";
 
 interface SideBtnProps {
   text: string;
@@ -49,8 +51,8 @@ const QuerySize = 3;
 export const Profile = () => {
   const [displayedSection, setDisplpayedSection] = useState("Dashboard");
   useEffect(() => setSectionHeader(displayedSection), [displayedSection]);
-
   const [sectionHeader, setSectionHeader] = useState("Dashboard");
+
   const [showModal, setShowModal] = useState(false);
   const [showThreadOptions, setShowThreadOptions] = useState(false);
   const [hideLoadMoreBtn, setHideLoadMoreBtn] = useState(false);
@@ -59,6 +61,7 @@ export const Profile = () => {
     useGetUserThreadsNumberLazyQuery({
       fetchPolicy: "network-only",
     });
+
   const [listUserQuery, { data, loading, fetchMore, refetch }] =
     useListUserThreadsLazyQuery({
       fetchPolicy: "network-only",
@@ -77,17 +80,17 @@ export const Profile = () => {
     return () => {
       isMounted = false;
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
 
   useEffect(() => {
     if (data) {
+      console.log("length of list", data.listUserThreads?.length);      
       const fetchedThreadsCount = data?.listUserThreads?.length;
       const userThreadsNum = userThreadsNumOptions.data?.getUserThreadsNumber;
       if (fetchedThreadsCount === userThreadsNum) setHideLoadMoreBtn(true);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data]);
+  }, [data?.listUserThreads]);
 
   // if the "profile" path was typed in the address
   useLayoutEffect(() => {
@@ -97,10 +100,9 @@ export const Profile = () => {
     }
   }, []);
 
-  // after creating a new thread
   const { onClose } = useDisclosure({ onClose: () => setShowModal(false) });
 
-  function loadMore() {
+  const loadMore = () => {
     const fetchedThreadsCount = data?.listUserThreads?.length;
     fetchMore!({
       variables: {
@@ -108,11 +110,12 @@ export const Profile = () => {
         limit: QuerySize,
       },
     });
-  }
+  };
 
   let ThreadSection: any = null;
   if (loading) {
-    ThreadSection = <FastBigSpinner />;
+    // ThreadSection = <FastBigSpinner />;
+    ThreadSection = <LoadingSkeleton num={3} />;
   } else if (data) {
     ThreadSection = (
       <>

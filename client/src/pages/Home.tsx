@@ -5,7 +5,7 @@ import {
   useListThreadsLazyQuery,
 } from "../generated/graphql";
 import { RouteComponentProps } from "react-router-dom";
-import { Box, Flex} from "@chakra-ui/react";
+import { Box, Flex } from "@chakra-ui/react";
 
 import { QuestionForm } from "../smallComps/QuestionForm";
 import { QuestionBox } from "../smallComps/QuestionBox";
@@ -58,7 +58,7 @@ export const Home: React.FC<RouteComponentProps> = ({ history, location }) => {
   let ThreadsComp: any = null;
 
   if (loading) {
-    ThreadsComp = <LoadingSkeleton />;
+    ThreadsComp = <LoadingSkeleton num={4} />;
   } else if (data) {
     ThreadsComp = (
       <>

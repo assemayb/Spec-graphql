@@ -51,8 +51,8 @@ export class ReplyResolver {
       await pubSub.publish(reply_channel, JSONReply);
 
       // add to notifs table
-      
-      const threadData = await Thread.findByPk(replyThread)
+
+      const threadData = await Thread.findByPk(replyThread);
       const threadCreatorId = threadData?.getDataValue("threadCreator");
       await Notification.create({
         replyId: reply.getDataValue("id"),
@@ -71,6 +71,8 @@ export class ReplyResolver {
     @Root() { id, replySpecialist, replyThread, text, upvotes }: ReplyType
   ) {
     try {
+      console.log({ id, replySpecialist, replyThread, text, upvotes });
+
       return { id, replySpecialist, replyThread, text, upvotes };
     } catch (error) {
       console.log(error);
