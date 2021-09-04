@@ -28,7 +28,6 @@ interface QuestionBoxProps {
   refetchProfileThreads?: () => Promise<
     ApolloQueryResult<ListUserThreadsQuery>
   >;
-  
 }
 export const QuestionBox: React.FC<QuestionBoxProps> = ({
   threadId,
@@ -44,20 +43,16 @@ export const QuestionBox: React.FC<QuestionBoxProps> = ({
   setShowThreadOptions,
   refetchProfileThreads,
 }) => {
-  // const currentUser = useMeQuery();
   const router = useHistory();
-
-  const [deleteReq] = useDeleteThreadMutation({});
+  const [deleteReq] = useDeleteThreadMutation();
 
   const deleteThread = async () => {
     await deleteReq({
       variables: {
         id: threadId!,
-      },
-      update: async () => {
-        await refetchProfileThreads!();
-      },
+      }
     });
+    await refetchProfileThreads!();
   };
 
   const goToThread = () => {

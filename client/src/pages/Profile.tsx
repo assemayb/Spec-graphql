@@ -26,7 +26,7 @@ export const SideBtn: React.FC<SideBtnProps> = ({ onClick, text }) => {
       boxShadow="inner"
       marginTop={text !== "New Thread" ? "0.5rem" : ""}
       p={["0.4rem", "0.5rem", "0.8rem", "1.2rem"]}
-      onClick={() => onClick()}
+      onClick={onClick}
       textAlign="center"
       bgColor="green.300"
       color="Window"
@@ -85,12 +85,11 @@ export const Profile = () => {
 
   useEffect(() => {
     if (data) {
-      console.log("length of list", data.listUserThreads?.length);      
       const fetchedThreadsCount = data?.listUserThreads?.length;
       const userThreadsNum = userThreadsNumOptions.data?.getUserThreadsNumber;
       if (fetchedThreadsCount === userThreadsNum) setHideLoadMoreBtn(true);
     }
-  }, [data?.listUserThreads]);
+  }, [data?.listUserThreads?.length]);
 
   // if the "profile" path was typed in the address
   useLayoutEffect(() => {
@@ -113,8 +112,8 @@ export const Profile = () => {
   };
 
   let ThreadSection: any = null;
+
   if (loading) {
-    // ThreadSection = <FastBigSpinner />;
     ThreadSection = <LoadingSkeleton num={3} />;
   } else if (data) {
     ThreadSection = (
@@ -144,7 +143,7 @@ export const Profile = () => {
               color="white"
               borderRadius="-20px"
             >
-              load more
+              Load More
             </Button>
           )}
         </Flex>

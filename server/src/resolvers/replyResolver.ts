@@ -60,7 +60,7 @@ export class ReplyResolver {
       });
 
       return true;
-    } catch (error) {
+    } catch (error: any) {
       console.log(error.message);
       return false;
     }
@@ -106,7 +106,7 @@ export class ReplyResolver {
           replyThread: threadId,
         },
       });
-    } catch (error) {
+    } catch (error: any) {
       throw new Error(error.message);
     }
     return replies;
@@ -117,7 +117,7 @@ export class ReplyResolver {
     try {
       const replies = await Reply.findAll({});
       return replies;
-    } catch (error) {
+    } catch (error: any) {
       throw new Error(error.message);
     }
   }
@@ -136,7 +136,7 @@ export class ReplyResolver {
       console.log(x?.getDataValue("upvotes"));
 
       return true;
-    } catch (error) {
+    } catch (error: any) {
       console.log(error.message);
       return false;
     }

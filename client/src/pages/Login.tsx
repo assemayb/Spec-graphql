@@ -51,7 +51,7 @@ export const Login: React.FC<RouteComponentProps> = ({ history }) => {
                 setUsername("")
                 setPassword("")
             }
-        } catch (error) {
+        } catch (error: any) {
             setShowMessage({ show: true, value: error.message })
             console.log(error)
         }
