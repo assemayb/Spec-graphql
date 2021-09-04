@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Flex } from "@chakra-ui/react";
+import { Flex, Center } from "@chakra-ui/react";
 import React, { useEffect } from "react";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
@@ -48,7 +48,7 @@ export const Notifications: React.FC<NotificationsProps> = ({}) => {
   const [notifs, setNotifs] = useState<string[]>([]);
 
   const [offset, setOffset] = useState(0);
-  const [end, setEnd] = useState(10);
+  const [end, setEnd] = useState(15);
 
   useEffect(() => {
     console.log(userId);
@@ -84,11 +84,9 @@ export const Notifications: React.FC<NotificationsProps> = ({}) => {
             loadMore={handleLoadMore}
             pageStart={0}
             // useWindow={false}
-            loader={<div key="loading">Loading ...</div>}
+            loader={<Center><FastBigSpinner /></Center>}
           >
-            {/* {Array.from({ length: 300 }, (v, k) => k).map((value, idx) => (
-              <NotifItem key={idx} />
-            ))} */}
+            
 
             {notifs.map((_, idx) => (
               <NotifItem key={idx} />
