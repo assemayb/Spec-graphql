@@ -1,13 +1,11 @@
 /* eslint-disable react-hooks/exhaustive-deps */
+
 import { Flex, Center } from "@chakra-ui/react";
 import React, { useEffect } from "react";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
-import { useMeLazyQuery } from "../generated/graphql";
 import { HeaderComp } from "../smallComps/HeaderComp";
-
 import InfiniteScroll from "react-infinite-scroller";
-
 import { FastBigSpinner } from "../smallComps/Spinners";
 
 export const NotifItem = () => {
@@ -40,21 +38,18 @@ const createDummieData = () => {
 };
 
 interface NotificationsProps {}
-type ParamsObject = { userId: string };
+
 export const Notifications: React.FC<NotificationsProps> = ({}) => {
-  const params: ParamsObject = useParams();
+  const params: { userId: string } = useParams();
   const [userId, setUserId] = useState("");
-
   const [notifs, setNotifs] = useState<string[]>([]);
-
   const [offset, setOffset] = useState(0);
-  const [end, setEnd] = useState(15);
 
+  const [end, setEnd] = useState(15);
   useEffect(() => {
-    console.log(userId);
     setUserId(params.userId);
   }, [params.userId]);
-
+  
   useEffect(() => {
     const dummieData = createDummieData();
     const slicedSection = dummieData.slice(offset, end);
@@ -66,7 +61,7 @@ export const Notifications: React.FC<NotificationsProps> = ({}) => {
     setTimeout(() => {
       offset > 0 && setOffset(end);
       end < 200 && setEnd((prevEnd) => prevEnd + 10);
-    }, 1500);
+    }, 1000);
   };
 
   return (
@@ -84,12 +79,14 @@ export const Notifications: React.FC<NotificationsProps> = ({}) => {
             loadMore={handleLoadMore}
             pageStart={0}
             // useWindow={false}
-            loader={<Center><FastBigSpinner /></Center>}
+            loader={
+              <Center key={0}>
+                <FastBigSpinner />
+              </Center>
+            }
           >
-            
-
-            {notifs.map((_, idx) => (
-              <NotifItem key={idx} />
+            {notifs.map((val, index) => (
+              <NotifItem key={index} />
             ))}
           </InfiniteScroll>
         </Flex>
