@@ -6,6 +6,8 @@ import { Box, Button, Flex, useDisclosure } from "@chakra-ui/react";
 import { QuestionBox } from "../smallComps/QuestionBox";
 import { FastBigSpinner } from "../smallComps/Spinners";
 import {
+  ListUserThreadsDocument,
+  ListUserThreadsQuery,
   useGetUserThreadsNumberLazyQuery,
   useListUserThreadsLazyQuery,
 } from "../generated/graphql";
@@ -51,8 +53,8 @@ const QuerySize = 3;
 export const Profile = () => {
   const [displayedSection, setDisplpayedSection] = useState("Dashboard");
   useEffect(() => setSectionHeader(displayedSection), [displayedSection]);
-  const [sectionHeader, setSectionHeader] = useState("Dashboard");
 
+  const [sectionHeader, setSectionHeader] = useState("Dashboard");
   const [showModal, setShowModal] = useState(false);
   const [showThreadOptions, setShowThreadOptions] = useState(false);
   const [hideLoadMoreBtn, setHideLoadMoreBtn] = useState(false);
@@ -62,7 +64,7 @@ export const Profile = () => {
       fetchPolicy: "network-only",
     });
 
-  const [listUserQuery, { data, loading, fetchMore, refetch }] =
+  const [listUserQuery, { data, loading, fetchMore, refetch, client }] =
     useListUserThreadsLazyQuery({
       fetchPolicy: "network-only",
       variables: {
@@ -82,14 +84,17 @@ export const Profile = () => {
     };
   }, []);
 
-
   useEffect(() => {
-    if (data) {
+    if (data && userThreadsNumOptions.data) {
       const fetchedThreadsCount = data?.listUserThreads?.length;
       const userThreadsNum = userThreadsNumOptions.data?.getUserThreadsNumber;
-      if (fetchedThreadsCount === userThreadsNum) setHideLoadMoreBtn(true);
+      console.log(fetchedThreadsCount);
+      console.log(userThreadsNum);
+      if (fetchedThreadsCount === userThreadsNum) {
+        setHideLoadMoreBtn(true);
+      }
     }
-  }, [data?.listUserThreads?.length]);
+  }, [data, userThreadsNumOptions.data]);
 
   // if the "profile" path was typed in the address
   useLayoutEffect(() => {
@@ -112,7 +117,6 @@ export const Profile = () => {
   };
 
   let ThreadSection: any = null;
-
   if (loading) {
     ThreadSection = <LoadingSkeleton num={3} />;
   } else if (data) {
@@ -128,7 +132,9 @@ export const Profile = () => {
               specializtion={thread.specialization}
               showThreadOptions={showThreadOptions}
               setShowThreadOptions={setShowThreadOptions}
-              refetchProfileThreads={refetch}
+              refetchProfileThreads={() =>
+                listUserQuery({ variables: { offset: 0, limit: 3 } })
+              }
             />
           );
         })}

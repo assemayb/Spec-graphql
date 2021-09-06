@@ -43,15 +43,14 @@ export const QuestionForm: React.FC<QuestionFormProps> = ({
   const [specilization, setSpecilization] = useState("");
 
   const topics = useQuery(topicsQuery);
-  const [topicsArr, setTopicsArr] = useState([]);    
+  const [topicsArr, setTopicsArr] = useState([]);
   useEffect(() => {
     setTopicsArr(topics.data && topics.data.listTopics);
   }, [topics.data]);
 
-
   const [createQuestion] = useCreateThreadMutation();
   const [userLogginData, { data }] = useIsUserLoggedInLazyQuery();
-  
+
   useEffect(() => {
     let isMounted = true;
     if (isMounted) {
@@ -70,22 +69,13 @@ export const QuestionForm: React.FC<QuestionFormProps> = ({
           question,
           spec: specilization,
         },
-        // update: () => {
-        //   setTriggerReload(prevVal => !prevVal)
-        // }
       });
+      setShowModal!(false);
 
-      if (refetchProfileThreads !== undefined) {
-        await refetchProfileThreads();
-        setTimeout(() => {
-          setShowModal!(false);
-          const x = document.querySelector("#footer")?.scrollHeight;
-          console.log(x);
-        }, 200);
-      }
+      if (refetchProfileThreads !== undefined) await refetchProfileThreads();
       refetch !== undefined && (await refetch());
       setQuestion("");
-    } catch (error) {
+    } catch (error: any) {
       console.log(error.messge);
     }
   };

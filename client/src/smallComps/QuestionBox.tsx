@@ -25,9 +25,10 @@ interface QuestionBoxProps {
   fromSingleTopicPage?: boolean;
   fromUserPage?: boolean;
   setShowThreadOptions?: React.Dispatch<React.SetStateAction<boolean>>;
-  refetchProfileThreads?: () => Promise<
-    ApolloQueryResult<ListUserThreadsQuery>
-  >;
+  // refetchProfileThreads?: () => Promise<
+  //   ApolloQueryResult<ListUserThreadsQuery>
+  // >;
+  refetchProfileThreads?: () => any;
 }
 export const QuestionBox: React.FC<QuestionBoxProps> = ({
   threadId,
@@ -50,9 +51,11 @@ export const QuestionBox: React.FC<QuestionBoxProps> = ({
     await deleteReq({
       variables: {
         id: threadId!,
-      }
+      },
+      update: async () => {
+        await refetchProfileThreads!();
+      },
     });
-    await refetchProfileThreads!();
   };
 
   const goToThread = () => {
