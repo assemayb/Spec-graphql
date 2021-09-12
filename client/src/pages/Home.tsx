@@ -25,7 +25,7 @@ export const Home: React.FC<RouteComponentProps> = ({ history, location }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [ListThreadsQuery, { data, loading, refetch }] =
     useListThreadsLazyQuery({
-      fetchPolicy: "cache-and-network",
+      fetchPolicy: "network-only",
       notifyOnNetworkStatusChange: true,
       variables: {
         sortBy: threadsHeader.split(" ")[1],
@@ -91,7 +91,6 @@ export const Home: React.FC<RouteComponentProps> = ({ history, location }) => {
   return (
     <>
       <HeaderComp header={threadsHeader} />
-
       <Flex marginTop="1rem" minH="80vh">
         <Flex
           flexDirection="column"
@@ -158,7 +157,7 @@ export const Home: React.FC<RouteComponentProps> = ({ history, location }) => {
             </Box>
           </Box>
 
-          <QuestionForm refetch={refetch} />
+          <QuestionForm refetchFromHome={refetch} />
         </Flex>
       </Flex>
     </>

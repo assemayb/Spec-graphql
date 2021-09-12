@@ -6,11 +6,10 @@ import { Box, Button, Flex, useDisclosure } from "@chakra-ui/react";
 import { QuestionBox } from "../smallComps/QuestionBox";
 import { FastBigSpinner } from "../smallComps/Spinners";
 import {
-  ListUserThreadsDocument,
-  ListUserThreadsQuery,
   useGetUserThreadsNumberLazyQuery,
   useListUserThreadsLazyQuery,
 } from "../generated/graphql";
+
 import { ProfileModal } from "../components/ProfileModal";
 import { HeaderComp } from "../smallComps/HeaderComp";
 import { SettingsSection } from "../smallComps/SettingsSections";
@@ -48,9 +47,8 @@ export const SideBtn: React.FC<SideBtnProps> = ({ onClick, text }) => {
   );
 };
 
-const QuerySize = 3;
-
 export const Profile = () => {
+  const QuerySize = React.useRef(3);
   const [displayedSection, setDisplpayedSection] = useState("Dashboard");
   useEffect(() => setSectionHeader(displayedSection), [displayedSection]);
 
@@ -58,22 +56,25 @@ export const Profile = () => {
   const [showModal, setShowModal] = useState(false);
   const [showThreadOptions, setShowThreadOptions] = useState(false);
   const [hideLoadMoreBtn, setHideLoadMoreBtn] = useState(false);
+  const [triggerReload, setTriggerReload] = useState(false);
 
   const [getUserThreadsNum, userThreadsNumOptions] =
     useGetUserThreadsNumberLazyQuery({
       fetchPolicy: "network-only",
     });
 
-  const [listUserQuery, { data, loading, fetchMore, refetch, client }] =
+  const [listUserQuery, { data, loading, fetchMore, refetch }] =
     useListUserThreadsLazyQuery({
       fetchPolicy: "network-only",
       variables: {
         offset: 0,
-        limit: QuerySize,
+        limit: QuerySize.current,
       },
     });
 
   useEffect(() => {
+    console.log("main useEffect");
+    
     let isMounted = true;
     if (isMounted) {
       getUserThreadsNum();
@@ -83,18 +84,25 @@ export const Profile = () => {
       isMounted = false;
     };
   }, []);
+  
 
   useEffect(() => {
-    if (data && userThreadsNumOptions.data) {
+    if (data || userThreadsNumOptions.data) {
       const fetchedThreadsCount = data?.listUserThreads?.length;
       const userThreadsNum = userThreadsNumOptions.data?.getUserThreadsNumber;
-      console.log(fetchedThreadsCount);
-      console.log(userThreadsNum);
       if (fetchedThreadsCount === userThreadsNum) {
         setHideLoadMoreBtn(true);
       }
     }
-  }, [data, userThreadsNumOptions.data]);
+  }, [data, userThreadsNumOptions.data, triggerReload]);
+
+  useEffect(() => {
+    const handleTriggerEvent = () => {
+      getUserThreadsNum();
+      listUserQuery();
+    };
+    handleTriggerEvent();
+  }, [triggerReload, setTriggerReload]);
 
   // if the "profile" path was typed in the address
   useLayoutEffect(() => {
@@ -111,7 +119,7 @@ export const Profile = () => {
     fetchMore!({
       variables: {
         offset: fetchedThreadsCount,
-        limit: QuerySize,
+        limit: QuerySize.current,
       },
     });
   };
@@ -132,9 +140,7 @@ export const Profile = () => {
               specializtion={thread.specialization}
               showThreadOptions={showThreadOptions}
               setShowThreadOptions={setShowThreadOptions}
-              refetchProfileThreads={() =>
-                listUserQuery({ variables: { offset: 0, limit: 3 } })
-              }
+              setTriggerReloadInProfilePage={setTriggerReload}
             />
           );
         })}

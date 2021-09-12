@@ -15,7 +15,7 @@ interface NotificationBtnProps {}
 export const NotificationBtn: React.FC<NotificationBtnProps> = () => {
   const toast = useToast();
   const [meQuery, meQueryOptions] = useMeLazyQuery({
-    fetchPolicy: "network-only",
+    fetchPolicy: "cache-and-network",
   });
   const { data } = useOnReplyCreatedSubscription({
     fetchPolicy: "network-only",
@@ -58,7 +58,7 @@ export const NotificationBtn: React.FC<NotificationBtnProps> = () => {
         });
       }
     }
-  }, [data?.onReplyCreated.id]);
+  }, [data]);
   
 
   const router = useHistory();

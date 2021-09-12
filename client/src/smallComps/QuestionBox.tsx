@@ -7,6 +7,7 @@ import { BiRightArrowAlt } from "react-icons/bi";
 import {
   ListUserThreadsQuery,
   useDeleteThreadMutation,
+  useListUserThreadsLazyQuery,
 } from "../generated/graphql";
 import { ApolloQueryResult } from "@apollo/client";
 import { InteractionsSection } from "../smallComps/InteractionsSection";
@@ -29,6 +30,7 @@ interface QuestionBoxProps {
   //   ApolloQueryResult<ListUserThreadsQuery>
   // >;
   refetchProfileThreads?: () => any;
+  setTriggerReloadInProfilePage?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 export const QuestionBox: React.FC<QuestionBoxProps> = ({
   threadId,
@@ -43,19 +45,27 @@ export const QuestionBox: React.FC<QuestionBoxProps> = ({
   fromUserPage,
   setShowThreadOptions,
   refetchProfileThreads,
+  setTriggerReloadInProfilePage,
 }) => {
   const router = useHistory();
   const [deleteReq] = useDeleteThreadMutation();
+  const [listUserQuery, listUserQueryOptions] = useListUserThreadsLazyQuery({
+    fetchPolicy: "network-only",
+    variables: {
+      offset: 0,
+      limit: 3
+    }
+  });
 
   const deleteThread = async () => {
     await deleteReq({
       variables: {
         id: threadId!,
       },
-      update: async () => {
-        await refetchProfileThreads!();
-      },
     });
+    listUserQuery();
+    console.log("previous", listUserQueryOptions.previousData);
+    console.log("data", listUserQueryOptions.data);
   };
 
   const goToThread = () => {

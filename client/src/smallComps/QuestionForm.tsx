@@ -4,6 +4,7 @@ import {
   ListThreadsQuery,
   ListUserThreadsQuery,
   useCreateThreadMutation,
+  useGetUserThreadsNumberLazyQuery,
   useIsUserLoggedInLazyQuery,
   useMeLazyQuery,
 } from "../generated/graphql";
@@ -24,9 +25,8 @@ import { topicsQuery } from "../pages/Topics";
 import { useGetUserThreads } from "../hooks/useGetUserThreads";
 
 interface QuestionFormProps {
-  refetch?: () => Promise<
-    ApolloQueryResult<ListThreadsQuery>
-  > /* from home page*/;
+  // refetchFromHome?: () => Promise<ApolloQueryResult<ListThreadsQuery>>;
+  refetchFromHome?: () => any
   clickedFromProfilePage?: boolean /* if this prop is passed from profile page */;
   setShowModal?: React.Dispatch<React.SetStateAction<boolean>>;
   refetchProfileThreads?: () => Promise<
@@ -34,27 +34,41 @@ interface QuestionFormProps {
   >;
 }
 export const QuestionForm: React.FC<QuestionFormProps> = ({
-  refetch,
+  refetchFromHome,
   clickedFromProfilePage,
   setShowModal,
   refetchProfileThreads,
 }) => {
+
   const [question, setQuestion] = useState("");
   const [specilization, setSpecilization] = useState("");
-
   const topics = useQuery(topicsQuery);
   const [topicsArr, setTopicsArr] = useState([]);
+
+  const [getUserThreadsNum, userThreadsNumOptions] =
+  useGetUserThreadsNumberLazyQuery({
+    fetchPolicy: "network-only",
+  });
+
+
   useEffect(() => {
     setTopicsArr(topics.data && topics.data.listTopics);
   }, [topics.data]);
 
-  const [createQuestion] = useCreateThreadMutation();
+  const [createQuestion] = useCreateThreadMutation({
+    onCompleted: () => {
+      const userThreadsNums = userThreadsNumOptions.data?.getUserThreadsNumber
+      console.log("number  ====> ", userThreadsNums);
+      
+    }
+  });
   const [userLogginData, { data }] = useIsUserLoggedInLazyQuery();
 
   useEffect(() => {
     let isMounted = true;
     if (isMounted) {
       userLogginData();
+      getUserThreadsNum();
     }
     return () => {
       isMounted = false;
@@ -71,9 +85,14 @@ export const QuestionForm: React.FC<QuestionFormProps> = ({
         },
       });
       setShowModal!(false);
-
-      if (refetchProfileThreads !== undefined) await refetchProfileThreads();
-      refetch !== undefined && (await refetch());
+      if (refetchProfileThreads !== undefined) {
+        console.log("this is from the profile page");
+        await refetchProfileThreads();
+        getUserThreadsNum()
+      }
+      if (refetchFromHome !== undefined) {
+        await refetchFromHome();
+      }
       setQuestion("");
     } catch (error: any) {
       console.log(error.messge);

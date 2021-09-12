@@ -47,7 +47,7 @@ export class ThreadResolver {
       await pubSub.publish(thread_channel, JSONThread);
 
       return true;
-    } catch (error) {
+    } catch (error: any) {
       console.log(error.message);
       return false;
     }
@@ -95,7 +95,7 @@ export class ThreadResolver {
       thread?.setDataValue("replies", sortedReplies!);
 
       return thread;
-    } catch (error) {
+    } catch (error: any) {
       console.error(error.message);
       return null;
     }
@@ -124,7 +124,7 @@ export class ThreadResolver {
           },
         });
         return true;
-      } catch (err) {
+      } catch (err: any) {
         console.error(err.message);
         return false;
       }
@@ -144,7 +144,7 @@ export class ThreadResolver {
       });
 
       return threadsNum;
-    } catch (error) {
+    } catch (error: any) {
       console.error(error.message);
       return null;
     }
@@ -154,10 +154,11 @@ export class ThreadResolver {
   @UseMiddleware(isAuthenticated)
   async listUserThreads(
     @Ctx() { req, payload }: MyContext,
-    @Arg("offset", () => Int) offset: number,
+    @Arg("offset", () => Int ,{ nullable: true }) offset: number,
     @Arg("limit", () => Int, { nullable: true }) limit: number
   ) {
     const loggedUserId = payload?.userId as number;
+    
     try {
       const userThreads = await Thread.findAll({
         where: {
@@ -166,9 +167,13 @@ export class ThreadResolver {
         offset,
         limit,
       });
+
+      console.log(offset, limit);
+      console.log("length of queried threads: ", userThreads.length);
+
       return userThreads;
-      
-    } catch (error) {
+
+    } catch (error: any) {
       throw new Error(error.message);
     }
   }
@@ -182,7 +187,7 @@ export class ThreadResolver {
         where: { threadCreator: usernameID },
       });
       return userThreads;
-    } catch (error) {
+    } catch (error: any) {
       throw new Error(error.message);
     }
   }
@@ -194,8 +199,6 @@ export class ThreadResolver {
     @Arg("limit", () => Int) limit: number
   ) {
     let threads;
-    console.log(limit, offset);
-
     try {
       if (sortBy == "recent") {
         threads = await Thread.findAll({
@@ -228,7 +231,7 @@ export class ThreadResolver {
         idx += 1;
       }
       return threads;
-    } catch (error) {
+    } catch (error: any) {
       console.error(error.message);
       return null;
     }
@@ -239,7 +242,7 @@ export class ThreadResolver {
     try {
       const threadsNum = await Thread.count();
       return threadsNum;
-    } catch (error) {
+    } catch (error: any) {
       console.error(error.message);
       return null;
     }
@@ -252,7 +255,7 @@ export class ThreadResolver {
       let imported = await import("../utils/constnats");
       let topics = imported.specs;
       return topics;
-    } catch (error) {
+    } catch (error: any) {
       throw new Error(error.message);
     }
   }
@@ -286,7 +289,7 @@ export class ThreadResolver {
         topicsThreads[idx] = thread;
         idx += 1;
       }
-    } catch (error) {
+    } catch (error: any) {
       throw new Error(error.message);
     }
     return topicsThreads;
@@ -303,7 +306,7 @@ export class ThreadResolver {
         },
       });
       return threadsNum;
-    } catch (error) {
+    } catch (error: any) {
       console.error(error.message);
       return null;
     }
@@ -316,13 +319,14 @@ export class ThreadResolver {
     @Ctx() { payload }: MyContext
   ) {
     try {
-      await Thread.destroy({
+      let thread = await Thread.findByPk(id)
+      thread !== null && await Thread.destroy({
         where: {
           id,
         },
       });
       return true;
-    } catch (error) {
+    } catch (error: any) {
       console.log(error.message);
       return false;
     }
