@@ -20,17 +20,16 @@ export const usePagination = ({
   totalCount,
   siblingCount = 1,
 }: usePaginationProps) => {
-
+  
   function returnPaginationShape() {
     const totalPageCount = Math.ceil(totalCount / pageSize);
     const totalPageNumbers = siblingCount + 5;
 
-    // type StringNumArray = Array<string>|Array<number>|Array<string|number> 
-    let outputRange: any;
+    // let outputRange: any;
 
     if (totalPageNumbers >= totalPageCount) {
-      // return range(1, totalPageCount);
-      outputRange = range(1, totalPageCount);
+      return range(1, totalPageCount);
+      // outputRange = range(1, totalPageCount);
     }
 
     const leftSiblingIndex = Math.max(currentPage - siblingCount, 1);
@@ -49,8 +48,8 @@ export const usePagination = ({
       let leftItemCount = 3 + 2 * siblingCount;
       let leftRange = range(1, leftItemCount);
 
-      // return [...leftRange, DOTS, totalPageCount];
-      outputRange =  [...leftRange, DOTS, totalPageCount];
+      return [...leftRange, DOTS, totalPageCount];
+      // outputRange =  [...leftRange, DOTS, totalPageCount];
     }
 
     if (shouldShowLeftDots && !shouldShowRightDots) {
@@ -60,18 +59,18 @@ export const usePagination = ({
         totalPageCount
       );
 
-      // return [firstPageIndex, DOTS, ...rightRange];
-      outputRange =  [firstPageIndex, DOTS, ...rightRange];
+      return [firstPageIndex, DOTS, ...rightRange];
+      // outputRange =  [firstPageIndex, DOTS, ...rightRange];
     }
 
     if (shouldShowLeftDots && shouldShowRightDots) {
       let middleRange = range(leftSiblingIndex, rightSiblingIndex);
 
-      // return [firstPageIndex, DOTS, ...middleRange, DOTS, lastPageIndex];
-      outputRange =  [firstPageIndex, DOTS, ...middleRange, DOTS, lastPageIndex];
+      return [firstPageIndex, DOTS, ...middleRange, DOTS, lastPageIndex];
+      // outputRange =  [firstPageIndex, DOTS, ...middleRange, DOTS, lastPageIndex];
     }
 
-    return outputRange
+    // return outputRange
   }
 
   const paginationRange = useMemo(returnPaginationShape, [

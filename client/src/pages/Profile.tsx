@@ -57,7 +57,6 @@ export const Profile = () => {
   const [showModal, setShowModal] = useState(false);
   const [showThreadOptions, setShowThreadOptions] = useState(false);
   const [hideLoadMoreBtn, setHideLoadMoreBtn] = useState(false);
-  const [triggerReload, setTriggerReload] = useState(false);
 
   const [getUserThreadsNum, userThreadsNumOptions] =
     useGetUserThreadsNumberLazyQuery({
@@ -71,14 +70,10 @@ export const Profile = () => {
         offset: 0,
         limit: QuerySize.current,
       },
-      onCompleted: () => {
-        console.log("fetched");
-      },
+      onCompleted: () => {},
     });
 
   useEffect(() => {
-    console.log("main useEffect");
-
     let isMounted = true;
     if (isMounted) {
       getUserThreadsNum();
@@ -90,10 +85,6 @@ export const Profile = () => {
   }, []);
 
   useEffect(() => {
-    listUserQuery();
-  }, [userThreadsNumOptions.data?.getUserThreadsNumber]);
-
-  useEffect(() => {
     if (data) {
       const fetchedThreadsCount = data?.listUserThreads?.length;
       const userThreadsNum = userThreadsNumOptions.data?.getUserThreadsNumber;
@@ -102,7 +93,6 @@ export const Profile = () => {
       }
     }
   }, [data?.listUserThreads]);
-
 
   // if the "profile" path was typed in the address
   useLayoutEffect(() => {
@@ -140,7 +130,6 @@ export const Profile = () => {
               specializtion={thread.specialization}
               showThreadOptions={showThreadOptions}
               setShowThreadOptions={setShowThreadOptions}
-              setTriggerReloadInProfilePage={setTriggerReload}
             />
           );
         })}

@@ -6,7 +6,7 @@ export const Footer = () => {
       id="footer"
       justifyContent="center"
       alignItems="center"
-      p="1rem"
+      p="2rem"
       marginTop="1rem"
       bgColor="green.300"
       fontSize="medium"
@@ -14,7 +14,7 @@ export const Footer = () => {
       color="white"
       width="100%"
     >
-      This is the footer
+      {" "}
     </Flex>
   );
 };
