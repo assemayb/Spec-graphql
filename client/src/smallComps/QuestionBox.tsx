@@ -49,22 +49,13 @@ export const QuestionBox: React.FC<QuestionBoxProps> = ({
 }) => {
   const router = useHistory();
   const [deleteReq] = useDeleteThreadMutation();
-  const [listUserQuery, listUserQueryOptions] = useListUserThreadsLazyQuery({
-    fetchPolicy: "network-only",
-    variables: {
-      offset: 0,
-      limit: 3
-    }
-  });
-
   const deleteThread = async () => {
     await deleteReq({
       variables: {
         id: threadId!,
       },
     });
-    listUserQuery();
-    setTimeout(() => window.location.reload(), 400);
+    setTimeout(() => window.location.reload(), 250);
   };
 
   const goToThread = () => {

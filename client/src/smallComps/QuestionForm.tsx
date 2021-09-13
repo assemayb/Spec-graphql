@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from "react";
 import {
+  ListThreadsQuery,
   ListUserThreadsQuery,
   useCreateThreadMutation,
   useGetUserThreadsNumberLazyQuery,
@@ -23,13 +24,10 @@ import { topicsQuery } from "../pages/Topics";
 import { useGetUserThreads } from "../hooks/useGetUserThreads";
 
 interface QuestionFormProps {
-  // refetchFromHome?: () => Promise<ApolloQueryResult<ListThreadsQuery>>;
-  refetchFromHome?: () => any;
-  clickedFromProfilePage?: boolean /* if this prop is passed from profile page */;
   setShowModal?: React.Dispatch<React.SetStateAction<boolean>>;
-  refetchProfileThreads?: () => Promise<
-    ApolloQueryResult<ListUserThreadsQuery>
-  >;
+  clickedFromProfilePage?: boolean /* if this prop is passed from profile page */;
+  refetchFromHome?: () => Promise<ApolloQueryResult<ListThreadsQuery>>;
+  refetchProfileThreads?: () => Promise<ApolloQueryResult<ListUserThreadsQuery>>;
 }
 export const QuestionForm: React.FC<QuestionFormProps> = ({
   refetchFromHome,
@@ -46,12 +44,7 @@ export const QuestionForm: React.FC<QuestionFormProps> = ({
     setTopicsArr(topics.data && topics.data.listTopics);
   }, [topics.data]);
 
-  const [createQuestion] = useCreateThreadMutation({
-    // onCompleted: () => {
-    //   const userThreadsNums = userThreadsNumOptions.data?.getUserThreadsNumber
-    //   console.log("number  ====> ", userThreadsNums);
-    // }
-  });
+  const [createQuestion] = useCreateThreadMutation({});
   const [userLogginData, { data }] = useIsUserLoggedInLazyQuery();
 
   useEffect(() => {
@@ -73,14 +66,18 @@ export const QuestionForm: React.FC<QuestionFormProps> = ({
           spec: specilization,
         },
       });
-      setShowModal!(false);
-      if (refetchProfileThreads !== undefined) {
-        setTimeout(() => window.location.reload(), 400);
+
+      if (refetchProfileThreads) {
+        setShowModal!(false);
+        // refetchProfileThreads()
+        setTimeout(() => window.location.reload(), 400);  
       }
-      if (refetchFromHome !== undefined) {
-        await refetchFromHome();
+      
+      else if (refetchFromHome) {
+        refetchFromHome();
+        setQuestion("");
       }
-      setQuestion("");
+
     } catch (error: any) {
       console.log(error.messge);
     }

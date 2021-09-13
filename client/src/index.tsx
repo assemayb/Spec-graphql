@@ -4,7 +4,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import reportWebVitals from "./reportWebVitals";
 import { ChakraProvider } from "@chakra-ui/react";
-// import { theme } from "./theme";
+import { theme } from "./theme";
 import {
   ApolloProvider,
   ApolloClient,
@@ -162,7 +162,7 @@ export const client = new ApolloClient({
 
 ReactDOM.render(
   <React.StrictMode>
-    <ChakraProvider /**theme={theme} */>
+    <ChakraProvider theme={theme}>
       <ApolloProvider client={client}>
         <App />
       </ApolloProvider>

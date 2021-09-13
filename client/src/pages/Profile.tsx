@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState, useLayoutEffect } from "react";
 import { Box, Button, Flex, useDisclosure } from "@chakra-ui/react";
-import { useLocation } from "react-router";
+
 // import InfiniteScroll from 'react-infinite-scroller';
 
 import { QuestionBox } from "../smallComps/QuestionBox";
@@ -94,8 +94,6 @@ export const Profile = () => {
   }, [userThreadsNumOptions.data?.getUserThreadsNumber]);
 
   useEffect(() => {
-    console.log("checking the number after additon");
-
     if (data) {
       const fetchedThreadsCount = data?.listUserThreads?.length;
       const userThreadsNum = userThreadsNumOptions.data?.getUserThreadsNumber;
@@ -103,15 +101,8 @@ export const Profile = () => {
         setHideLoadMoreBtn(true);
       }
     }
-  }, [data?.listUserThreads, listUserQuery, triggerReload]);
+  }, [data?.listUserThreads]);
 
-  useEffect(() => {
-    const handleTriggerEvent = () => {
-      getUserThreadsNum();
-      listUserQuery();
-    };
-    handleTriggerEvent();
-  }, [triggerReload, setTriggerReload]);
 
   // if the "profile" path was typed in the address
   useLayoutEffect(() => {

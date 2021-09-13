@@ -14,7 +14,6 @@ export const HeaderComp: React.FC<HeaderCompProps> = ({ header }) => {
             }}
             marginTop={["8px", "8px", "1rem", "1rem"]}
             fontSize={["15px", "20px", "30px", "30px"]}
-            fontFamily="fantasy"
             fontWeight="bold"
             color="gray.500"
             textShadow="lg"
