@@ -36,7 +36,6 @@ export const NotificationBtn: React.FC<NotificationBtnProps> = () => {
 
   useEffect(() => {
     if (data?.onReplyCreated && userThreads.threads.length !== 0) {
-      console.log("A reply has been added");
       const currentUserThreadsIDs =
         userThreads &&
         userThreads?.threads.map((thread: { id: number }) => thread.id);
@@ -48,9 +47,11 @@ export const NotificationBtn: React.FC<NotificationBtnProps> = () => {
         currentUserThreadsIDs?.includes(addedReplyThreadID);
 
       if (doesAddedReplyBelongToUserThreads && anotherUserReplied) {
+        const spec = data?.onReplyCreated.replySpecialist
+        const text = data?.onReplyCreated.text
         toast({
-          title: "some replied to your thread",
-          description: data?.onReplyCreated.text,
+          title: `${spec} replied to your thread`,
+          description: text,
           status: "success",
           duration: 6000,
           isClosable: true,
