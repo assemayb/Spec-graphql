@@ -1,12 +1,10 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from "react";
 import {
-  ListThreadsQuery,
   ListUserThreadsQuery,
   useCreateThreadMutation,
   useGetUserThreadsNumberLazyQuery,
   useIsUserLoggedInLazyQuery,
-  useMeLazyQuery,
 } from "../generated/graphql";
 
 import {
@@ -26,7 +24,7 @@ import { useGetUserThreads } from "../hooks/useGetUserThreads";
 
 interface QuestionFormProps {
   // refetchFromHome?: () => Promise<ApolloQueryResult<ListThreadsQuery>>;
-  refetchFromHome?: () => any
+  refetchFromHome?: () => any;
   clickedFromProfilePage?: boolean /* if this prop is passed from profile page */;
   setShowModal?: React.Dispatch<React.SetStateAction<boolean>>;
   refetchProfileThreads?: () => Promise<
@@ -39,28 +37,20 @@ export const QuestionForm: React.FC<QuestionFormProps> = ({
   setShowModal,
   refetchProfileThreads,
 }) => {
-
   const [question, setQuestion] = useState("");
   const [specilization, setSpecilization] = useState("");
   const topics = useQuery(topicsQuery);
   const [topicsArr, setTopicsArr] = useState([]);
-
-  const [getUserThreadsNum, userThreadsNumOptions] =
-  useGetUserThreadsNumberLazyQuery({
-    fetchPolicy: "network-only",
-  });
-
 
   useEffect(() => {
     setTopicsArr(topics.data && topics.data.listTopics);
   }, [topics.data]);
 
   const [createQuestion] = useCreateThreadMutation({
-    onCompleted: () => {
-      const userThreadsNums = userThreadsNumOptions.data?.getUserThreadsNumber
-      console.log("number  ====> ", userThreadsNums);
-      
-    }
+    // onCompleted: () => {
+    //   const userThreadsNums = userThreadsNumOptions.data?.getUserThreadsNumber
+    //   console.log("number  ====> ", userThreadsNums);
+    // }
   });
   const [userLogginData, { data }] = useIsUserLoggedInLazyQuery();
 
@@ -68,7 +58,6 @@ export const QuestionForm: React.FC<QuestionFormProps> = ({
     let isMounted = true;
     if (isMounted) {
       userLogginData();
-      getUserThreadsNum();
     }
     return () => {
       isMounted = false;
@@ -86,9 +75,7 @@ export const QuestionForm: React.FC<QuestionFormProps> = ({
       });
       setShowModal!(false);
       if (refetchProfileThreads !== undefined) {
-        console.log("this is from the profile page");
-        await refetchProfileThreads();
-        getUserThreadsNum()
+        setTimeout(() => window.location.reload(), 400);
       }
       if (refetchFromHome !== undefined) {
         await refetchFromHome();

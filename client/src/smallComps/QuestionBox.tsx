@@ -64,8 +64,7 @@ export const QuestionBox: React.FC<QuestionBoxProps> = ({
       },
     });
     listUserQuery();
-    console.log("previous", listUserQueryOptions.previousData);
-    console.log("data", listUserQueryOptions.data);
+    setTimeout(() => window.location.reload(), 400);
   };
 
   const goToThread = () => {

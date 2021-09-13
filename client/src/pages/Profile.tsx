@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState, useLayoutEffect } from "react";
 import { Box, Button, Flex, useDisclosure } from "@chakra-ui/react";
+import { useLocation } from "react-router";
 // import InfiniteScroll from 'react-infinite-scroller';
 
 import { QuestionBox } from "../smallComps/QuestionBox";
@@ -70,11 +71,14 @@ export const Profile = () => {
         offset: 0,
         limit: QuerySize.current,
       },
+      onCompleted: () => {
+        console.log("fetched");
+      },
     });
 
   useEffect(() => {
     console.log("main useEffect");
-    
+
     let isMounted = true;
     if (isMounted) {
       getUserThreadsNum();
@@ -84,17 +88,22 @@ export const Profile = () => {
       isMounted = false;
     };
   }, []);
-  
 
   useEffect(() => {
-    if (data || userThreadsNumOptions.data) {
+    listUserQuery();
+  }, [userThreadsNumOptions.data?.getUserThreadsNumber]);
+
+  useEffect(() => {
+    console.log("checking the number after additon");
+
+    if (data) {
       const fetchedThreadsCount = data?.listUserThreads?.length;
       const userThreadsNum = userThreadsNumOptions.data?.getUserThreadsNumber;
       if (fetchedThreadsCount === userThreadsNum) {
         setHideLoadMoreBtn(true);
       }
     }
-  }, [data, userThreadsNumOptions.data, triggerReload]);
+  }, [data?.listUserThreads, listUserQuery, triggerReload]);
 
   useEffect(() => {
     const handleTriggerEvent = () => {

@@ -59,7 +59,6 @@ export const NotificationBtn: React.FC<NotificationBtnProps> = () => {
       }
     }
   }, [data]);
-  
 
   const router = useHistory();
   const goToNotificationsPage = () => {

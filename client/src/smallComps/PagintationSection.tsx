@@ -20,6 +20,8 @@ export const Pagination = (props: PagintationProps) => {
   });
 
   useLayoutEffect(() => {
+    console.log("pagination range : ", paginationRange);
+    
     const setterFunc = () => {
       if (window.innerWidth < 800) {
         setShowNumberedSection(false)
@@ -41,9 +43,9 @@ export const Pagination = (props: PagintationProps) => {
   })!;
 
   let firstPage = 1;
-  let lastPage = paginationRange[paginationRange.length - 1];
+  let lastPage = paginationRange &&  paginationRange[paginationRange.length - 1];
   
-  if (currentPage === 0 || paginationRange.length < 2) {
+  if (currentPage === 0 || (paginationRange && paginationRange.length < 2)) {
     // return <div></div>;
     return null;
   }
