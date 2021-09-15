@@ -22,6 +22,8 @@ import { ReplyType } from "./replyResolverTypes";
 import { User } from "../models/User";
 import { Thread } from "../models/Thread";
 import { not } from "sequelize/types/lib/operators";
+import { ReplyNotifType } from "./notificationsTypes";
+
 
 const reply_channel = "replies_channel";
 
@@ -42,22 +44,29 @@ export class ReplyResolver {
       const { text, replyThread } = options;
       let reply = await Reply.create({
         text,
-        replySpecialist: replySpecialistID as number,
+        replySpecialist: replySpecialistID,
         replyThread,
       });
-      reply.setDataValue("replySpecialist", replySpecialistUsername!);
 
-      let JSONReply = reply.toJSON();
+      reply.setDataValue("replySpecialist", replySpecialistUsername!);
+      let JSONReply: any = reply.toJSON();
+      JSONReply.replySpecialistId = replySpecialistID as number
+
+      // publish the reply instance to the channel
       await pubSub.publish(reply_channel, JSONReply);
 
-      // add to notifs table
+      console.log("the reply in JSON from: ", JSONReply);
+      
 
+      // add to notifs table
       const threadData = await Thread.findByPk(replyThread);
-      const threadCreatorId = threadData?.getDataValue("threadCreator");
-      await Notification.create({
-        replyId: reply.getDataValue("id"),
-        userId: threadCreatorId,
-      });
+      const threadCreatorId = threadData && threadData?.getDataValue("threadCreator");
+
+      threadCreatorId &&
+        (await Notification.create({
+          replyId: reply.getDataValue("id"),
+          userId: threadCreatorId,
+        }));
 
       return true;
     } catch (error: any) {
@@ -66,14 +75,16 @@ export class ReplyResolver {
     }
   }
 
-  @Subscription(() => ReplyType, { topics: reply_channel })
+  @Subscription(() => ReplyNotifType, { topics: reply_channel })
   async onReplyCreated(
-    @Root() { id, replySpecialist, replyThread, text, upvotes }: ReplyType
+    @Root() { id, replySpecialist, replyThread, text, upvotes, replySpecialistId }: ReplyNotifType
   ) {
     try {
-      console.log({ id, replySpecialist, replyThread, text, upvotes });
 
-      return { id, replySpecialist, replyThread, text, upvotes };
+      console.log("username: ", replySpecialist);
+
+
+      return { id, replySpecialist,replySpecialistId,  replyThread, text, upvotes };
     } catch (error) {
       console.log(error);
     }

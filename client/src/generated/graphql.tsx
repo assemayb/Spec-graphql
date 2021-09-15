@@ -33,6 +33,8 @@ export type Query = {
   getTopicThreadsNum: Scalars['Int'];
   listThreadReplies?: Maybe<Array<ReplyType>>;
   listAllReplies?: Maybe<Array<ReplyType>>;
+  getNotifsCount: Scalars['Int'];
+  listUserNotifs: Array<NotificationType>;
 };
 
 
@@ -104,6 +106,14 @@ export type ReplyType = {
   text: Scalars['String'];
   replyThread: Scalars['Int'];
   replySpecialist?: Maybe<Scalars['Int']>;
+};
+
+export type NotificationType = {
+  __typename?: 'NotificationType';
+  id: Scalars['Int'];
+  opened: Scalars['Boolean'];
+  userId: Scalars['Int'];
+  replyId?: Maybe<Scalars['Int']>;
 };
 
 export type Mutation = {
@@ -205,7 +215,17 @@ export type ReplyCreateType = {
 export type Subscription = {
   __typename?: 'Subscription';
   threadCreated: ThreadType;
-  onReplyCreated: ReplyType;
+  onReplyCreated: ReplyNotifType;
+};
+
+export type ReplyNotifType = {
+  __typename?: 'ReplyNotifType';
+  id: Scalars['Int'];
+  upvotes: Scalars['Int'];
+  text: Scalars['String'];
+  replyThread: Scalars['Int'];
+  replySpecialist?: Maybe<Scalars['String']>;
+  replySpecialistId?: Maybe<Scalars['Int']>;
 };
 
 export type AddReplyMutationVariables = Exact<{
@@ -409,8 +429,8 @@ export type OnReplyCreatedSubscriptionVariables = Exact<{ [key: string]: never; 
 export type OnReplyCreatedSubscription = (
   { __typename?: 'Subscription' }
   & { onReplyCreated: (
-    { __typename?: 'ReplyType' }
-    & Pick<ReplyType, 'id' | 'text' | 'replyThread' | 'replySpecialist' | 'upvotes'>
+    { __typename?: 'ReplyNotifType' }
+    & Pick<ReplyNotifType, 'id' | 'text' | 'replyThread' | 'replySpecialist' | 'replySpecialistId' | 'upvotes'>
   ) }
 );
 
@@ -1026,6 +1046,7 @@ export const OnReplyCreatedDocument = gql`
     text
     replyThread
     replySpecialist
+    replySpecialistId
     upvotes
   }
 }

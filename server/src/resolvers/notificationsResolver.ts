@@ -27,7 +27,7 @@ import { NotificationType } from "./notificationsTypes";
 @Resolver()
 export class NotificationResolver {
   // get user notifications count
-  @Query(() => Number)
+  @Query(() => Int)
   @UseMiddleware(isAuthenticated)
   async getNotifsCount(@Ctx() { payload }: MyContext) {
     try {
@@ -38,7 +38,7 @@ export class NotificationResolver {
         },
       });
       return notifsCount;
-    } catch (error) {
+    } catch (error: any) {
       console.log(error.message);
     }
   }
@@ -53,8 +53,10 @@ export class NotificationResolver {
           userId: payload?.userId,
         },
       });
+      console.log(notifs);
+      
       return notifs;
-    } catch (error) {
+    } catch (error: any) {
       console.log(error.message);
     }
   }

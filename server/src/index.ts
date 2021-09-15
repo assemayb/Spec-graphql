@@ -12,6 +12,7 @@ import { HelloResolver } from "./resolvers/helloResolver";
 import { UserResolver } from "./resolvers/userResolver";
 import { ThreadResolver } from "./resolvers/threadResolver";
 import { ReplyResolver } from "./resolvers/replyResolver";
+import { NotificationResolver } from "./resolvers/notificationsResolver";
 
 import { getCurrentUserThreads } from "./utils/restEndpoints/getCurrentUserThreads";
 import { sendRefreshTokenWhenAppReloads } from "./utils/restEndpoints/sendRefreshTokenWhenRelods";
@@ -28,7 +29,7 @@ import { sendRefreshTokenWhenAppReloads } from "./utils/restEndpoints/sendRefres
   app.use(cookieParser());
   app.use(morgan("dev"));
   const corsOptions = {
-    origin: "http://localhost:3000",
+    origin: ["http://localhost:3000", "http://localhost:5000"],
     credentials: true,
   };
   app.use(cors(corsOptions));
@@ -37,7 +38,7 @@ import { sendRefreshTokenWhenAppReloads } from "./utils/restEndpoints/sendRefres
     sendRefreshTokenWhenAppReloads(res, req)
   );
   app.get("/get_user_threads", (res, req) => getCurrentUserThreads(res, req));
-  
+
   // connection the database
   dbConfig
     .authenticate()
@@ -50,7 +51,13 @@ import { sendRefreshTokenWhenAppReloads } from "./utils/restEndpoints/sendRefres
   try {
     const apolloServer = new ApolloServer({
       schema: await buildSchema({
-        resolvers: [HelloResolver, UserResolver, ThreadResolver, ReplyResolver],
+        resolvers: [
+          HelloResolver,
+          UserResolver,
+          ThreadResolver,
+          ReplyResolver,
+          NotificationResolver,
+        ],
         validate: false,
       }),
       subscriptions: {

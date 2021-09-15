@@ -4,6 +4,7 @@ subscription onReplyCreated {
     text
     replyThread
     replySpecialist
+    replySpecialistId
     upvotes
   }
 }

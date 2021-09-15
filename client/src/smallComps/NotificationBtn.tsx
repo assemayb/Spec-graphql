@@ -15,7 +15,7 @@ interface NotificationBtnProps {}
 export const NotificationBtn: React.FC<NotificationBtnProps> = () => {
   const toast = useToast();
   const [meQuery, meQueryOptions] = useMeLazyQuery({
-    fetchPolicy: "cache-and-network",
+    fetchPolicy: "network-only",
   });
   const { data } = useOnReplyCreatedSubscription({
     fetchPolicy: "network-only",
@@ -36,13 +36,17 @@ export const NotificationBtn: React.FC<NotificationBtnProps> = () => {
 
   useEffect(() => {
     if (data?.onReplyCreated && userThreads.threads.length !== 0) {
-      const currentUserThreadsIDs =
-        userThreads &&
-        userThreads?.threads.map((thread: { id: number }) => thread.id);
+      console.log("data:  ", data?.onReplyCreated);
+      
+      const currentUserThreadsIDs =  userThreads?.threads.map((thread: { id: number }) => thread.id);
       const addedReplyThreadID: any = data?.onReplyCreated.replyThread;
-      const addedReplySpecID = data?.onReplyCreated.replySpecialist;
-      const anotherUserReplied =
-        meQueryOptions.data?.me?.id !== addedReplySpecID;
+
+      const addedReplySpecID = data?.onReplyCreated.replySpecialistId;
+      const anotherUserReplied = meQueryOptions.data?.me?.id !== addedReplySpecID;
+
+      console.log("reply spec id: ", addedReplySpecID);
+      console.log("logged user  id: ", meQueryOptions.data?.me?.id);
+    
       const doesAddedReplyBelongToUserThreads =
         currentUserThreadsIDs?.includes(addedReplyThreadID);
 

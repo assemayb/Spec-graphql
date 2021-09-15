@@ -23,7 +23,7 @@ export const NotifItem: React.FC<NotifItemProps> = ({ handleClick, val }) => {
         fontSize="medium"
         fontWeight="bold"
         color="#335344"
-        borderLeft="12px solid #718096"
+        borderLeft="12px solid #518096"
         borderLeftRadius="4px"
         _hover={{
           bgColor: "gray.200",
