@@ -164,14 +164,30 @@ export class ReplyResolver {
         userUpvoteId: userId,
         infoReplyId: replyId
       })
-
-      let x = await Reply.findOne({ where: { id } });
-      console.log(x?.getDataValue("upvotes"));
-
       return true;
     } catch (error: any) {
       console.log(error.message);
       return false;
     }
   }
+
+  @Query(() => [Int], { nullable: true })
+  async listUserLikedReplies(
+    @Ctx () {payload}: MyContext
+  ) {
+    try {
+      const userId = payload?.userId
+      let repliesInfo = await ReplyInfo.findAll({
+        where: {
+          userUpvoteId: userId
+        }
+      })
+      const repliesIds = repliesInfo.map((rep) => rep.getDataValue("infoReplyId"))
+      return repliesIds
+      
+    } catch (error: any) {
+      throw new Error(error.message);
+    }
+  }
+
 }
