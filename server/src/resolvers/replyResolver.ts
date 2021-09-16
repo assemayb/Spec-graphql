@@ -24,7 +24,6 @@ import { Thread } from "../models/Thread";
 import { not } from "sequelize/types/lib/operators";
 import { ReplyNotifType } from "./notificationsTypes";
 
-
 const reply_channel = "replies_channel";
 
 @Resolver()
@@ -50,17 +49,17 @@ export class ReplyResolver {
 
       reply.setDataValue("replySpecialist", replySpecialistUsername!);
       let JSONReply: any = reply.toJSON();
-      JSONReply.replySpecialistId = replySpecialistID as number
+      JSONReply.replySpecialistId = replySpecialistID as number;
 
       // publish the reply instance to the channel
       await pubSub.publish(reply_channel, JSONReply);
 
       console.log("the reply in JSON from: ", JSONReply);
-      
 
       // add to notifs table
       const threadData = await Thread.findByPk(replyThread);
-      const threadCreatorId = threadData && threadData?.getDataValue("threadCreator");
+      const threadCreatorId =
+        threadData && threadData?.getDataValue("threadCreator");
 
       threadCreatorId &&
         (await Notification.create({
@@ -77,14 +76,27 @@ export class ReplyResolver {
 
   @Subscription(() => ReplyNotifType, { topics: reply_channel })
   async onReplyCreated(
-    @Root() { id, replySpecialist, replyThread, text, upvotes, replySpecialistId }: ReplyNotifType
+    @Root()
+    {
+      id,
+      replySpecialist,
+      replyThread,
+      text,
+      upvotes,
+      replySpecialistId,
+    }: ReplyNotifType
   ) {
     try {
-
       console.log("username: ", replySpecialist);
 
-
-      return { id, replySpecialist,replySpecialistId,  replyThread, text, upvotes };
+      return {
+        id,
+        replySpecialist,
+        replySpecialistId,
+        replyThread,
+        text,
+        upvotes,
+      };
     } catch (error) {
       console.log(error);
     }

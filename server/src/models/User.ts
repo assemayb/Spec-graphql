@@ -11,6 +11,7 @@ export interface UserAttributes {
     email: string
     isSpec: boolean
     spec: string
+    // likedRepliesIds: number[]
 }
 
 export interface UserCreationAttributes extends Optional<UserAttributes, "email" | "id" | "spec"> { }
@@ -40,7 +41,15 @@ export const User: ModelDefined<UserAttributes, UserCreationAttributes> = dbConf
     spec: {
         type: DataTypes.STRING(200),
         allowNull: true,
-    }
+    },
+
+    // only works with PostgreSQL
+    // likedRepliesIds: {
+    //     type: DataTypes.ARRAY(DataTypes.INTEGER()),
+    //     defaultValue: [],
+    //     allowNull: true
+    // }
+
 }, {
     tableName: "users"
 })

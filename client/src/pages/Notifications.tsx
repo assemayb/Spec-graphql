@@ -32,7 +32,7 @@ export const NotifItem: React.FC<NotifItemProps> = ({ handleClick, val }) => {
         pos="relative"
       >
         {val}
-        <Button bgColor="blue.300" pos="absolute" right="4px" top="2px" onClick={handleClick}>delete</Button>
+        {/* <Button bgColor="blue.300" pos="absolute" right="4px" top="2px" onClick={handleClick}>delete</Button> */}
       </Flex>
       
     </>

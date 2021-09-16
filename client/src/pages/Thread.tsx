@@ -27,18 +27,20 @@ export const HeaderSection: React.FC<HeaderSectionProps> = ({ question }) => {
     <Heading
       p={{
         base: "0.5rem",
-        md: "1rem",
+        md: "1.2rem",
       }}
       textShadow="lg"
+      boxShadow="base"
       color="#718096"
       textTransform="uppercase"
       fontSize={{
         base: "20px",
         md: "25px",
       }}
+      bgColor="green.50"
     >
       {question}
-      <Divider marginTop="1rem" />
+      {/* <Divider marginTop="0.6rem" /> */}
     </Heading>
   );
 };
@@ -142,6 +144,7 @@ export const Thread: React.FC<ThreadProps> = () => {
               marginBottom="0.8rem"
               opacity="0.80"
               boxShadow="lg"
+              marginLeft="0.7rem"
               borderRadius="-10px"
               _hover={{
                 bg: "green.500",

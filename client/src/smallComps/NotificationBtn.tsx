@@ -36,30 +36,27 @@ export const NotificationBtn: React.FC<NotificationBtnProps> = () => {
 
   useEffect(() => {
     if (data?.onReplyCreated && userThreads.threads.length !== 0) {
-      console.log("data:  ", data?.onReplyCreated);
-      
-      const currentUserThreadsIDs =  userThreads?.threads.map((thread: { id: number }) => thread.id);
+      const currentUserThreadsIDs = userThreads?.threads.map(
+        (thread: { id: number }) => thread.id
+      );
       const addedReplyThreadID: any = data?.onReplyCreated.replyThread;
 
       const addedReplySpecID = data?.onReplyCreated.replySpecialistId;
-      const anotherUserReplied = meQueryOptions.data?.me?.id !== addedReplySpecID;
-
-      console.log("reply spec id: ", addedReplySpecID);
-      console.log("logged user  id: ", meQueryOptions.data?.me?.id);
-    
+      const anotherUserReplied =
+        meQueryOptions.data?.me?.id !== addedReplySpecID;
       const doesAddedReplyBelongToUserThreads =
         currentUserThreadsIDs?.includes(addedReplyThreadID);
 
       if (doesAddedReplyBelongToUserThreads && anotherUserReplied) {
-        const spec = data?.onReplyCreated.replySpecialist
-        const text = data?.onReplyCreated.text
+        const spec = data?.onReplyCreated.replySpecialist;
+        const text = data?.onReplyCreated.text;
         toast({
           title: `${spec} replied to your thread`,
           description: text,
           status: "success",
           duration: 6000,
           isClosable: true,
-          position: "top-left",
+          position: "top-right",
         });
       }
     }

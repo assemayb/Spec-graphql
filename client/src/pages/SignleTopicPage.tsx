@@ -50,6 +50,7 @@ export const SignleTopicPage: React.FC<SignleTopicPageProps> = () => {
     };
   }, []);
 
+
   useEffect(() => {
     return () => {
       setCurrentPage(1);
