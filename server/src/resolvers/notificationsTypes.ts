@@ -1,3 +1,5 @@
+
+
 import { ObjectType, InputType, Field, Int } from "type-graphql";
 import { ReplyType, reply as Reply } from "./replyResolverTypes";
 
@@ -14,6 +16,9 @@ export class NotificationType {
 
   @Field(() => Int, { nullable: true })
   replyId?: number;
+
+  @Field(() => String, { nullable: true })
+  text?: string;
 }
 
 @ObjectType()

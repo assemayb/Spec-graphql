@@ -53,9 +53,17 @@ export class NotificationResolver {
           userId: payload?.userId,
         },
       });
-      console.log(notifs);
+      let newNotifs = [];
+      for (let x of notifs) {
+        const notif: any = x.toJSON();
+        const reply = await Reply.findOne({ where: { id: notif.replyId } });
+        const replyText = reply && reply?.getDataValue("text");
+        notif.text = replyText;
+        newNotifs.push(notif);
+      }
+      console.log(newNotifs);
+      return newNotifs;
       
-      return notifs;
     } catch (error: any) {
       console.log(error.message);
     }

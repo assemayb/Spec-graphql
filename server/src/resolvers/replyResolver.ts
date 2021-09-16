@@ -185,6 +185,7 @@ export class ReplyResolver {
       })
       let repliesIds = repliesInfo.map((rep) => rep.getDataValue("infoReplyId"))
       repliesIds = Array.from(new Set(repliesIds))
+      
       console.log(repliesIds);
     
       return repliesIds
