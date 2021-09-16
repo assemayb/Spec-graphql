@@ -23,6 +23,7 @@ import { User } from "../models/User";
 import { Thread } from "../models/Thread";
 import { not } from "sequelize/types/lib/operators";
 import { ReplyNotifType } from "./notificationsTypes";
+import { ReplyInfo } from "../models/ReplyInfo";
 
 const reply_channel = "replies_channel";
 
@@ -147,14 +148,23 @@ export class ReplyResolver {
 
   @Mutation(() => Boolean, { nullable: false })
   @UseMiddleware(isAuthenticated)
-  async upvoteReply(@Arg("id", () => Int) id: number) {
+  async upvoteReply(
+    @Arg("id", () => Int) id: number,
+    @Ctx() {payload }: MyContext
+  ) {
     try {
       let reply = await Reply.findOne({ where: { id } });
       const replyUpvotes = reply?.getDataValue("upvotes");
-      console.log(replyUpvotes);
       await reply?.update({
         upvotes: replyUpvotes! + 1,
       });
+      const userId = payload?.userId
+      const replyId = reply?.getDataValue("id")
+      await ReplyInfo.create({
+        userUpvoteId: userId,
+        infoReplyId: replyId
+      })
+
       let x = await Reply.findOne({ where: { id } });
       console.log(x?.getDataValue("upvotes"));
 
