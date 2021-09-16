@@ -7,6 +7,7 @@ import { useParams } from "react-router-dom";
 import { HeaderComp } from "../smallComps/HeaderComp";
 import InfiniteScroll from "react-infinite-scroller";
 import { FastBigSpinner } from "../smallComps/Spinners";
+import { useListUserNotifsLazyQuery } from "../generated/graphql";
 
 interface NotifItemProps {
   handleClick: () => any;
@@ -34,7 +35,6 @@ export const NotifItem: React.FC<NotifItemProps> = ({ handleClick, val }) => {
         {val}
         {/* <Button bgColor="blue.300" pos="absolute" right="4px" top="2px" onClick={handleClick}>delete</Button> */}
       </Flex>
-      
     </>
   );
 };
@@ -47,6 +47,21 @@ const createDummieData = () => {
 interface NotificationsProps {}
 
 export const Notifications: React.FC<NotificationsProps> = () => {
+  const [listNotifs, listNotifsOptions] = useListUserNotifsLazyQuery({
+    fetchPolicy: "network-only",
+  });
+  useEffect(() => {
+    let isMounted = true;
+    if (isMounted) {
+      listNotifs();
+      console.log(listNotifsOptions.data?.listUserNotifs);
+    }
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  
   const params: { userId: string } = useParams();
   const [userId, setUserId] = useState("");
   const [notifs, setNotifs] = useState<string[]>([]);
@@ -69,11 +84,6 @@ export const Notifications: React.FC<NotificationsProps> = () => {
       offset > 0 && setOffset(end);
       end < 200 && setEnd((prevEnd) => prevEnd + 10);
     }, 1000);
-
-    // const hiddenDiv = document.getElementById("hidden")
-    // hiddenDiv!.scrollIntoView({
-    //   behavior: "smooth"
-    // });
   };
 
   return (

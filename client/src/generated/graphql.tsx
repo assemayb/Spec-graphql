@@ -33,6 +33,7 @@ export type Query = {
   getTopicThreadsNum: Scalars['Int'];
   listThreadReplies?: Maybe<Array<ReplyType>>;
   listAllReplies?: Maybe<Array<ReplyType>>;
+  listUserLikedReplies?: Maybe<Array<Scalars['Int']>>;
   getNotifsCount: Scalars['Int'];
   listUserNotifs: Array<NotificationType>;
 };
@@ -114,6 +115,7 @@ export type NotificationType = {
   opened: Scalars['Boolean'];
   userId: Scalars['Int'];
   replyId?: Maybe<Scalars['Int']>;
+  text?: Maybe<Scalars['String']>;
 };
 
 export type Mutation = {
@@ -370,6 +372,17 @@ export type ListTopicThreadsQuery = (
       & Pick<ReplyType, 'id' | 'upvotes' | 'text' | 'replyThread' | 'replySpecialist'>
     )>> }
   )>> }
+);
+
+export type ListUserNotifsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type ListUserNotifsQuery = (
+  { __typename?: 'Query' }
+  & { listUserNotifs: Array<(
+    { __typename?: 'NotificationType' }
+    & Pick<NotificationType, 'id' | 'opened' | 'userId' | 'replyId' | 'text'>
+  )> }
 );
 
 export type ListUserThreadsQueryVariables = Exact<{
@@ -899,6 +912,42 @@ export function useListTopicThreadsLazyQuery(baseOptions?: Apollo.LazyQueryHookO
 export type ListTopicThreadsQueryHookResult = ReturnType<typeof useListTopicThreadsQuery>;
 export type ListTopicThreadsLazyQueryHookResult = ReturnType<typeof useListTopicThreadsLazyQuery>;
 export type ListTopicThreadsQueryResult = Apollo.QueryResult<ListTopicThreadsQuery, ListTopicThreadsQueryVariables>;
+export const ListUserNotifsDocument = gql`
+    query listUserNotifs {
+  listUserNotifs {
+    id
+    opened
+    userId
+    replyId
+    text
+  }
+}
+    `;
+
+/**
+ * __useListUserNotifsQuery__
+ *
+ * To run a query within a React component, call `useListUserNotifsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useListUserNotifsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useListUserNotifsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useListUserNotifsQuery(baseOptions?: Apollo.QueryHookOptions<ListUserNotifsQuery, ListUserNotifsQueryVariables>) {
+        return Apollo.useQuery<ListUserNotifsQuery, ListUserNotifsQueryVariables>(ListUserNotifsDocument, baseOptions);
+      }
+export function useListUserNotifsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ListUserNotifsQuery, ListUserNotifsQueryVariables>) {
+          return Apollo.useLazyQuery<ListUserNotifsQuery, ListUserNotifsQueryVariables>(ListUserNotifsDocument, baseOptions);
+        }
+export type ListUserNotifsQueryHookResult = ReturnType<typeof useListUserNotifsQuery>;
+export type ListUserNotifsLazyQueryHookResult = ReturnType<typeof useListUserNotifsLazyQuery>;
+export type ListUserNotifsQueryResult = Apollo.QueryResult<ListUserNotifsQuery, ListUserNotifsQueryVariables>;
 export const ListUserThreadsDocument = gql`
     query listUserThreads($offset: Int, $limit: Int) {
   listUserThreads(offset: $offset, limit: $limit) {

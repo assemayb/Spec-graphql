@@ -1,5 +1,6 @@
 import { DataTypes, ModelDefined, Optional } from "sequelize";
 import { dbConfig } from "../config/database";
+import { User } from "./User";
 
 export interface ReplyAttributes {
   id: number;

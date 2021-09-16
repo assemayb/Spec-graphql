@@ -1,0 +1,9 @@
+query listUserNotifs {
+  listUserNotifs {
+    id
+    opened
+    userId
+    replyId
+    text
+  }
+}
