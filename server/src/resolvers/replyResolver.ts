@@ -172,6 +172,7 @@ export class ReplyResolver {
   }
 
   @Query(() => [Int], { nullable: true })
+  @UseMiddleware(isAuthenticated)
   async listUserLikedReplies(
     @Ctx () {payload}: MyContext
   ) {
@@ -182,9 +183,12 @@ export class ReplyResolver {
           userUpvoteId: userId
         }
       })
-      const repliesIds = repliesInfo.map((rep) => rep.getDataValue("infoReplyId"))
+      let repliesIds = repliesInfo.map((rep) => rep.getDataValue("infoReplyId"))
+      repliesIds = Array.from(new Set(repliesIds))
+      console.log(repliesIds);
+    
       return repliesIds
-      
+
     } catch (error: any) {
       throw new Error(error.message);
     }
