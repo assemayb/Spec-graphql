@@ -79,6 +79,12 @@ export type QueryListThreadRepliesArgs = {
   threadId: Scalars['Int'];
 };
 
+
+export type QueryListUserNotifsArgs = {
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+};
+
 export type UserType = {
   __typename?: 'UserType';
   username: Scalars['String'];
@@ -263,6 +269,14 @@ export type DeleteThreadMutation = (
   & Pick<Mutation, 'deleteThread'>
 );
 
+export type GetNotifsNumQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetNotifsNumQuery = (
+  { __typename?: 'Query' }
+  & Pick<Query, 'getNotifsCount'>
+);
+
 export type GetThreadDataQueryVariables = Exact<{
   id: Scalars['Int'];
   sortBy: Scalars['String'];
@@ -374,7 +388,10 @@ export type ListTopicThreadsQuery = (
   )>> }
 );
 
-export type ListUserNotifsQueryVariables = Exact<{ [key: string]: never; }>;
+export type ListUserNotifsQueryVariables = Exact<{
+  offset?: Maybe<Scalars['Int']>;
+  limit?: Maybe<Scalars['Int']>;
+}>;
 
 
 export type ListUserNotifsQuery = (
@@ -590,6 +607,36 @@ export function useDeleteThreadMutation(baseOptions?: Apollo.MutationHookOptions
 export type DeleteThreadMutationHookResult = ReturnType<typeof useDeleteThreadMutation>;
 export type DeleteThreadMutationResult = Apollo.MutationResult<DeleteThreadMutation>;
 export type DeleteThreadMutationOptions = Apollo.BaseMutationOptions<DeleteThreadMutation, DeleteThreadMutationVariables>;
+export const GetNotifsNumDocument = gql`
+    query getNotifsNum {
+  getNotifsCount
+}
+    `;
+
+/**
+ * __useGetNotifsNumQuery__
+ *
+ * To run a query within a React component, call `useGetNotifsNumQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetNotifsNumQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetNotifsNumQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetNotifsNumQuery(baseOptions?: Apollo.QueryHookOptions<GetNotifsNumQuery, GetNotifsNumQueryVariables>) {
+        return Apollo.useQuery<GetNotifsNumQuery, GetNotifsNumQueryVariables>(GetNotifsNumDocument, baseOptions);
+      }
+export function useGetNotifsNumLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetNotifsNumQuery, GetNotifsNumQueryVariables>) {
+          return Apollo.useLazyQuery<GetNotifsNumQuery, GetNotifsNumQueryVariables>(GetNotifsNumDocument, baseOptions);
+        }
+export type GetNotifsNumQueryHookResult = ReturnType<typeof useGetNotifsNumQuery>;
+export type GetNotifsNumLazyQueryHookResult = ReturnType<typeof useGetNotifsNumLazyQuery>;
+export type GetNotifsNumQueryResult = Apollo.QueryResult<GetNotifsNumQuery, GetNotifsNumQueryVariables>;
 export const GetThreadDataDocument = gql`
     query getThreadData($id: Int!, $sortBy: String!) {
   getThread(id: $id, sortBy: $sortBy) {
@@ -913,8 +960,8 @@ export type ListTopicThreadsQueryHookResult = ReturnType<typeof useListTopicThre
 export type ListTopicThreadsLazyQueryHookResult = ReturnType<typeof useListTopicThreadsLazyQuery>;
 export type ListTopicThreadsQueryResult = Apollo.QueryResult<ListTopicThreadsQuery, ListTopicThreadsQueryVariables>;
 export const ListUserNotifsDocument = gql`
-    query listUserNotifs {
-  listUserNotifs {
+    query listUserNotifs($offset: Int, $limit: Int) {
+  listUserNotifs(offset: $offset, limit: $limit) {
     id
     opened
     userId
@@ -936,6 +983,8 @@ export const ListUserNotifsDocument = gql`
  * @example
  * const { data, loading, error } = useListUserNotifsQuery({
  *   variables: {
+ *      offset: // value for 'offset'
+ *      limit: // value for 'limit'
  *   },
  * });
  */

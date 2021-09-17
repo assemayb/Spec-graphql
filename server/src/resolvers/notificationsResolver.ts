@@ -46,12 +46,18 @@ export class NotificationResolver {
   // list user notifications
   @Query(() => [NotificationType])
   @UseMiddleware(isAuthenticated)
-  async listUserNotifs(@Ctx() { payload }: MyContext) {
+  async listUserNotifs(
+    @Ctx() { payload }: MyContext,
+    @Arg("offset", () => Int, { nullable: true }) offset: number,
+    @Arg("limit", () => Int, { nullable: true }) limit: number
+  ) {
     try {
       const notifs = await Notification.findAll({
         where: {
           userId: payload?.userId,
         },
+        offset: offset,
+        limit: limit
       });
       let newNotifs = [];
       for (let x of notifs) {
@@ -61,9 +67,7 @@ export class NotificationResolver {
         notif.text = replyText;
         newNotifs.push(notif);
       }
-      console.log(newNotifs);
       return newNotifs;
-      
     } catch (error: any) {
       console.log(error.message);
     }

@@ -1,9 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 
-import { Flex, Center, Button } from "@chakra-ui/react";
+import { Flex, Center } from "@chakra-ui/react";
 import React, { useEffect } from "react";
 import { useState } from "react";
-import { useParams } from "react-router-dom";
 import { HeaderComp } from "../smallComps/HeaderComp";
 import InfiniteScroll from "react-infinite-scroller";
 import { FastBigSpinner } from "../smallComps/Spinners";
@@ -17,19 +16,21 @@ export const NotifItem: React.FC<NotifItemProps> = ({ handleClick, val }) => {
   return (
     <>
       <Flex
-        p="1.5rem"
-        borderRadius="-20px"
+        as="button"
+        w="100%"
+        p="1rem"
+        borderRadius="-40px"
         bgColor="gray.100"
         shadow="lg"
-        fontSize="medium"
+        fontSize="20px"
         fontWeight="bold"
         color="#335344"
         borderLeft="12px solid #518096"
-        borderLeftRadius="4px"
+        // borderLeftRadius="4px"
         _hover={{
           bgColor: "gray.200",
         }}
-        my="0.4rem"
+        my="0.7rem"
         pos="relative"
       >
         {val}
@@ -50,36 +51,33 @@ export const Notifications: React.FC<NotificationsProps> = () => {
   const [listNotifs, listNotifsOptions] = useListUserNotifsLazyQuery({
     fetchPolicy: "network-only",
   });
+
+  useEffect(() => {
+    const { data } = listNotifsOptions;
+    const notifs = data?.listUserNotifs;
+    console.log(notifs);
+  }, [listNotifs, listNotifsOptions.data]);
+
   useEffect(() => {
     let isMounted = true;
     if (isMounted) {
       listNotifs();
-      console.log(listNotifsOptions.data?.listUserNotifs);
     }
     return () => {
       isMounted = false;
     };
   }, []);
 
-  
-  const params: { userId: string } = useParams();
-  const [userId, setUserId] = useState("");
-  const [notifs, setNotifs] = useState<string[]>([]);
   const [offset, setOffset] = useState(0);
 
-  const [end, setEnd] = useState(15);
-  useEffect(() => {
-    setUserId(params.userId);
-  }, [params.userId]);
+  const [end, setEnd] = useState(5);
 
   useEffect(() => {
     const dummieData = createDummieData();
     const slicedSection = dummieData.slice(offset, end);
-    setNotifs(slicedSection);
   }, [end, offset]);
 
   const handleLoadMore = () => {
-    console.log(offset, end);
     setTimeout(() => {
       offset > 0 && setOffset(end);
       end < 200 && setEnd((prevEnd) => prevEnd + 10);
@@ -97,7 +95,7 @@ export const Notifications: React.FC<NotificationsProps> = () => {
           p={["0.2rem", "0.4rem", "1rem", "1rem"]}
         >
           <InfiniteScroll
-            hasMore={notifs.length < 200}
+            hasMore={listNotifsOptions.data?.listUserNotifs.length! < 200}
             loadMore={handleLoadMore}
             pageStart={0}
             // useWindow={false}
@@ -107,19 +105,19 @@ export const Notifications: React.FC<NotificationsProps> = () => {
               </Center>
             }
           >
-            {notifs.map((val, index: number) => (
-              <NotifItem
-                key={index}
-                val={val}
-                handleClick={() => {
-                  console.log("current item index is: ", index);
-                  let x = notifs.filter((_, idx) => index !== idx);
-                  console.log(x.length);
-
-                  setNotifs(x);
-                }}
-              />
-            ))}
+            {listNotifsOptions.data?.listUserNotifs.map(
+              (val, index: number) => (
+                <NotifItem
+                  key={index}
+                  val={val.text!}
+                  // handleClick={() => {
+                  //   let x = notifs.filter((_, idx) => index !== idx);
+                  //   setNotifs(x);
+                  // }}
+                  handleClick={() => console.log("click event")}
+                />
+              )
+            )}
           </InfiniteScroll>
         </Flex>
       </Flex>

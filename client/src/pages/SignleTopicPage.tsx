@@ -17,7 +17,6 @@ const pageSize = 3;
 interface SignleTopicPageProps {}
 export const SignleTopicPage: React.FC<SignleTopicPageProps> = () => {
   const params: { topicName: string } = useParams();
-  const location = useLocation()
   const [currentPage, setCurrentPage] = useState(1);
   const [getTopicThreadsNum, getTopicThreadsNumOptions] =
     useGetTopicThreadsNumLazyQuery({
@@ -49,7 +48,6 @@ export const SignleTopicPage: React.FC<SignleTopicPageProps> = () => {
       setCurrentPage(1);
     };
   }, []);
-
 
   useEffect(() => {
     return () => {

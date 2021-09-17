@@ -1,5 +1,5 @@
-query listUserNotifs {
-  listUserNotifs {
+query listUserNotifs($offset: Int, $limit: Int) {
+  listUserNotifs(offset: $offset, limit: $limit) {
     id
     opened
     userId
