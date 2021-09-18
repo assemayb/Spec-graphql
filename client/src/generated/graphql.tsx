@@ -388,6 +388,14 @@ export type ListTopicThreadsQuery = (
   )>> }
 );
 
+export type ListUserLikedRepliesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type ListUserLikedRepliesQuery = (
+  { __typename?: 'Query' }
+  & Pick<Query, 'listUserLikedReplies'>
+);
+
 export type ListUserNotifsQueryVariables = Exact<{
   offset?: Maybe<Scalars['Int']>;
   limit?: Maybe<Scalars['Int']>;
@@ -959,6 +967,36 @@ export function useListTopicThreadsLazyQuery(baseOptions?: Apollo.LazyQueryHookO
 export type ListTopicThreadsQueryHookResult = ReturnType<typeof useListTopicThreadsQuery>;
 export type ListTopicThreadsLazyQueryHookResult = ReturnType<typeof useListTopicThreadsLazyQuery>;
 export type ListTopicThreadsQueryResult = Apollo.QueryResult<ListTopicThreadsQuery, ListTopicThreadsQueryVariables>;
+export const ListUserLikedRepliesDocument = gql`
+    query listUserLikedReplies {
+  listUserLikedReplies
+}
+    `;
+
+/**
+ * __useListUserLikedRepliesQuery__
+ *
+ * To run a query within a React component, call `useListUserLikedRepliesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useListUserLikedRepliesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useListUserLikedRepliesQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useListUserLikedRepliesQuery(baseOptions?: Apollo.QueryHookOptions<ListUserLikedRepliesQuery, ListUserLikedRepliesQueryVariables>) {
+        return Apollo.useQuery<ListUserLikedRepliesQuery, ListUserLikedRepliesQueryVariables>(ListUserLikedRepliesDocument, baseOptions);
+      }
+export function useListUserLikedRepliesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ListUserLikedRepliesQuery, ListUserLikedRepliesQueryVariables>) {
+          return Apollo.useLazyQuery<ListUserLikedRepliesQuery, ListUserLikedRepliesQueryVariables>(ListUserLikedRepliesDocument, baseOptions);
+        }
+export type ListUserLikedRepliesQueryHookResult = ReturnType<typeof useListUserLikedRepliesQuery>;
+export type ListUserLikedRepliesLazyQueryHookResult = ReturnType<typeof useListUserLikedRepliesLazyQuery>;
+export type ListUserLikedRepliesQueryResult = Apollo.QueryResult<ListUserLikedRepliesQuery, ListUserLikedRepliesQueryVariables>;
 export const ListUserNotifsDocument = gql`
     query listUserNotifs($offset: Int, $limit: Int) {
   listUserNotifs(offset: $offset, limit: $limit) {

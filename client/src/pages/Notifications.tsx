@@ -82,13 +82,11 @@ export const Notifications: React.FC<NotificationsProps> = () => {
           offset: offset,
         },
       });
-  }, [end, setEnd]);
+  }, [end, offset]);
 
   const handleLoadMore = () => {
-    setTimeout(() => {
-      offset > 0 && setOffset(end);
-      end < notifsCount && setEnd((prevEnd) => prevEnd + 10);
-    }, 600);
+    offset > 0 && setOffset(end);
+    end < notifsCount && setEnd((prevEnd) => prevEnd + 10);
   };
 
   return (

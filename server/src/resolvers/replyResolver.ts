@@ -187,7 +187,6 @@ export class ReplyResolver {
       repliesIds = Array.from(new Set(repliesIds))
       
       console.log(repliesIds);
-    
       return repliesIds
 
     } catch (error: any) {

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect } from "react";
 import { Box } from "@chakra-ui/react";
 import { BiLike } from "react-icons/bi";
@@ -10,11 +11,13 @@ interface LikeSectionProps {
   refetch: () => any;
   replyId: number;
   upvotes: number;
+  likedRepliesIds: number[];
 }
 export const LikeSection: React.FC<LikeSectionProps> = ({
   refetch,
   replyId,
   upvotes,
+  likedRepliesIds,
 }) => {
   const [isUserLoggedInLazyQuery, { data }] = useIsUserLoggedInLazyQuery({
     fetchPolicy: "network-only",
@@ -28,15 +31,18 @@ export const LikeSection: React.FC<LikeSectionProps> = ({
     return () => {
       isMounted = false;
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    console.log(likedRepliesIds);
+  }, [likedRepliesIds]);
 
   const [upvoteReq] = useUpvoteReplyMutation();
   const upvoteReply = async (id: any) => {
     if (data?.isUserLoggedIn === true) {
       await upvoteReq({
         variables: { id },
-      });  
+      });
       await refetch();
     } else {
       const profileBtn: HTMLElement = document.getElementById("profile-btn")!;
@@ -50,7 +56,8 @@ export const LikeSection: React.FC<LikeSectionProps> = ({
         as="button"
         onClick={() => upvoteReply(replyId)}
         borderRadius="-20px"
-        p={{base: "5px", md: "10px"}}
+        p={{ base: "5px", md: "10px" }}
+        disabled={likedRepliesIds && likedRepliesIds.includes(replyId)}
         bg="green.50"
         _hover={{
           bg: "blue.300",
@@ -66,7 +73,7 @@ export const LikeSection: React.FC<LikeSectionProps> = ({
           bg: "blue.300",
           color: "white",
         }}
-        p={{base: "5px", md: "10px"}}
+        p={{ base: "5px", md: "10px" }}
         bg="green.100"
         boxShadow="md"
         mx="3px"

@@ -13,6 +13,7 @@ import { useParams } from "react-router-dom";
 import {
   useGetThreadDataLazyQuery,
   useIsUserLoggedInLazyQuery,
+  useListUserLikedRepliesLazyQuery,
   useMeLazyQuery,
 } from "../generated/graphql";
 import { LikeSection } from "../smallComps/LikeSection";
@@ -64,13 +65,16 @@ export const Thread: React.FC<ThreadProps> = () => {
       sortBy: "upvotes",
     },
   });
+  const [listLikedReplies, listLikedRepliesOptions] =
+    useListUserLikedRepliesLazyQuery({ fetchPolicy: "network-only" });
 
   useEffect(() => {
     let isMounted = true;
     if (isMounted === true) {
+      listLikedReplies();
+      meQuery();
       getThreadDataQuery();
       isUserLoggedInLazyQuery();
-      meQuery();
     }
     return () => {
       isMounted = false;
@@ -195,6 +199,7 @@ export const Thread: React.FC<ThreadProps> = () => {
                   >
                     {reply.text}
                     <LikeSection
+                      likedRepliesIds={listLikedRepliesOptions.data?.listUserLikedReplies!}
                       refetch={fetchByUpvotes}
                       replyId={reply.id}
                       upvotes={reply.upvotes}

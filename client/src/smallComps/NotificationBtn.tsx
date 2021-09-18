@@ -14,6 +14,7 @@ import { useHistory } from "react-router-dom";
 interface NotificationBtnProps {}
 export const NotificationBtn: React.FC<NotificationBtnProps> = () => {
   const toast = useToast();
+  
   const [meQuery, meQueryOptions] = useMeLazyQuery({
     fetchPolicy: "network-only",
   });
