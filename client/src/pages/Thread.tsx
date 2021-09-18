@@ -69,6 +69,11 @@ export const Thread: React.FC<ThreadProps> = () => {
     useListUserLikedRepliesLazyQuery({ fetchPolicy: "network-only" });
 
   useEffect(() => {
+    setShowReplies((prev) => !prev);
+    setShowReplies((prev) => !prev);
+  }, [listLikedRepliesOptions.refetch, listLikedRepliesOptions.data]);
+
+  useEffect(() => {
     let isMounted = true;
     if (isMounted === true) {
       listLikedReplies();
@@ -199,7 +204,10 @@ export const Thread: React.FC<ThreadProps> = () => {
                   >
                     {reply.text}
                     <LikeSection
-                      likedRepliesIds={listLikedRepliesOptions.data?.listUserLikedReplies!}
+                      likedRepliesIds={
+                        listLikedRepliesOptions.data?.listUserLikedReplies!
+                      }
+                      refetchLikedReplies={listLikedRepliesOptions.refetch}
                       refetch={fetchByUpvotes}
                       replyId={reply.id}
                       upvotes={reply.upvotes}

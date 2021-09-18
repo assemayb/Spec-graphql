@@ -3,21 +3,27 @@ import { useEffect } from "react";
 import { Box } from "@chakra-ui/react";
 import { BiLike } from "react-icons/bi";
 import {
+  ListUserLikedRepliesQuery,
   useIsUserLoggedInLazyQuery,
   useUpvoteReplyMutation,
 } from "../generated/graphql";
+import { ApolloQueryResult } from "@apollo/client";
 
 interface LikeSectionProps {
   refetch: () => any;
   replyId: number;
   upvotes: number;
   likedRepliesIds: number[];
+  refetchLikedReplies?: () => Promise<
+    ApolloQueryResult<ListUserLikedRepliesQuery>
+  >;
 }
 export const LikeSection: React.FC<LikeSectionProps> = ({
   refetch,
   replyId,
   upvotes,
   likedRepliesIds,
+  refetchLikedReplies
 }) => {
   const [isUserLoggedInLazyQuery, { data }] = useIsUserLoggedInLazyQuery({
     fetchPolicy: "network-only",
@@ -33,10 +39,6 @@ export const LikeSection: React.FC<LikeSectionProps> = ({
     };
   }, []);
 
-  useEffect(() => {
-    console.log(likedRepliesIds);
-  }, [likedRepliesIds]);
-
   const [upvoteReq] = useUpvoteReplyMutation();
   const upvoteReply = async (id: any) => {
     if (data?.isUserLoggedIn === true) {
@@ -44,6 +46,7 @@ export const LikeSection: React.FC<LikeSectionProps> = ({
         variables: { id },
       });
       await refetch();
+      refetchLikedReplies && refetchLikedReplies()
     } else {
       const profileBtn: HTMLElement = document.getElementById("profile-btn")!;
       profileBtn.click();
@@ -58,7 +61,16 @@ export const LikeSection: React.FC<LikeSectionProps> = ({
         borderRadius="-20px"
         p={{ base: "5px", md: "10px" }}
         disabled={likedRepliesIds && likedRepliesIds.includes(replyId)}
-        bg="green.50"
+        bg={
+          likedRepliesIds && likedRepliesIds.includes(replyId)
+            ? "blue.200"
+            : "green.50"
+        }
+        cursor={
+          likedRepliesIds && likedRepliesIds.includes(replyId)
+            ? "not-allowed"
+            : "pointer"
+        }
         _hover={{
           bg: "blue.300",
           color: "white",
