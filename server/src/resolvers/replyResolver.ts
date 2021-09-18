@@ -183,9 +183,13 @@ export class ReplyResolver {
           userUpvoteId: userId
         }
       })
-      let repliesIds = repliesInfo.map((rep) => rep.getDataValue("infoReplyId"))
+      let repliesIds = repliesInfo.map((rep, idx) => {
+        let x = rep.getDataValue("infoReplyId")
+        if (x == null ) x = -1 
+        return x
+      })
+
       repliesIds = Array.from(new Set(repliesIds))
-      
       console.log(repliesIds);
       return repliesIds
 

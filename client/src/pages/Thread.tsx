@@ -170,7 +170,7 @@ export const Thread: React.FC<ThreadProps> = () => {
         {showReplies === false ? (
           Array(repliesCount)
             .fill("-")
-            .map((item, idx) => (
+            .map((_, idx) => (
               <Skeleton key={idx} p="1.5em" height="50px" marginTop="12px" />
             ))
         ) : (
