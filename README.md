@@ -6,5 +6,5 @@
 - GraphQL
 - apollo-server-express
 - React JS
-- Apollo Clinet
+- Apollo Client
 - Chakra UI
