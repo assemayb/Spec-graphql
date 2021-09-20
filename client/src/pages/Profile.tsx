@@ -2,10 +2,8 @@
 import React, { useEffect, useState, useLayoutEffect } from "react";
 import { Box, Button, Flex, useDisclosure } from "@chakra-ui/react";
 
-// import InfiniteScroll from 'react-infinite-scroller';
-
+import InfiniteScroll from 'react-infinite-scroller';
 import { QuestionBox } from "../smallComps/QuestionBox";
-import { FastBigSpinner } from "../smallComps/Spinners";
 import {
   useGetUserThreadsNumberLazyQuery,
   useListUserThreadsLazyQuery,
