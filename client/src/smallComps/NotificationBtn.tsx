@@ -64,16 +64,13 @@ export const NotificationBtn: React.FC<NotificationBtnProps> = () => {
   }, [data]);
 
   const router = useHistory();
-  const goToNotificationsPage = () => {
-    const currUserId = meQueryOptions.data?.me?.id;
-    router.push(`/notifications/${currUserId}`);
-  };
+  
 
   return (
     <>
       <Tooltip label="show notifications">
         <Button
-          onClick={goToNotificationsPage}
+          onClick={() => router.push(`/notifications`)}
           height={["30%", "30%", "50%", "50%"]}
           fontSize={["sm", "sm", "medium", "medium"]}
           fontWeight="bold"

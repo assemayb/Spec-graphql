@@ -25,7 +25,7 @@ export const BaseRouter: React.FC = () => {
       <Route path="/topics/:topicName" component={SignleTopicPage} />
       <Route exact path="/topics" component={Topics} />
       <Route path="/threads/:threadId" component={Thread} />
-      <Route path="/notifications/:userId" component={Notifications} />
+      <Route path="/notifications" component={Notifications} />
     </Switch>
   );
 };

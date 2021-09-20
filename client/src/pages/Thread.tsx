@@ -31,17 +31,16 @@ export const HeaderSection: React.FC<HeaderSectionProps> = ({ question }) => {
         md: "1.2rem",
       }}
       textShadow="lg"
-      boxShadow="base"
       color="#718096"
       textTransform="uppercase"
       fontSize={{
         base: "20px",
         md: "25px",
       }}
-      bgColor="green.50"
+      // bgColor="green.50"
     >
       {question}
-      {/* <Divider marginTop="0.6rem" /> */}
+      <Divider marginTop="0.6rem" />
     </Heading>
   );
 };

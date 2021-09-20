@@ -42,6 +42,7 @@ const cache = new InMemoryCache({
     Query: {
       fields: {
         listUserThreads: offsetLimitPagination(),
+        // listUserNotifs: offsetLimitPagination(),
       },
     },
   },
@@ -55,7 +56,7 @@ const wsLink = new WebSocketLink({
   uri: "ws://localhost:8000/subscriptions",
   // options: {
   //   reconnect: true,
-    
+
   // },
 });
 

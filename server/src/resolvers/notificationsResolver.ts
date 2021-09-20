@@ -52,13 +52,22 @@ export class NotificationResolver {
     @Arg("limit", () => Int, { nullable: true }) limit: number
   ) {
     try {
-      const notifs = await Notification.findAll({
-        where: {
-          userId: payload?.userId,
-        },
-        offset: offset,
-        limit: limit
-      });
+      let notifs;
+      if (offset !== null && limit !== null) {
+        notifs = await Notification.findAll({
+          where: {
+            userId: payload?.userId,
+          },
+          offset: offset,
+          limit: limit,
+        });
+      } else {
+        notifs = await Notification.findAll({
+          where: {
+            userId: payload?.userId,
+          },
+        });
+      }
       let newNotifs = [];
       for (let x of notifs) {
         const notif: any = x.toJSON();
