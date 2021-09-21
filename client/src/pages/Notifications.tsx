@@ -8,12 +8,13 @@ import InfiniteScroll from "react-infinite-scroller";
 import { FastBigSpinner } from "../smallComps/Spinners";
 
 import {
+  NotificationType,
   useGetNotifsNumLazyQuery,
   useListUserNotifsLazyQuery,
 } from "../generated/graphql";
 
 interface NotifItemProps {
-  handleClick: () => any;
+  handleClick: () => void;
   val?: string;
 }
 export const NotifItem: React.FC<NotifItemProps> = ({ handleClick, val }) => {
@@ -24,11 +25,12 @@ export const NotifItem: React.FC<NotifItemProps> = ({ handleClick, val }) => {
         w="100%"
         p="1rem"
         borderRadius="-40px"
-        bgColor="gray.100"
-        shadow="lg"
+        bgColor="gray.50"
+        shadow="md"
         fontSize="1rem"
         fontWeight="bold"
         color="#335344"
+        minH="80px"
         borderLeft="12px solid #518096"
         textAlign="left"
         _hover={{
@@ -36,6 +38,7 @@ export const NotifItem: React.FC<NotifItemProps> = ({ handleClick, val }) => {
         }}
         my="0.7rem"
         pos="relative"
+        onClick={handleClick}
       >
         {val}
         {/* <Button bgColor="blue.300" pos="absolute" right="4px" top="2px" onClick={handleClick}>delete</Button> */}
@@ -47,17 +50,17 @@ export const NotifItem: React.FC<NotifItemProps> = ({ handleClick, val }) => {
 interface NotificationsProps {}
 
 export const Notifications: React.FC<NotificationsProps> = () => {
+  const [getNotifsNum, getNotifsNumOptions] = useGetNotifsNumLazyQuery();
   const [limitSize, setLimitSize] = useState(15);
-  const [displayedSection, setDisplayedSection] = useState<any[]>([]);
 
-  const [getNotifsNum, getNotifsNumOptions] = useGetNotifsNumLazyQuery({
-    fetchPolicy: "network-only",
-  });
+  const [displayedSection, setDisplayedSection] = useState<NotificationType[]>(
+    []
+  );
 
   const [listNotifs, { data }] = useListUserNotifsLazyQuery({
     fetchPolicy: "network-only",
     onCompleted: (data) => {
-      setDisplayedSection(data.listUserNotifs!.slice(0, limitSize));
+      setDisplayedSection(data.listUserNotifs.slice(0, limitSize));
     },
   });
 
@@ -72,28 +75,31 @@ export const Notifications: React.FC<NotificationsProps> = () => {
     };
   }, []);
 
-  function loadMoreNotifs() {
-    console.log("load more here");
-    if (data?.listUserNotifs !== undefined) {
-      const didNotExceedNotifsNum =
-        data!.listUserNotifs.length < getNotifsNumOptions.data?.getNotifsCount!;
-      const newLimit = limitSize + 15;
+  useEffect(() => {
+    console.log("<==============> <Effect>  <==============>");
+    
+    if (data !== undefined && displayedSection.length <= 15) {
+      const queriedNotifs = data!.listUserNotifs.length;
+      const notifsNum =
+        getNotifsNumOptions.data! && getNotifsNumOptions.data?.getNotifsCount!;
+      const notExceeded = queriedNotifs < notifsNum;
+
       setTimeout(() => {
-        didNotExceedNotifsNum &&
-          setDisplayedSection(data!.listUserNotifs!.slice(0, newLimit));
-        setLimitSize((prevSize) => prevSize + 15);
+        if (notExceeded) {
+          setDisplayedSection(data!.listUserNotifs!.slice(0, limitSize + 15));
+          // setLimitSize((prevSize) => {
+          //   console.log("prev size", prevSize);
+          //   return prevSize + 15;
+          // });
+        }
       }, 400);
     }
-  }
-
-  useEffect(() => {
-    console.log(displayedSection.length);
-  }, [displayedSection]);
+  }, [setLimitSize, setLimitSize]);
 
   return (
     <>
       <HeaderComp header={"Notifications"} />
-      <Flex marginTop="1rem">
+      <Flex marginTop="0.5rem">
         <Flex
           flexDirection="column"
           flex="5"
@@ -102,10 +108,11 @@ export const Notifications: React.FC<NotificationsProps> = () => {
         >
           <InfiniteScroll
             hasMore={
-              displayedSection.length <
+              displayedSection.length <=
               getNotifsNumOptions.data?.getNotifsCount!
             }
-            loadMore={() => loadMoreNotifs()}
+            loadMore={() => setLimitSize((prevSize) => prevSize + 15)}
+
             pageStart={0}
             // useWindow={false}
             loader={
@@ -114,7 +121,7 @@ export const Notifications: React.FC<NotificationsProps> = () => {
               </Center>
             }
           >
-            {displayedSection.length > 0 ? (
+            {displayedSection &&
               displayedSection.map((val, index: number) => (
                 <NotifItem
                   key={index}
@@ -125,10 +132,7 @@ export const Notifications: React.FC<NotificationsProps> = () => {
                   // }}
                   handleClick={() => console.log("click event")}
                 />
-              ))
-            ) : (
-              <div></div>
-            )}
+              ))}
           </InfiniteScroll>
         </Flex>
       </Flex>

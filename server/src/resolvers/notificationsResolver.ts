@@ -53,7 +53,9 @@ export class NotificationResolver {
   ) {
     try {
       let notifs;
-      if (offset !== null && limit !== null) {
+      const notNull = offset !== null && limit !== null;
+      const notUndefined = offset !== undefined && limit !== undefined;
+      if (notNull && notUndefined) {
         notifs = await Notification.findAll({
           where: {
             userId: payload?.userId,
@@ -76,7 +78,10 @@ export class NotificationResolver {
         notif.text = replyText;
         newNotifs.push(notif);
       }
+
+      console.log(newNotifs.length);
       return newNotifs;
+      
     } catch (error: any) {
       console.log(error.message);
     }
