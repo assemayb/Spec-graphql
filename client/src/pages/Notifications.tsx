@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 
-import { Flex, Center } from "@chakra-ui/react";
+import { Flex, Center, Box } from "@chakra-ui/react";
 import React, { useEffect } from "react";
 import { useState } from "react";
 import { HeaderComp } from "../smallComps/HeaderComp";
@@ -25,9 +25,10 @@ export const NotifItem: React.FC<NotifItemProps> = ({ handleClick, val }) => {
         w="100%"
         p="1rem"
         borderRadius="-40px"
-        bgColor="gray.50"
+        // make it darker if not openned
+        bgColor="gray.100"
         shadow="md"
-        fontSize="1rem"
+        fontSize="1.3rem"
         fontWeight="bold"
         color="#335344"
         minH="80px"
@@ -47,15 +48,15 @@ export const NotifItem: React.FC<NotifItemProps> = ({ handleClick, val }) => {
   );
 };
 
-interface NotificationsProps {}
+interface NotificationsProps { }
 
 export const Notifications: React.FC<NotificationsProps> = () => {
   const [getNotifsNum, getNotifsNumOptions] = useGetNotifsNumLazyQuery();
+
   const [limitSize, setLimitSize] = useState(15);
 
-  const [displayedSection, setDisplayedSection] = useState<NotificationType[]>(
-    []
-  );
+  const [allowMoreLoading, setAllowMoreLoading] = useState(true);
+  const [displayedSection, setDisplayedSection] = useState<NotificationType[]>([]);
 
   const [listNotifs, { data }] = useListUserNotifsLazyQuery({
     fetchPolicy: "network-only",
@@ -75,26 +76,27 @@ export const Notifications: React.FC<NotificationsProps> = () => {
     };
   }, []);
 
-  useEffect(() => {
-    console.log("<==============> <Effect>  <==============>");
-    
-    if (data !== undefined && displayedSection.length <= 15) {
-      const queriedNotifs = data!.listUserNotifs.length;
-      const notifsNum =
-        getNotifsNumOptions.data! && getNotifsNumOptions.data?.getNotifsCount!;
-      const notExceeded = queriedNotifs < notifsNum;
+  function loadMoreNotifications() {
+    const chunk: NotificationType[] = data?.listUserNotifs.slice(0, limitSize + 15)!
+    const allNotifsCount = getNotifsNumOptions.data?.getNotifsCount!
+    const sectionLength = displayedSection && displayedSection.length
 
-      setTimeout(() => {
-        if (notExceeded) {
-          setDisplayedSection(data!.listUserNotifs!.slice(0, limitSize + 15));
-          // setLimitSize((prevSize) => {
-          //   console.log("prev size", prevSize);
-          //   return prevSize + 15;
-          // });
-        }
-      }, 400);
+    if (sectionLength < allNotifsCount) {
+      setDisplayedSection(chunk)
     }
-  }, [setLimitSize, setLimitSize]);
+  }
+
+  useEffect(() => {
+    const allNotifsCount = getNotifsNumOptions.data?.getNotifsCount!
+    const sectionLength = displayedSection && displayedSection.length
+
+    console.log(sectionLength);
+    console.log(allowMoreLoading);
+    
+    if(allNotifsCount <=  sectionLength) {
+      setAllowMoreLoading(false)
+    }
+  }, [displayedSection, setDisplayedSection])
 
   return (
     <>
@@ -107,11 +109,8 @@ export const Notifications: React.FC<NotificationsProps> = () => {
           p={["0.2rem", "0.4rem", "0.8rem", "0.8rem"]}
         >
           <InfiniteScroll
-            hasMore={
-              displayedSection.length <=
-              getNotifsNumOptions.data?.getNotifsCount!
-            }
-            loadMore={() => setLimitSize((prevSize) => prevSize + 15)}
+            hasMore={allowMoreLoading}
+            loadMore={loadMoreNotifications}
 
             pageStart={0}
             // useWindow={false}
