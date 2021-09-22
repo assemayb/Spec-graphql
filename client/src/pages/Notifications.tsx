@@ -11,12 +11,15 @@ import {
   NotificationType,
   useGetNotifsNumLazyQuery,
   useListUserNotifsLazyQuery,
+  useListUserNotifsQuery,
 } from "../generated/graphql";
 
 interface NotifItemProps {
   handleClick: () => void;
   val?: string;
 }
+
+
 export const NotifItem: React.FC<NotifItemProps> = ({ handleClick, val }) => {
   return (
     <>
@@ -47,56 +50,60 @@ export const NotifItem: React.FC<NotifItemProps> = ({ handleClick, val }) => {
     </>
   );
 };
-
-interface NotificationsProps { }
-
-export const Notifications: React.FC<NotificationsProps> = () => {
-  const [getNotifsNum, getNotifsNumOptions] = useGetNotifsNumLazyQuery();
-
-  const [limitSize, setLimitSize] = useState(15);
-
-  const [allowMoreLoading, setAllowMoreLoading] = useState(true);
-  const [displayedSection, setDisplayedSection] = useState<NotificationType[]>([]);
-
-  const [listNotifs, { data }] = useListUserNotifsLazyQuery({
+export const useGetNotification = (start: number, end: number) => {
+  const [notifs, setNotifs] = useState<NotificationType[]>([])
+  const { data } = useListUserNotifsQuery({
     fetchPolicy: "network-only",
     onCompleted: (data) => {
-      setDisplayedSection(data.listUserNotifs.slice(0, limitSize));
-    },
-  });
+      const chunk = data?.listUserNotifs!.slice(start, end)
+      setNotifs(chunk!)
+    }
+  })
 
+  useEffect(() => {
+    const chunk = data?.listUserNotifs!.slice(start, end)
+    setNotifs(chunk!)
+  }, [start, end])
+
+  return notifs
+}
+
+
+interface NotificationsProps { }
+export const Notifications: React.FC<NotificationsProps> = () => {
+
+
+  const [getNotifsNum, getNotifsNumOptions] = useGetNotifsNumLazyQuery();
   useEffect(() => {
     let isMounted = true;
     if (isMounted) {
       getNotifsNum();
-      listNotifs();
     }
     return () => {
       isMounted = false;
     };
   }, []);
 
-  function loadMoreNotifications() {
-    const chunk: NotificationType[] = data?.listUserNotifs.slice(0, limitSize + 15)!
-    const allNotifsCount = getNotifsNumOptions.data?.getNotifsCount!
-    const sectionLength = displayedSection && displayedSection.length
 
-    if (sectionLength < allNotifsCount) {
-      setDisplayedSection(chunk)
-    }
+  const [offset] = useState(0)
+  const [limit, setLimit] = useState(15);
+  const [allowMoreLoading, setAllowMoreLoading] = useState(true);
+  const notifs = useGetNotification(offset, limit)
+
+
+  const loadMoreNotifications = () => {
+    console.log("load more function");
+    setTimeout(() => {
+      setLimit((prev) => prev + 15)
+    }, 2000)
   }
 
   useEffect(() => {
-    const allNotifsCount = getNotifsNumOptions.data?.getNotifsCount!
-    const sectionLength = displayedSection && displayedSection.length
-
-    console.log(sectionLength);
-    console.log(allowMoreLoading);
-    
-    if(allNotifsCount <=  sectionLength) {
+    console.log(notifs);
+    if (limit >= getNotifsNumOptions.data?.getNotifsCount!) {
       setAllowMoreLoading(false)
     }
-  }, [displayedSection, setDisplayedSection])
+  }, [limit])
 
   return (
     <>
@@ -110,18 +117,18 @@ export const Notifications: React.FC<NotificationsProps> = () => {
         >
           <InfiniteScroll
             hasMore={allowMoreLoading}
-            loadMore={loadMoreNotifications}
+            loadMore={() => loadMoreNotifications()}
 
             pageStart={0}
-            // useWindow={false}
+            useWindow={false}
             loader={
               <Center key={0}>
                 <FastBigSpinner />
               </Center>
             }
           >
-            {displayedSection &&
-              displayedSection.map((val, index: number) => (
+            {notifs &&
+              notifs.map((val, index: number) => (
                 <NotifItem
                   key={index}
                   val={val.text!}
