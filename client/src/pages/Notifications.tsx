@@ -22,6 +22,7 @@ export const NotifItem: React.FC<NotifItemProps> = ({ handleClick, val, data }) 
       replyId: data?.replyId as number
     }, fetchPolicy: "network-only"
   })
+
   const notifThreadId = notificationInfo.data?.getThreadByReplyId
 
   return (
@@ -31,7 +32,8 @@ export const NotifItem: React.FC<NotifItemProps> = ({ handleClick, val, data }) 
         w="100%"
         p="1rem"
         borderRadius="-20px"
-        // make it darker if not openned
+
+        //TODO:  make it darker if not openned
         bgColor="gray.100"
         shadow="md"
         fontSize="1.3rem"
@@ -46,9 +48,8 @@ export const NotifItem: React.FC<NotifItemProps> = ({ handleClick, val, data }) 
         my="1rem"
         pos="relative"
         onClick={() => {
-          console.log(data?.opened, data?.text);
-          console.log(notifThreadId);
-          handleClick()
+          // console.log(notifThreadId);
+          // handleClick()
         }}
       >
         {val}
@@ -63,27 +64,18 @@ export const NotifItem: React.FC<NotifItemProps> = ({ handleClick, val, data }) 
 interface NotificationsProps { }
 export const Notifications: React.FC<NotificationsProps> = () => {
 
-  // const [section, setSections] = useState<any[]>([])
   const [getNotifsNum, getNotifsNumOptions] = useGetNotifsNumLazyQuery();
   const [range, setRange] = useState({
     offset: 0,
     limit: 20
   })
-
   const notifs = useGetNotification(range.offset, range.limit)
   const [allowMore, setAllowMore] = useState(false)
-
-
-  useEffect(() => {
-    notifs.forEach((notif) => console.log(notif))
-  }, [notifs.length])
 
   useEffect(() => {
     let isMounted = true;
     if (isMounted) {
       getNotifsNum();
-      const allowToLoad = getNotifsNumOptions.data?.getNotifsCount! > notifs.length
-      setAllowMore(allowToLoad)
     }
     return () => {
       isMounted = false;
@@ -91,15 +83,11 @@ export const Notifications: React.FC<NotificationsProps> = () => {
   }, []);
 
 
-
   const laodMoreNotifs = () => {
-    console.log("load more function is called");
     setTimeout(() => {
-
       const prevLimit = range.limit
       setRange((value) => ({ ...value, limit: prevLimit + 10 }))
-
-    }, 3000)
+    }, 1500)
   }
 
 
@@ -113,25 +101,22 @@ export const Notifications: React.FC<NotificationsProps> = () => {
           minH="80vh"
           p={["0.2rem", "0.4rem", "0.8rem", "0.8rem"]}
         >
-
           <InfiniteScroll
-            hasMore={allowMore}
+            hasMore={getNotifsNumOptions.data?.getNotifsCount! > notifs.length}
             loadMore={laodMoreNotifs}
             pageStart={0}
-            useWindow={false}
             loader={
               <Center key={0}>
                 <FastBigSpinner />
               </Center>
             }
           >
-            {notifs && notifs.map((val, index: number) => (
+            {notifs && notifs?.map((val, index: number) => (
               <NotifItem
-                key={index}
+                key={index.toString() + "_" + index.toString()}
                 val={val.text!}
                 data={val}
-                handleClick={() => console.log("click event")}
-              />
+                handleClick={() => console.log("click event")} />
             ))}
           </InfiniteScroll>
 
