@@ -55,19 +55,32 @@ export class ReplyResolver {
       // publish the reply instance to the channel
       await pubSub.publish(reply_channel, JSONReply);
 
-      console.log("the reply in JSON from: ", JSONReply);
-
       // add to notifs table
       const threadData = await Thread.findByPk(replyThread);
-      const threadCreatorId =
-        threadData && threadData?.getDataValue("threadCreator");
+      const threadCreatorId = threadData && threadData?.getDataValue("threadCreator");
+      if (threadCreatorId !== replySpecialistID) {
+        threadCreatorId &&
+          (await Notification.create({
+            replyId: reply.getDataValue("id"),
+            userId: threadCreatorId,
+          }));
+      }
+      return true;
+    } catch (error: any) {
+      console.log(error.message);
+      return false;
+    }
+  }
 
-      threadCreatorId &&
-        (await Notification.create({
-          replyId: reply.getDataValue("id"),
-          userId: threadCreatorId,
-        }));
-
+  @Mutation(() => Boolean, { nullable: true })
+  @UseMiddleware(isAuthenticated)
+  async deleteReply(@Arg("id", () => Int) id: number) {
+    try {
+      await Reply.destroy({
+        where: {
+          id,
+        },
+      });
       return true;
     } catch (error: any) {
       console.log(error.message);
@@ -88,8 +101,6 @@ export class ReplyResolver {
     }: ReplyNotifType
   ) {
     try {
-      console.log("username: ", replySpecialist);
-
       return {
         id,
         replySpecialist,
@@ -150,7 +161,7 @@ export class ReplyResolver {
   @UseMiddleware(isAuthenticated)
   async upvoteReply(
     @Arg("id", () => Int) id: number,
-    @Ctx() {payload }: MyContext
+    @Ctx() { payload }: MyContext
   ) {
     try {
       let reply = await Reply.findOne({ where: { id } });
@@ -158,12 +169,12 @@ export class ReplyResolver {
       await reply?.update({
         upvotes: replyUpvotes! + 1,
       });
-      const userId = payload?.userId
-      const replyId = reply?.getDataValue("id")
+      const userId = payload?.userId;
+      const replyId = reply?.getDataValue("id");
       await ReplyInfo.create({
         userUpvoteId: userId,
-        infoReplyId: replyId
-      })
+        infoReplyId: replyId,
+      });
       return true;
     } catch (error: any) {
       console.log(error.message);
@@ -173,29 +184,24 @@ export class ReplyResolver {
 
   @Query(() => [Int], { nullable: true })
   @UseMiddleware(isAuthenticated)
-  async listUserLikedReplies(
-    @Ctx () {payload}: MyContext
-  ) {
+  async listUserLikedReplies(@Ctx() { payload }: MyContext) {
     try {
-      const userId = payload?.userId
+      const userId = payload?.userId;
       let repliesInfo = await ReplyInfo.findAll({
         where: {
-          userUpvoteId: userId
-        }
-      })
+          userUpvoteId: userId,
+        },
+      });
       let repliesIds = repliesInfo.map((rep, idx) => {
-        let x = rep.getDataValue("infoReplyId")
-        if (x == null ) x = -1 
-        return x
-      })
+        let x = rep.getDataValue("infoReplyId");
+        if (x == null) x = -1;
+        return x;
+      });
 
-      repliesIds = Array.from(new Set(repliesIds))
-      console.log(repliesIds);
-      return repliesIds
-
+      repliesIds = Array.from(new Set(repliesIds));
+      return repliesIds;
     } catch (error: any) {
       throw new Error(error.message);
     }
   }
-
 }

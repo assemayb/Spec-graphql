@@ -9,14 +9,14 @@ import { FastBigSpinner } from "../smallComps/Spinners";
 import { useGetNotification } from "../hooks/useListNotifications"
 import { NotificationType, useGetNotifsNumLazyQuery, useGetThreadByReplyQuery } from "../generated/graphql";
 
+
 interface NotifItemProps {
-  handleClick: () => void;
   val?: string;
   data?: NotificationType
 }
 
 
-export const NotifItem: React.FC<NotifItemProps> = ({ handleClick, val, data }) => {
+export const NotifItem: React.FC<NotifItemProps> = ({ val, data }) => {
   const notificationInfo = useGetThreadByReplyQuery({
     variables: {
       replyId: data?.replyId as number
@@ -24,6 +24,7 @@ export const NotifItem: React.FC<NotifItemProps> = ({ handleClick, val, data }) 
   })
 
   const notifThreadId = notificationInfo.data?.getThreadByReplyId
+
 
   return (
     <>
@@ -40,7 +41,7 @@ export const NotifItem: React.FC<NotifItemProps> = ({ handleClick, val, data }) 
         fontWeight="bold"
         color="#335344"
         minH="80px"
-        borderLeft="10px solid #1e8244"
+        borderLeft="7px solid #1e8244"
         textAlign="left"
         _hover={{
           bgColor: "gray.200",
@@ -48,11 +49,10 @@ export const NotifItem: React.FC<NotifItemProps> = ({ handleClick, val, data }) 
         my="1rem"
         pos="relative"
         onClick={() => {
-          // console.log(notifThreadId);
-          // handleClick()
+          console.log(notifThreadId)
         }}
       >
-        {val}
+        {val + JSON.stringify(data?.id)  + JSON.stringify(data?.opened.valueOf())}
         {/* <Button bgColor="blue.300" pos="absolute" right="4px" top="2px" onClick={handleClick}>delete</Button> */}
       </Flex>
     </>
@@ -67,10 +67,12 @@ export const Notifications: React.FC<NotificationsProps> = () => {
   const [getNotifsNum, getNotifsNumOptions] = useGetNotifsNumLazyQuery();
   const [range, setRange] = useState({
     offset: 0,
-    limit: 20
+    limit: 10
   })
   const notifs = useGetNotification(range.offset, range.limit)
-  const [allowMore, setAllowMore] = useState(false)
+  useEffect(() => {
+    console.log("length  ===>> ", notifs.length);
+  }, [notifs.length])
 
   useEffect(() => {
     let isMounted = true;
@@ -87,7 +89,7 @@ export const Notifications: React.FC<NotificationsProps> = () => {
     setTimeout(() => {
       const prevLimit = range.limit
       setRange((value) => ({ ...value, limit: prevLimit + 10 }))
-    }, 1500)
+    }, 850)
   }
 
 
@@ -116,7 +118,7 @@ export const Notifications: React.FC<NotificationsProps> = () => {
                 key={index.toString() + "_" + index.toString()}
                 val={val.text!}
                 data={val}
-                handleClick={() => console.log("click event")} />
+              />
             ))}
           </InfiniteScroll>
 
