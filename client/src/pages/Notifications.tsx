@@ -7,15 +7,23 @@ import { HeaderComp } from "../smallComps/HeaderComp";
 import InfiniteScroll from "react-infinite-scroller";
 import { FastBigSpinner } from "../smallComps/Spinners";
 import { useGetNotification } from "../hooks/useListNotifications"
-import { useGetNotifsNumLazyQuery } from "../generated/graphql";
+import { NotificationType, useGetNotifsNumLazyQuery, useGetThreadByReplyQuery } from "../generated/graphql";
 
 interface NotifItemProps {
   handleClick: () => void;
   val?: string;
+  data?: NotificationType
 }
 
 
-export const NotifItem: React.FC<NotifItemProps> = ({ handleClick, val }) => {
+export const NotifItem: React.FC<NotifItemProps> = ({ handleClick, val, data }) => {
+  const notificationInfo = useGetThreadByReplyQuery({
+    variables: {
+      replyId: data?.replyId as number
+    }, fetchPolicy: "network-only"
+  })
+  const notifThreadId = notificationInfo.data?.getThreadByReplyId
+
   return (
     <>
       <Flex
@@ -37,7 +45,11 @@ export const NotifItem: React.FC<NotifItemProps> = ({ handleClick, val }) => {
         }}
         my="1rem"
         pos="relative"
-        onClick={() => handleClick()}
+        onClick={() => {
+          console.log(data?.opened, data?.text);
+          console.log(notifThreadId);
+          handleClick()
+        }}
       >
         {val}
         {/* <Button bgColor="blue.300" pos="absolute" right="4px" top="2px" onClick={handleClick}>delete</Button> */}
@@ -117,6 +129,7 @@ export const Notifications: React.FC<NotificationsProps> = () => {
               <NotifItem
                 key={index}
                 val={val.text!}
+                data={val}
                 handleClick={() => console.log("click event")}
               />
             ))}

@@ -1,0 +1,3 @@
+query getThreadByReply($replyId: Int!) {
+  getThreadByReplyId(replyId: $replyId)
+}

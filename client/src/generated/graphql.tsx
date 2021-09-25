@@ -31,6 +31,7 @@ export type Query = {
   listTopics: Array<Scalars['String']>;
   lisTopicThreads?: Maybe<Array<ThreadType>>;
   getTopicThreadsNum: Scalars['Int'];
+  getThreadByReplyId: Scalars['Int'];
   listThreadReplies?: Maybe<Array<ReplyType>>;
   listAllReplies?: Maybe<Array<ReplyType>>;
   listUserLikedReplies?: Maybe<Array<Scalars['Int']>>;
@@ -72,6 +73,11 @@ export type QueryLisTopicThreadsArgs = {
 
 export type QueryGetTopicThreadsNumArgs = {
   topic: Scalars['String'];
+};
+
+
+export type QueryGetThreadByReplyIdArgs = {
+  replyId: Scalars['Int'];
 };
 
 
@@ -293,6 +299,16 @@ export type GetThreadDataQuery = (
       & Pick<ReplyType, 'id' | 'upvotes' | 'text' | 'replyThread' | 'replySpecialist'>
     )>> }
   )> }
+);
+
+export type GetThreadByReplyQueryVariables = Exact<{
+  replyId: Scalars['Int'];
+}>;
+
+
+export type GetThreadByReplyQuery = (
+  { __typename?: 'Query' }
+  & Pick<Query, 'getThreadByReplyId'>
 );
 
 export type GetThreadsNumQueryVariables = Exact<{ [key: string]: never; }>;
@@ -689,6 +705,37 @@ export function useGetThreadDataLazyQuery(baseOptions?: Apollo.LazyQueryHookOpti
 export type GetThreadDataQueryHookResult = ReturnType<typeof useGetThreadDataQuery>;
 export type GetThreadDataLazyQueryHookResult = ReturnType<typeof useGetThreadDataLazyQuery>;
 export type GetThreadDataQueryResult = Apollo.QueryResult<GetThreadDataQuery, GetThreadDataQueryVariables>;
+export const GetThreadByReplyDocument = gql`
+    query getThreadByReply($replyId: Int!) {
+  getThreadByReplyId(replyId: $replyId)
+}
+    `;
+
+/**
+ * __useGetThreadByReplyQuery__
+ *
+ * To run a query within a React component, call `useGetThreadByReplyQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetThreadByReplyQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetThreadByReplyQuery({
+ *   variables: {
+ *      replyId: // value for 'replyId'
+ *   },
+ * });
+ */
+export function useGetThreadByReplyQuery(baseOptions: Apollo.QueryHookOptions<GetThreadByReplyQuery, GetThreadByReplyQueryVariables>) {
+        return Apollo.useQuery<GetThreadByReplyQuery, GetThreadByReplyQueryVariables>(GetThreadByReplyDocument, baseOptions);
+      }
+export function useGetThreadByReplyLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetThreadByReplyQuery, GetThreadByReplyQueryVariables>) {
+          return Apollo.useLazyQuery<GetThreadByReplyQuery, GetThreadByReplyQueryVariables>(GetThreadByReplyDocument, baseOptions);
+        }
+export type GetThreadByReplyQueryHookResult = ReturnType<typeof useGetThreadByReplyQuery>;
+export type GetThreadByReplyLazyQueryHookResult = ReturnType<typeof useGetThreadByReplyLazyQuery>;
+export type GetThreadByReplyQueryResult = Apollo.QueryResult<GetThreadByReplyQuery, GetThreadByReplyQueryVariables>;
 export const GetThreadsNumDocument = gql`
     query getThreadsNum {
   getThreadsNum

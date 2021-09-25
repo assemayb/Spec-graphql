@@ -23,6 +23,7 @@ import { MyContext } from "../utils/context";
 
 import { isAuthenticated } from "../utils/isAuth";
 import { User } from "../models/User";
+import { Reply } from "../models/Reply";
 
 const thread_channel = "threads_channel";
 
@@ -154,11 +155,11 @@ export class ThreadResolver {
   @UseMiddleware(isAuthenticated)
   async listUserThreads(
     @Ctx() { req, payload }: MyContext,
-    @Arg("offset", () => Int ,{ nullable: true }) offset: number,
+    @Arg("offset", () => Int, { nullable: true }) offset: number,
     @Arg("limit", () => Int, { nullable: true }) limit: number
   ) {
     const loggedUserId = payload?.userId as number;
-    
+
     try {
       const userThreads = await Thread.findAll({
         where: {
@@ -172,7 +173,6 @@ export class ThreadResolver {
       console.log("length of queried threads: ", userThreads.length);
 
       return userThreads;
-
     } catch (error: any) {
       throw new Error(error.message);
     }
@@ -319,16 +319,33 @@ export class ThreadResolver {
     @Ctx() { payload }: MyContext
   ) {
     try {
-      let thread = await Thread.findByPk(id)
-      thread !== null && await Thread.destroy({
-        where: {
-          id,
-        },
-      });
+      let thread = await Thread.findByPk(id);
+      thread !== null &&
+        (await Thread.destroy({
+          where: {
+            id,
+          },
+        }));
       return true;
     } catch (error: any) {
       console.log(error.message);
       return false;
+    }
+  }
+
+  @Query(() => Int, { nullable: false })
+  @UseMiddleware(isAuthenticated)
+  async getThreadByReplyId(@Arg("replyId", () => Int) replyId: number) {
+    try {
+      const reply = await Reply.findOne({
+        where: {
+          id: replyId,
+        },
+      });
+      const thread = reply?.getDataValue("replyThread");
+      return thread;
+    } catch (error: any) {
+      throw new Error(error.message);
     }
   }
 }
