@@ -1,18 +1,13 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 
-import { Flex, Center, Box } from "@chakra-ui/react";
+import { Flex, Center } from "@chakra-ui/react";
 import React, { useEffect } from "react";
 import { useState } from "react";
 import { HeaderComp } from "../smallComps/HeaderComp";
 import InfiniteScroll from "react-infinite-scroller";
 import { FastBigSpinner } from "../smallComps/Spinners";
-
-import {
-  NotificationType,
-  useGetNotifsNumLazyQuery,
-  useListUserNotifsLazyQuery,
-  useListUserNotifsQuery,
-} from "../generated/graphql";
+import { useGetNotification } from "../hooks/useListNotifications"
+import { useGetNotifsNumLazyQuery } from "../generated/graphql";
 
 interface NotifItemProps {
   handleClick: () => void;
@@ -27,7 +22,7 @@ export const NotifItem: React.FC<NotifItemProps> = ({ handleClick, val }) => {
         as="button"
         w="100%"
         p="1rem"
-        borderRadius="-40px"
+        borderRadius="-20px"
         // make it darker if not openned
         bgColor="gray.100"
         shadow="md"
@@ -35,14 +30,14 @@ export const NotifItem: React.FC<NotifItemProps> = ({ handleClick, val }) => {
         fontWeight="bold"
         color="#335344"
         minH="80px"
-        borderLeft="12px solid #518096"
+        borderLeft="10px solid #1e8244"
         textAlign="left"
         _hover={{
           bgColor: "gray.200",
         }}
-        my="0.7rem"
+        my="1rem"
         pos="relative"
-        onClick={handleClick}
+        onClick={() => handleClick()}
       >
         {val}
         {/* <Button bgColor="blue.300" pos="absolute" right="4px" top="2px" onClick={handleClick}>delete</Button> */}
@@ -50,34 +45,33 @@ export const NotifItem: React.FC<NotifItemProps> = ({ handleClick, val }) => {
     </>
   );
 };
-export const useGetNotification = (start: number, end: number) => {
-  const [notifs, setNotifs] = useState<NotificationType[]>([])
-  const { data } = useListUserNotifsQuery({
-    fetchPolicy: "network-only",
-    onCompleted: (data) => {
-      const chunk = data?.listUserNotifs!.slice(start, end)
-      setNotifs(chunk!)
-    }
-  })
 
-  useEffect(() => {
-    const chunk = data?.listUserNotifs!.slice(start, end)
-    setNotifs(chunk!)
-  }, [start, end])
-
-  return notifs
-}
 
 
 interface NotificationsProps { }
 export const Notifications: React.FC<NotificationsProps> = () => {
 
-
+  // const [section, setSections] = useState<any[]>([])
   const [getNotifsNum, getNotifsNumOptions] = useGetNotifsNumLazyQuery();
+  const [range, setRange] = useState({
+    offset: 0,
+    limit: 20
+  })
+
+  const notifs = useGetNotification(range.offset, range.limit)
+  const [allowMore, setAllowMore] = useState(false)
+
+
+  useEffect(() => {
+    notifs.forEach((notif) => console.log(notif))
+  }, [notifs.length])
+
   useEffect(() => {
     let isMounted = true;
     if (isMounted) {
       getNotifsNum();
+      const allowToLoad = getNotifsNumOptions.data?.getNotifsCount! > notifs.length
+      setAllowMore(allowToLoad)
     }
     return () => {
       isMounted = false;
@@ -85,25 +79,17 @@ export const Notifications: React.FC<NotificationsProps> = () => {
   }, []);
 
 
-  const [offset] = useState(0)
-  const [limit, setLimit] = useState(15);
-  const [allowMoreLoading, setAllowMoreLoading] = useState(true);
-  const notifs = useGetNotification(offset, limit)
 
-
-  const loadMoreNotifications = () => {
-    console.log("load more function");
+  const laodMoreNotifs = () => {
+    console.log("load more function is called");
     setTimeout(() => {
-      setLimit((prev) => prev + 15)
-    }, 2000)
+
+      const prevLimit = range.limit
+      setRange((value) => ({ ...value, limit: prevLimit + 10 }))
+
+    }, 3000)
   }
 
-  useEffect(() => {
-    console.log(notifs);
-    if (limit >= getNotifsNumOptions.data?.getNotifsCount!) {
-      setAllowMoreLoading(false)
-    }
-  }, [limit])
 
   return (
     <>
@@ -115,10 +101,10 @@ export const Notifications: React.FC<NotificationsProps> = () => {
           minH="80vh"
           p={["0.2rem", "0.4rem", "0.8rem", "0.8rem"]}
         >
-          <InfiniteScroll
-            hasMore={allowMoreLoading}
-            loadMore={() => loadMoreNotifications()}
 
+          <InfiniteScroll
+            hasMore={allowMore}
+            loadMore={laodMoreNotifs}
             pageStart={0}
             useWindow={false}
             loader={
@@ -127,19 +113,15 @@ export const Notifications: React.FC<NotificationsProps> = () => {
               </Center>
             }
           >
-            {notifs &&
-              notifs.map((val, index: number) => (
-                <NotifItem
-                  key={index}
-                  val={val.text!}
-                  // handleClick={() => {
-                  //   let x = notifs.filter((_, idx) => index !== idx);
-                  //   setNotifs(x);
-                  // }}
-                  handleClick={() => console.log("click event")}
-                />
-              ))}
+            {notifs && notifs.map((val, index: number) => (
+              <NotifItem
+                key={index}
+                val={val.text!}
+                handleClick={() => console.log("click event")}
+              />
+            ))}
           </InfiniteScroll>
+
         </Flex>
       </Flex>
     </>

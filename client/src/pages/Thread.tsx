@@ -37,7 +37,7 @@ export const HeaderSection: React.FC<HeaderSectionProps> = ({ question }) => {
         base: "20px",
         md: "25px",
       }}
-      // bgColor="green.50"
+    // bgColor="green.50"
     >
       {question}
       <Divider marginTop="0.6rem" />
@@ -45,7 +45,7 @@ export const HeaderSection: React.FC<HeaderSectionProps> = ({ question }) => {
   );
 };
 
-interface ThreadProps {}
+interface ThreadProps { }
 export const Thread: React.FC<ThreadProps> = () => {
   const params: { threadId: string } = useParams();
   const [isUserLoggedInLazyQuery, isUserLoggedInLazyQueryData] =
@@ -85,18 +85,15 @@ export const Thread: React.FC<ThreadProps> = () => {
     };
   }, []);
 
-  const fetchByUpvotes = () =>
+  const fetch = (type: string) => {
     refetch!({
       id: parseInt(params.threadId!),
-      sortBy: "upvotes",
+      sortBy: type,
     });
+  }
+  const fetchByUpvotes = () => fetch("upvotes")
+  const refetchByDate = () => fetch("recent")
 
-  const refetchByDate = () => {
-    refetch!({
-      id: parseInt(params.threadId!),
-      sortBy: "recent",
-    });
-  };
   const [repliesCount, setRepliesCount] = useState(0);
   const [showReplies, setShowReplies] = useState(false);
   const [showModal, setShowModal] = useState(false);

@@ -21,7 +21,6 @@ import { ReplyCreateType } from "./replyResolverTypes";
 import { ReplyType } from "./replyResolverTypes";
 import { User } from "../models/User";
 import { Thread } from "../models/Thread";
-import { not } from "sequelize/types/lib/operators";
 import { NotificationType } from "./notificationsTypes";
 
 @Resolver()
@@ -81,7 +80,6 @@ export class NotificationResolver {
 
       console.log(newNotifs.length);
       return newNotifs;
-      
     } catch (error: any) {
       console.log(error.message);
     }

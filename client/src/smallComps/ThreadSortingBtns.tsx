@@ -4,7 +4,7 @@ import { BiTimeFive } from "react-icons/bi";
 import { GetThreadDataQuery } from "../generated/graphql";
 
 interface SortingButtonsSectionProps {
-  fetchByUpvotes: () => Promise<ApolloQueryResult<GetThreadDataQuery>>;
+  fetchByUpvotes: () => void;
   refetchByDate: () => any;
 }
 export const SortingButtonsSection: React.FC<SortingButtonsSectionProps> = ({
