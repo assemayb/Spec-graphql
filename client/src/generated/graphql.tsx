@@ -141,7 +141,9 @@ export type Mutation = {
   updateThread: Scalars['Boolean'];
   deleteThread?: Maybe<Scalars['Boolean']>;
   addReply: Scalars['Boolean'];
+  deleteReply?: Maybe<Scalars['Boolean']>;
   upvoteReply: Scalars['Boolean'];
+  deleteNotif?: Maybe<Scalars['Boolean']>;
 };
 
 
@@ -191,7 +193,17 @@ export type MutationAddReplyArgs = {
 };
 
 
+export type MutationDeleteReplyArgs = {
+  id: Scalars['Int'];
+};
+
+
 export type MutationUpvoteReplyArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type MutationDeleteNotifArgs = {
   id: Scalars['Int'];
 };
 
@@ -263,6 +275,16 @@ export type CreateThreadMutationVariables = Exact<{
 export type CreateThreadMutation = (
   { __typename?: 'Mutation' }
   & Pick<Mutation, 'createThread'>
+);
+
+export type DeleteNotifMutationVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type DeleteNotifMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'deleteNotif'>
 );
 
 export type DeleteThreadMutationVariables = Exact<{
@@ -601,6 +623,36 @@ export function useCreateThreadMutation(baseOptions?: Apollo.MutationHookOptions
 export type CreateThreadMutationHookResult = ReturnType<typeof useCreateThreadMutation>;
 export type CreateThreadMutationResult = Apollo.MutationResult<CreateThreadMutation>;
 export type CreateThreadMutationOptions = Apollo.BaseMutationOptions<CreateThreadMutation, CreateThreadMutationVariables>;
+export const DeleteNotifDocument = gql`
+    mutation deleteNotif($id: Int!) {
+  deleteNotif(id: $id)
+}
+    `;
+export type DeleteNotifMutationFn = Apollo.MutationFunction<DeleteNotifMutation, DeleteNotifMutationVariables>;
+
+/**
+ * __useDeleteNotifMutation__
+ *
+ * To run a mutation, you first call `useDeleteNotifMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteNotifMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteNotifMutation, { data, loading, error }] = useDeleteNotifMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useDeleteNotifMutation(baseOptions?: Apollo.MutationHookOptions<DeleteNotifMutation, DeleteNotifMutationVariables>) {
+        return Apollo.useMutation<DeleteNotifMutation, DeleteNotifMutationVariables>(DeleteNotifDocument, baseOptions);
+      }
+export type DeleteNotifMutationHookResult = ReturnType<typeof useDeleteNotifMutation>;
+export type DeleteNotifMutationResult = Apollo.MutationResult<DeleteNotifMutation>;
+export type DeleteNotifMutationOptions = Apollo.BaseMutationOptions<DeleteNotifMutation, DeleteNotifMutationVariables>;
 export const DeleteThreadDocument = gql`
     mutation deleteThread($id: Int!) {
   deleteThread(id: $id)

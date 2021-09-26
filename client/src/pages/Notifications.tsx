@@ -7,13 +7,18 @@ import { HeaderComp } from "../smallComps/HeaderComp";
 import InfiniteScroll from "react-infinite-scroller";
 import { FastBigSpinner } from "../smallComps/Spinners";
 import { useGetNotification } from "../hooks/useListNotifications"
-import { NotificationType, useGetNotifsNumLazyQuery, useGetThreadByReplyQuery } from "../generated/graphql";
+import { NotificationType, useDeleteNotifMutation, useGetNotifsNumLazyQuery, useGetThreadByReplyQuery } from "../generated/graphql";
 import { useHistory, useLocation } from "react-router";
 
 
 interface NotifItemProps {
   val?: string;
   data?: NotificationType
+  setRange: any;
+  range: {
+    offset: number;
+    limit: number;
+  }
 }
 
 
@@ -24,6 +29,7 @@ export const NotifItem: React.FC<NotifItemProps> = ({ val, data }) => {
     }, fetchPolicy: "network-only"
   })
   const [showDelBtn, setShowDelBtn] = useState(false)
+  const [deleteNotifMutation, { called }] = useDeleteNotifMutation()
 
   const notifThreadId = notificationInfo.data?.getThreadByReplyId
 
@@ -36,8 +42,8 @@ export const NotifItem: React.FC<NotifItemProps> = ({ val, data }) => {
   return (
     <>
       <Flex
-        as="button"
-        w="100%"
+        // as="button"
+        // w="100%"
         p="1rem"
         borderRadius="-20px"
         justify="space-between"
@@ -56,11 +62,20 @@ export const NotifItem: React.FC<NotifItemProps> = ({ val, data }) => {
         }}
         my="1rem"
         pos="relative"
-        onClick={() => goToThread()}
       >
-        {val}
+        <div style={{ width: "80%", cursor: "pointer" }} onClick={() => goToThread()}>
+          {val}
+        </div>
         <Tooltip label="delete">
           <Button
+            onClick={() => deleteNotifMutation({
+              variables: {
+                id: data?.id!
+              },
+              update: () => {
+                console.log("donee");
+              }
+            })}
             borderRadius="5px"
             fontSize="20px"
             bgColor="seashell"
@@ -86,11 +101,8 @@ export const Notifications: React.FC<NotificationsProps> = () => {
     offset: 0,
     limit: 10
   })
-  const notifs = useGetNotification(range.offset, range.limit)
-  useEffect(() => {
-    console.log("length  ===>> ", notifs.length);
-  }, [notifs.length])
 
+  const notifs = useGetNotification(range.offset, range.limit)
   useEffect(() => {
     let isMounted = true;
     if (isMounted) {
@@ -135,6 +147,8 @@ export const Notifications: React.FC<NotificationsProps> = () => {
                 key={index.toString() + "_" + index.toString()}
                 val={val.text!}
                 data={val}
+                range={range}
+                setRange={setRange}
               />
             ))}
           </InfiniteScroll>
