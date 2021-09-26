@@ -9,7 +9,7 @@ import {
   Skeleton,
   Tooltip,
 } from "@chakra-ui/react";
-import { useParams } from "react-router-dom";
+import { useParams, useLocation } from "react-router-dom";
 import {
   useGetThreadDataLazyQuery,
   useIsUserLoggedInLazyQuery,
@@ -50,6 +50,14 @@ interface ThreadProps { }
 export const Thread: React.FC<ThreadProps> = () => {
   const params: { threadId: string } = useParams();
   const [userLoggedInCheck, userLoggedInCheckOptions] = useIsUserLoggedInLazyQuery({ fetchPolicy: "no-cache" })
+
+  const { state }: any = useLocation()
+  useEffect(() => {
+    const passedReply = state.repID
+    console.log(passedReply);
+  }, [state])
+
+
   useEffect(() => {
     let mounted = true
     mounted === true && userLoggedInCheck()
@@ -72,8 +80,7 @@ export const Thread: React.FC<ThreadProps> = () => {
       sortBy: "upvotes",
     },
   });
-  const [listLikedReplies, listLikedRepliesOptions] =
-    useListUserLikedRepliesLazyQuery({ fetchPolicy: "network-only" });
+  const [listLikedReplies, listLikedRepliesOptions] = useListUserLikedRepliesLazyQuery({ fetchPolicy: "network-only" });
 
   useEffect(() => {
     setShowReplies((prev) => !prev);

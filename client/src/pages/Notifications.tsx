@@ -25,11 +25,11 @@ export const NotifItem: React.FC<NotifItemProps> = ({ val, data }) => {
   })
 
   const notifThreadId = notificationInfo.data?.getThreadByReplyId
+  
   const history = useHistory()
-
   function goToThread() {
     const repID = data?.replyId
-    history.push(`/threads/${notifThreadId}`, {repID})
+    history.push(`/threads/${notifThreadId}`, {repID: repID})
   }
 
   return (
@@ -56,7 +56,7 @@ export const NotifItem: React.FC<NotifItemProps> = ({ val, data }) => {
         pos="relative"
         onClick={() => goToThread()}
       >
-        {val + JSON.stringify(data?.id) + JSON.stringify(data?.opened.valueOf())}
+        {val}
         {/* <Button bgColor="blue.300" pos="absolute" right="4px" top="2px" onClick={handleClick}>delete</Button> */}
       </Flex>
     </>
