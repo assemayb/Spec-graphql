@@ -88,4 +88,25 @@ export class NotificationResolver {
   // update notification
 
   // delete notification
+  @Mutation(() => Boolean, { nullable: true })
+  @UseMiddleware(isAuthenticated)
+  async deleteNotif(
+    @Arg("id", () => Int) id: number,
+  ) {
+    try {
+      let notif = await Notification.findByPk(id);
+      notif !== null &&
+        (await Notification.destroy({
+          where: {
+            id,
+          },
+        }));
+      return true;
+    } catch (error: any) {
+      console.log(error.message);
+      return false;
+    }
+  }
+
+
 }
