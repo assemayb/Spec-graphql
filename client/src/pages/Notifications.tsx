@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 
-import { Flex, Center } from "@chakra-ui/react";
+import { Flex, Center, Button, Tooltip } from "@chakra-ui/react";
 import React, { useEffect } from "react";
 import { useState } from "react";
 import { HeaderComp } from "../smallComps/HeaderComp";
@@ -23,13 +23,14 @@ export const NotifItem: React.FC<NotifItemProps> = ({ val, data }) => {
       replyId: data?.replyId as number
     }, fetchPolicy: "network-only"
   })
+  const [showDelBtn, setShowDelBtn] = useState(false)
 
   const notifThreadId = notificationInfo.data?.getThreadByReplyId
-  
+
   const history = useHistory()
   function goToThread() {
     const repID = data?.replyId
-    history.push(`/threads/${notifThreadId}`, {repID: repID})
+    history.push(`/threads/${notifThreadId}`, { repID: repID })
   }
 
   return (
@@ -39,7 +40,8 @@ export const NotifItem: React.FC<NotifItemProps> = ({ val, data }) => {
         w="100%"
         p="1rem"
         borderRadius="-20px"
-
+        justify="space-between"
+        flexDirection="row"
         //TODO:  make it darker if not openned
         bgColor="gray.100"
         shadow="md"
@@ -57,7 +59,18 @@ export const NotifItem: React.FC<NotifItemProps> = ({ val, data }) => {
         onClick={() => goToThread()}
       >
         {val}
-        {/* <Button bgColor="blue.300" pos="absolute" right="4px" top="2px" onClick={handleClick}>delete</Button> */}
+        <Tooltip label="delete">
+          <Button
+            borderRadius="5px"
+            fontSize="20px"
+            bgColor="seashell"
+            _hover={{
+              bgColor: "red.300",
+              color: "white"
+            }}>
+            x
+          </Button>
+        </Tooltip>
       </Flex>
     </>
   );

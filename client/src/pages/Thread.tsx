@@ -51,13 +51,6 @@ export const Thread: React.FC<ThreadProps> = () => {
   const params: { threadId: string } = useParams();
   const [userLoggedInCheck, userLoggedInCheckOptions] = useIsUserLoggedInLazyQuery({ fetchPolicy: "no-cache" })
 
-  const { state }: any = useLocation()
-  useEffect(() => {
-    const passedReply = state.repID
-    console.log(passedReply);
-  }, [state])
-
-
   useEffect(() => {
     let mounted = true
     mounted === true && userLoggedInCheck()
@@ -127,6 +120,18 @@ export const Thread: React.FC<ThreadProps> = () => {
       }, 100);
     }
   }, [repliesCount]);
+
+
+  const { state }: any = useLocation()
+  useEffect(() => {
+    if (state) {
+      const passedReply = state.repID
+      setTimeout(() => {
+        console.log(passedReply);
+      }, 2000)
+    }
+  }, [state])
+
 
   const addNewReply = () => {
     const isUserLoggedIn: boolean =
