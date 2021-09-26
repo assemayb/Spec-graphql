@@ -13,6 +13,7 @@ import { useParams } from "react-router-dom";
 import {
   useGetThreadDataLazyQuery,
   useIsUserLoggedInLazyQuery,
+  useIsUserLoggedInQuery,
   useListUserLikedRepliesLazyQuery,
   useMeLazyQuery,
 } from "../generated/graphql";
@@ -48,6 +49,13 @@ export const HeaderSection: React.FC<HeaderSectionProps> = ({ question }) => {
 interface ThreadProps { }
 export const Thread: React.FC<ThreadProps> = () => {
   const params: { threadId: string } = useParams();
+  const [userLoggedInCheck, userLoggedInCheckOptions] = useIsUserLoggedInLazyQuery({ fetchPolicy: "no-cache" })
+  useEffect(() => {
+    let mounted = true
+    mounted === true && userLoggedInCheck()
+    return () => { mounted = false }
+  }, [])
+
   const [isUserLoggedInLazyQuery, isUserLoggedInLazyQueryData] =
     useIsUserLoggedInLazyQuery({
       fetchPolicy: "network-only",
@@ -75,10 +83,13 @@ export const Thread: React.FC<ThreadProps> = () => {
   useEffect(() => {
     let isMounted = true;
     if (isMounted === true) {
-      listLikedReplies();
-      meQuery();
+      const isUserLogged = userLoggedInCheckOptions.data?.isUserLoggedIn
+      if (isUserLogged === true) {
+        listLikedReplies();
+        meQuery();
+        isUserLoggedInLazyQuery();
+      }
       getThreadDataQuery();
-      isUserLoggedInLazyQuery();
     }
     return () => {
       isMounted = false;

@@ -8,6 +8,7 @@ import InfiniteScroll from "react-infinite-scroller";
 import { FastBigSpinner } from "../smallComps/Spinners";
 import { useGetNotification } from "../hooks/useListNotifications"
 import { NotificationType, useGetNotifsNumLazyQuery, useGetThreadByReplyQuery } from "../generated/graphql";
+import { useHistory, useLocation } from "react-router";
 
 
 interface NotifItemProps {
@@ -24,7 +25,12 @@ export const NotifItem: React.FC<NotifItemProps> = ({ val, data }) => {
   })
 
   const notifThreadId = notificationInfo.data?.getThreadByReplyId
+  const history = useHistory()
 
+  function goToThread() {
+    const repID = data?.replyId
+    history.push(`/threads/${notifThreadId}`, {repID})
+  }
 
   return (
     <>
@@ -48,11 +54,9 @@ export const NotifItem: React.FC<NotifItemProps> = ({ val, data }) => {
         }}
         my="1rem"
         pos="relative"
-        onClick={() => {
-          console.log(notifThreadId)
-        }}
+        onClick={() => goToThread()}
       >
-        {val + JSON.stringify(data?.id)  + JSON.stringify(data?.opened.valueOf())}
+        {val + JSON.stringify(data?.id) + JSON.stringify(data?.opened.valueOf())}
         {/* <Button bgColor="blue.300" pos="absolute" right="4px" top="2px" onClick={handleClick}>delete</Button> */}
       </Flex>
     </>
