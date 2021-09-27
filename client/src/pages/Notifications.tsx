@@ -6,37 +6,45 @@ import { useState } from "react";
 import { HeaderComp } from "../smallComps/HeaderComp";
 import InfiniteScroll from "react-infinite-scroller";
 import { FastBigSpinner } from "../smallComps/Spinners";
-import { useGetNotification } from "../hooks/useListNotifications"
-import { NotificationType, useDeleteNotifMutation, useGetNotifsNumLazyQuery, useGetThreadByReplyQuery } from "../generated/graphql";
-import { useHistory, useLocation } from "react-router";
-
+import { useGetNotification } from "../hooks/useListNotifications";
+import {
+  NotificationType,
+  useDeleteNotifMutation,
+  useGetNotifsNumLazyQuery,
+  useGetThreadByReplyQuery,
+  useListUserNotifsLazyQuery,
+} from "../generated/graphql";
+import { useHistory } from "react-router";
 
 interface NotifItemProps {
   val?: string;
-  data?: NotificationType
-  setRange: any;
-  range: {
-    offset: number;
-    limit: number;
-  }
+  data?: NotificationType;
+  deleteNotifMutation: any;
+  // setRange: any;
+  // range: {
+  //   offset: number;
+  //   limit: number;
+  // };
 }
 
-
-export const NotifItem: React.FC<NotifItemProps> = ({ val, data }) => {
+export const NotifItem: React.FC<NotifItemProps> = ({
+  val,
+  data,
+  deleteNotifMutation,
+}) => {
   const notificationInfo = useGetThreadByReplyQuery({
     variables: {
-      replyId: data?.replyId as number
-    }, fetchPolicy: "network-only"
-  })
-  const [showDelBtn, setShowDelBtn] = useState(false)
-  const [deleteNotifMutation, { called }] = useDeleteNotifMutation()
+      replyId: data?.replyId as number,
+    },
+    fetchPolicy: "network-only",
+  });
+  const [showDelBtn, setShowDelBtn] = useState(false);
+  const notifThreadId = notificationInfo.data?.getThreadByReplyId;
 
-  const notifThreadId = notificationInfo.data?.getThreadByReplyId
-
-  const history = useHistory()
+  const history = useHistory();
   function goToThread() {
-    const repID = data?.replyId
-    history.push(`/threads/${notifThreadId}`, { repID: repID })
+    const repID = data?.replyId;
+    history.push(`/threads/${notifThreadId}`, { repID: repID });
   }
 
   return (
@@ -63,26 +71,32 @@ export const NotifItem: React.FC<NotifItemProps> = ({ val, data }) => {
         my="1rem"
         pos="relative"
       >
-        <div style={{ width: "80%", cursor: "pointer" }} onClick={() => goToThread()}>
+        <div
+          style={{ width: "80%", cursor: "pointer" }}
+          onClick={() => goToThread()}
+        >
           {val}
         </div>
         <Tooltip label="delete">
           <Button
-            onClick={() => deleteNotifMutation({
-              variables: {
-                id: data?.id!
-              },
-              update: () => {
-                console.log("donee");
-              }
-            })}
+            onClick={() =>
+              deleteNotifMutation({
+                variables: {
+                  id: data?.id!,
+                },
+                update: () => {
+                  console.log("donee");
+                },
+              })
+            }
             borderRadius="5px"
             fontSize="20px"
-            bgColor="seashell"
+            bgColor="gray.400"
             _hover={{
               bgColor: "red.300",
-              color: "white"
-            }}>
+              color: "white",
+            }}
+          >
             x
           </Button>
         </Tooltip>
@@ -91,36 +105,50 @@ export const NotifItem: React.FC<NotifItemProps> = ({ val, data }) => {
   );
 };
 
-
-
-interface NotificationsProps { }
+interface NotificationsProps {}
 export const Notifications: React.FC<NotificationsProps> = () => {
-
   const [getNotifsNum, getNotifsNumOptions] = useGetNotifsNumLazyQuery();
   const [range, setRange] = useState({
     offset: 0,
-    limit: 10
-  })
-
-  const notifs = useGetNotification(range.offset, range.limit)
+    limit: 10,
+  });
+  
   useEffect(() => {
     let isMounted = true;
-    if (isMounted) {
-      getNotifsNum();
-    }
-    return () => {
-      isMounted = false;
-    };
+    isMounted &&   getNotifsNum();
+    return () => { isMounted = false};
   }, []);
 
+  const notifs = useGetNotification(range.offset, range.limit);
+  const [notifsSec, setNotifsSec] = useState<any[]>([]);
+  useEffect(() => {
+    if(notifs.length !== 0) {
+      setNotifsSec(notifs)
+    }
+  }, [notifs]);
 
   const laodMoreNotifs = () => {
     setTimeout(() => {
-      const prevLimit = range.limit
-      setRange((value) => ({ ...value, limit: prevLimit + 10 }))
-    }, 850)
-  }
+      const prevLimit = range.limit;
+      setRange((value) => ({ ...value, limit: prevLimit + 10 }));
+    }, 850);
+  };
+  const [getNotifs, getNotifsOptions] = useListUserNotifsLazyQuery({
+    fetchPolicy: "network-only",
+  });
 
+  const [deleteNotifMutation] = useDeleteNotifMutation({
+    onCompleted: () => {
+      getNotifs();
+    },
+  });
+
+  useEffect(() => {
+    if (getNotifsOptions.called) {
+      const newList = getNotifsOptions.data?.listUserNotifs!;
+      setNotifsSec(newList);
+    }
+  }, [getNotifsOptions]);
 
   return (
     <>
@@ -133,7 +161,7 @@ export const Notifications: React.FC<NotificationsProps> = () => {
           p={["0.2rem", "0.4rem", "0.8rem", "0.8rem"]}
         >
           <InfiniteScroll
-            hasMore={getNotifsNumOptions.data?.getNotifsCount! > notifs.length}
+            hasMore={getNotifsNumOptions.data?.getNotifsCount! > notifsSec.length}
             loadMore={laodMoreNotifs}
             pageStart={0}
             loader={
@@ -142,17 +170,15 @@ export const Notifications: React.FC<NotificationsProps> = () => {
               </Center>
             }
           >
-            {notifs && notifs?.map((val, index: number) => (
+            {notifsSec?.map((val, index: number) => (
               <NotifItem
                 key={index.toString() + "_" + index.toString()}
                 val={val.text!}
                 data={val}
-                range={range}
-                setRange={setRange}
+                deleteNotifMutation={deleteNotifMutation}
               />
             ))}
           </InfiniteScroll>
-
         </Flex>
       </Flex>
     </>

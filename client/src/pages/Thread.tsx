@@ -38,7 +38,7 @@ export const HeaderSection: React.FC<HeaderSectionProps> = ({ question }) => {
         base: "20px",
         md: "25px",
       }}
-    // bgColor="green.50"
+      // bgColor="green.50"
     >
       {question}
       <Divider marginTop="0.6rem" />
@@ -46,21 +46,20 @@ export const HeaderSection: React.FC<HeaderSectionProps> = ({ question }) => {
   );
 };
 
-interface ThreadProps { }
+interface ThreadProps {}
 export const Thread: React.FC<ThreadProps> = () => {
   const params: { threadId: string } = useParams();
-  const [userLoggedInCheck, userLoggedInCheckOptions] = useIsUserLoggedInLazyQuery({ fetchPolicy: "no-cache" })
+  const [userLoggedInCheck, userLoggedInCheckOptions] =
+    useIsUserLoggedInLazyQuery({ fetchPolicy: "network-only" });
 
   useEffect(() => {
-    let mounted = true
-    mounted === true && userLoggedInCheck()
-    return () => { mounted = false }
-  }, [])
+    let mounted = true;
+    mounted === true && userLoggedInCheck();
+    return () => {
+      mounted = false;
+    };
+  }, []);
 
-  const [isUserLoggedInLazyQuery, isUserLoggedInLazyQueryData] =
-    useIsUserLoggedInLazyQuery({
-      fetchPolicy: "network-only",
-    });
   const [meQuery, meQueryoptions] = useMeLazyQuery({
     fetchPolicy: "network-only",
   });
@@ -73,7 +72,8 @@ export const Thread: React.FC<ThreadProps> = () => {
       sortBy: "upvotes",
     },
   });
-  const [listLikedReplies, listLikedRepliesOptions] = useListUserLikedRepliesLazyQuery({ fetchPolicy: "network-only" });
+  const [listLikedReplies, listLikedRepliesOptions] =
+    useListUserLikedRepliesLazyQuery({ fetchPolicy: "network-only" });
 
   useEffect(() => {
     setShowReplies((prev) => !prev);
@@ -83,13 +83,12 @@ export const Thread: React.FC<ThreadProps> = () => {
   useEffect(() => {
     let isMounted = true;
     if (isMounted === true) {
-      const isUserLogged = userLoggedInCheckOptions.data?.isUserLoggedIn
+      const isUserLogged = userLoggedInCheckOptions.data?.isUserLoggedIn;
       if (isUserLogged === true) {
+        getThreadDataQuery();
         listLikedReplies();
         meQuery();
-        isUserLoggedInLazyQuery();
       }
-      getThreadDataQuery();
     }
     return () => {
       isMounted = false;
@@ -101,9 +100,9 @@ export const Thread: React.FC<ThreadProps> = () => {
       id: parseInt(params.threadId!),
       sortBy: type,
     });
-  }
-  const fetchByUpvotes = () => fetch("upvotes")
-  const refetchByDate = () => fetch("recent")
+  };
+  const fetchByUpvotes = () => fetch("upvotes");
+  const refetchByDate = () => fetch("recent");
 
   const [repliesCount, setRepliesCount] = useState(0);
   const [showReplies, setShowReplies] = useState(false);
@@ -121,22 +120,19 @@ export const Thread: React.FC<ThreadProps> = () => {
     }
   }, [repliesCount]);
 
-
-  const { state }: any = useLocation()
+  const { state }: any = useLocation();
   useEffect(() => {
     if (state) {
-      const passedReply = state.repID
+      const passedReply = state.repID;
       setTimeout(() => {
         console.log(passedReply);
-      }, 2000)
+      }, 2000);
     }
-  }, [state])
-
+  }, [state]);
 
   const addNewReply = () => {
-    const isUserLoggedIn: boolean =
-      isUserLoggedInLazyQueryData.data?.isUserLoggedIn === true;
-
+    const isUserLoggedIn =
+      userLoggedInCheckOptions.data?.isUserLoggedIn === true;
     if (isUserLoggedIn) {
       return setShowModal(true);
     }
