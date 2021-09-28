@@ -56,14 +56,15 @@ export const NotifItem: React.FC<NotifItemProps> = ({
         borderRadius="-20px"
         justify="space-between"
         flexDirection="row"
+
         //TODO:  make it darker if not openned
         bgColor="gray.100"
-        shadow="md"
+        shadow="lg"
         fontSize="1.3rem"
         fontWeight="bold"
         color="#335344"
         minH="80px"
-        borderLeft="7px solid #1e8244"
+        // borderLeft="7px solid #1e8244"
         textAlign="left"
         _hover={{
           bgColor: "gray.200",
@@ -89,7 +90,7 @@ export const NotifItem: React.FC<NotifItemProps> = ({
                 },
               })
             }
-            borderRadius="5px"
+            borderRadius="10px"
             fontSize="20px"
             bgColor="gray.400"
             _hover={{
@@ -140,15 +141,19 @@ export const Notifications: React.FC<NotificationsProps> = () => {
   const [deleteNotifMutation] = useDeleteNotifMutation({
     onCompleted: () => {
       getNotifs();
+      const newList = getNotifsOptions.data?.listUserNotifs!;
+      console.log(newList);
     },
-  });
+  }); 
+
+  
 
   useEffect(() => {
     if (getNotifsOptions.called) {
       const newList = getNotifsOptions.data?.listUserNotifs!;
       setNotifsSec(newList);
     }
-  }, [getNotifsOptions]);
+  }, [getNotifsOptions.called]);
 
   return (
     <>
@@ -161,7 +166,8 @@ export const Notifications: React.FC<NotificationsProps> = () => {
           p={["0.2rem", "0.4rem", "0.8rem", "0.8rem"]}
         >
           <InfiniteScroll
-            hasMore={getNotifsNumOptions.data?.getNotifsCount! > notifsSec.length}
+            // hasMore={getNotifsNumOptions.data?.getNotifsCount! > notifsSec.length}
+            hasMore={false}
             loadMore={laodMoreNotifs}
             pageStart={0}
             loader={

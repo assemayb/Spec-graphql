@@ -83,12 +83,10 @@ export const Thread: React.FC<ThreadProps> = () => {
   useEffect(() => {
     let isMounted = true;
     if (isMounted === true) {
-      const isUserLogged = userLoggedInCheckOptions.data?.isUserLoggedIn;
-      if (isUserLogged === true) {
-        getThreadDataQuery();
-        listLikedReplies();
-        meQuery();
-      }
+      // const isUserLogged = userLoggedInCheckOptions.data?.isUserLoggedIn;
+      getThreadDataQuery();
+      listLikedReplies();
+      meQuery();
     }
     return () => {
       isMounted = false;

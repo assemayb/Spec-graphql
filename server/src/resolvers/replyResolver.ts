@@ -57,7 +57,8 @@ export class ReplyResolver {
 
       // add to notifs table
       const threadData = await Thread.findByPk(replyThread);
-      const threadCreatorId = threadData && threadData?.getDataValue("threadCreator");
+      const threadCreatorId =
+        threadData && threadData?.getDataValue("threadCreator");
       if (threadCreatorId !== replySpecialistID) {
         threadCreatorId &&
           (await Notification.create({
