@@ -45,7 +45,12 @@ export const NotifItem: React.FC<NotifItemProps> = ({
   const history = useHistory();
   function goToThread() {
     const repID = data?.replyId;
-    history.push(`/threads/${notifThreadId}`, { repID: repID });
+    const repText = data?.text;
+
+    history.push(`/threads/${notifThreadId}`, {
+      repID: repID,
+      repText: repText,
+    });
   }
 
   return (

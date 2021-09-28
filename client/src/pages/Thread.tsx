@@ -47,11 +47,13 @@ export const HeaderSection: React.FC<HeaderSectionProps> = ({ question }) => {
 
 interface ThreadProps {}
 
-
 export const Thread: React.FC<ThreadProps> = () => {
   const params: { threadId: string } = useParams();
-  const [userLoggedInCheck, userLoggedInCheckOptions] = useIsUserLoggedInLazyQuery({ fetchPolicy: "network-only" });
-  const [meQuery, meQueryoptions] = useMeLazyQuery({ fetchPolicy: "network-only" });
+  const [userLoggedInCheck, userLoggedInCheckOptions] =
+    useIsUserLoggedInLazyQuery({ fetchPolicy: "network-only" });
+  const [meQuery, meQueryoptions] = useMeLazyQuery({
+    fetchPolicy: "network-only",
+  });
 
   useEffect(() => {
     let mounted = true;
@@ -61,7 +63,6 @@ export const Thread: React.FC<ThreadProps> = () => {
     };
   }, []);
 
-  
   const isLoggedUserSpec = meQueryoptions.data?.me?.isSpec!;
 
   const [getThreadDataQuery, { data, refetch }] = useGetThreadDataLazyQuery({
@@ -118,12 +119,33 @@ export const Thread: React.FC<ThreadProps> = () => {
   }, [repliesCount]);
 
   const { state }: any = useLocation();
+  const [exactReplyId, setExactReplyId] = useState(null);
+
   useEffect(() => {
     if (state) {
-      const passedReply = state.repID;
+      const passedReplyText = state.repText;
+      const passedReplyId = state.repID;
+
       setTimeout(() => {
-        console.log(passedReply);
-      }, 2000);
+        if (data?.getThread?.replies?.length !== 0) {
+          console.log(passedReplyText);
+          let repliesHTMLCollection = document.getElementsByClassName(
+            "chakra-heading css-1o73blb"
+          );
+          const repliesList = Array.from(repliesHTMLCollection);
+          const exactReply = repliesList.filter(
+            (rep) => rep.firstChild?.textContent === passedReplyText
+          )[0];
+          exactReply && exactReply.scrollIntoView({
+            behavior: "smooth",
+            // block: "start"
+          });
+        }
+      }, 1000);
+
+      setTimeout(() => {
+        setExactReplyId(passedReplyId);
+      }, 3000);
     }
   }, [state]);
 
@@ -199,11 +221,13 @@ export const Thread: React.FC<ThreadProps> = () => {
                     // as="h4"
                     p="1.2em"
                     textShadow="md"
+                    bgColor={
+                      reply.id === exactReplyId ? "green.100" : "gray.50"
+                    }
                     color="#718096"
                     fontSize="15px"
                     borderLeft="4px solid gray"
                     marginTop="12px"
-                    bgColor="gray.50"
                     _hover={{
                       bgColor: "gray.100",
                       textShadow: "lg",
