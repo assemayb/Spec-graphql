@@ -13,7 +13,6 @@ import { useParams, useLocation } from "react-router-dom";
 import {
   useGetThreadDataLazyQuery,
   useIsUserLoggedInLazyQuery,
-  useIsUserLoggedInQuery,
   useListUserLikedRepliesLazyQuery,
   useMeLazyQuery,
 } from "../generated/graphql";
@@ -47,10 +46,12 @@ export const HeaderSection: React.FC<HeaderSectionProps> = ({ question }) => {
 };
 
 interface ThreadProps {}
+
+
 export const Thread: React.FC<ThreadProps> = () => {
   const params: { threadId: string } = useParams();
-  const [userLoggedInCheck, userLoggedInCheckOptions] =
-    useIsUserLoggedInLazyQuery({ fetchPolicy: "network-only" });
+  const [userLoggedInCheck, userLoggedInCheckOptions] = useIsUserLoggedInLazyQuery({ fetchPolicy: "network-only" });
+  const [meQuery, meQueryoptions] = useMeLazyQuery({ fetchPolicy: "network-only" });
 
   useEffect(() => {
     let mounted = true;
@@ -60,9 +61,7 @@ export const Thread: React.FC<ThreadProps> = () => {
     };
   }, []);
 
-  const [meQuery, meQueryoptions] = useMeLazyQuery({
-    fetchPolicy: "network-only",
-  });
+  
   const isLoggedUserSpec = meQueryoptions.data?.me?.isSpec!;
 
   const [getThreadDataQuery, { data, refetch }] = useGetThreadDataLazyQuery({
@@ -114,7 +113,7 @@ export const Thread: React.FC<ThreadProps> = () => {
     if (repliesCount > 0) {
       setTimeout(() => {
         setShowReplies(true);
-      }, 100);
+      }, 400);
     }
   }, [repliesCount]);
 

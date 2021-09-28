@@ -15,6 +15,7 @@ import {
   useListUserNotifsLazyQuery,
 } from "../generated/graphql";
 import { useHistory } from "react-router";
+import { BiTrash, BiArrowToRight } from "react-icons/bi";
 
 interface NotifItemProps {
   val?: string;
@@ -56,10 +57,9 @@ export const NotifItem: React.FC<NotifItemProps> = ({
         borderRadius="-20px"
         justify="space-between"
         flexDirection="row"
-
         //TODO:  make it darker if not openned
         bgColor="gray.100"
-        shadow="lg"
+        shadow="base"
         fontSize="1.3rem"
         fontWeight="bold"
         color="#335344"
@@ -78,29 +78,46 @@ export const NotifItem: React.FC<NotifItemProps> = ({
         >
           {val}
         </div>
-        <Tooltip label="delete">
-          <Button
-            onClick={() =>
-              deleteNotifMutation({
-                variables: {
-                  id: data?.id!,
-                },
-                update: () => {
-                  console.log("donee");
-                },
-              })
-            }
-            borderRadius="10px"
-            fontSize="20px"
-            bgColor="gray.400"
-            _hover={{
-              bgColor: "red.300",
-              color: "white",
-            }}
-          >
-            x
-          </Button>
-        </Tooltip>
+        <div>
+          <Tooltip label="visit this reply">
+            <Button
+              onClick={goToThread}
+              bgColor="gray.400"
+              borderRadius="-50px"
+              fontSize="20px"
+              marginRight="5px"
+              _hover={{
+                bgColor: "blue.300",
+                color: "white",
+              }}
+            >
+              <BiArrowToRight />
+            </Button>
+          </Tooltip>
+          <Tooltip label="delete">
+            <Button
+              onClick={() =>
+                deleteNotifMutation({
+                  variables: {
+                    id: data?.id!,
+                  },
+                  update: () => {
+                    console.log("donee");
+                  },
+                })
+              }
+              borderRadius="-50px"
+              fontSize="20px"
+              bgColor="gray.300"
+              _hover={{
+                bgColor: "red.300",
+                color: "white",
+              }}
+            >
+              <BiTrash />
+            </Button>
+          </Tooltip>
+        </div>
       </Flex>
     </>
   );
@@ -113,18 +130,20 @@ export const Notifications: React.FC<NotificationsProps> = () => {
     offset: 0,
     limit: 10,
   });
-  
+
   useEffect(() => {
     let isMounted = true;
-    isMounted &&   getNotifsNum();
-    return () => { isMounted = false};
+    isMounted && getNotifsNum();
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   const notifs = useGetNotification(range.offset, range.limit);
   const [notifsSec, setNotifsSec] = useState<any[]>([]);
   useEffect(() => {
-    if(notifs.length !== 0) {
-      setNotifsSec(notifs)
+    if (notifs.length !== 0) {
+      setNotifsSec(notifs);
     }
   }, [notifs]);
 
@@ -144,9 +163,7 @@ export const Notifications: React.FC<NotificationsProps> = () => {
       const newList = getNotifsOptions.data?.listUserNotifs!;
       console.log(newList);
     },
-  }); 
-
-  
+  });
 
   useEffect(() => {
     if (getNotifsOptions.called) {
@@ -163,7 +180,8 @@ export const Notifications: React.FC<NotificationsProps> = () => {
           flexDirection="column"
           flex="5"
           minH="80vh"
-          p={["0.2rem", "0.4rem", "0.8rem", "0.8rem"]}
+          shadow="md"
+          p={["0.2rem", "0.4rem", "0.8rem", "1rem"]}
         >
           <InfiniteScroll
             // hasMore={getNotifsNumOptions.data?.getNotifsCount! > notifsSec.length}
