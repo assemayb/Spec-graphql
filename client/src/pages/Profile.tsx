@@ -47,7 +47,7 @@ export const SideBtn: React.FC<SideBtnProps> = ({ onClick, text }) => {
 };
 
 export const Profile = () => {
-  const QuerySize = React.useRef(3);
+  const QuerySize = React.useRef(5);
   const [displayedSection, setDisplpayedSection] = useState("Dashboard");
   useEffect(() => setSectionHeader(displayedSection), [displayedSection]);
 

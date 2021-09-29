@@ -123,22 +123,25 @@ export const Thread: React.FC<ThreadProps> = () => {
 
   useEffect(() => {
     if (state) {
-      const passedReplyText = state.repText;
+      const passedReplyText: string = state.repText;
       const passedReplyId = state.repID;
 
       setTimeout(() => {
         if (data?.getThread?.replies?.length !== 0) {
           let repliesHTMLCollection = document.querySelectorAll("h2");
           const repliesList = Array.from(repliesHTMLCollection);
-          let reply;
 
-          for (let item of repliesList) {
-            if (item.firstChild?.textContent === passedReplyText) {
-              console.log(item.firstChild?.textContent);
-              reply = item;
-            }
-          }
-          reply && reply.scrollIntoView({ behavior: "smooth", block: "center" });
+          let reply = repliesList.filter(
+            (rep, idx) => rep.firstChild?.textContent === passedReplyText
+          )[0];
+          reply.scrollIntoView({ behavior: "smooth", block: "center" });
+          reply.focus();
+
+          // for (let item of repliesList) {
+          //   if (item.firstChild?.textContent === passedReplyText) {
+          //     reply = item;
+          //   }
+          // }
         }
       }, 1000);
 
@@ -212,6 +215,7 @@ export const Thread: React.FC<ThreadProps> = () => {
               fetchByUpvotes={fetchByUpvotes}
               refetchByDate={refetchByDate}
             />
+
             {data?.getThread &&
               data?.getThread?.replies?.map((reply, idx) => {
                 return (

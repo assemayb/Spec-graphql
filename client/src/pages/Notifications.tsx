@@ -58,6 +58,8 @@ export const NotifItem: React.FC<NotifItemProps> = ({
       <Flex
         // as="button"
         // w="100%"
+        onMouseOver={() => setShowDelBtn(true)}
+        onMouseLeave={() => setShowDelBtn(false)}
         p="1rem"
         borderRadius="-20px"
         justify="space-between"
@@ -83,43 +85,46 @@ export const NotifItem: React.FC<NotifItemProps> = ({
         >
           {val}
         </div>
-        <div>
-          <Tooltip label="visit this reply">
-            <Button
-              onClick={goToThread}
-              bgColor="gray.300"
-              borderRadius="-50px"
-              fontSize="20px"
-              marginRight="5px"
-              _hover={{
-                bgColor: "blue.300",
-                color: "white",
-              }}
-            >
-              <BiArrowToRight />
-            </Button>
-          </Tooltip>
-          <Tooltip label="delete">
-            <Button
-              onClick={() =>
-                deleteNotifMutation({
-                  variables: {
-                    id: data?.id!,
-                  },
-                })
-              }
-              borderRadius="-50px"
-              fontSize="20px"
-              bgColor="gray.300"
-              _hover={{
-                bgColor: "red.300",
-                color: "white",
-              }}
-            >
-              <BiTrash />
-            </Button>
-          </Tooltip>
-        </div>
+        {showDelBtn && (
+          <div>
+            <Tooltip label="visit this reply">
+              <Button
+                onClick={goToThread}
+                bgColor="gray.300"
+                borderRadius="-50px"
+                fontSize="20px"
+                marginRight="5px"
+                _hover={{
+                  bgColor: "blue.300",
+                  color: "white",
+                }}
+              >
+                <BiArrowToRight />
+              </Button>
+            </Tooltip>
+
+            <Tooltip label="delete">
+              <Button
+                onClick={() =>
+                  deleteNotifMutation({
+                    variables: {
+                      id: data?.id!,
+                    },
+                  })
+                }
+                borderRadius="-50px"
+                fontSize="20px"
+                bgColor="gray.300"
+                _hover={{
+                  bgColor: "red.300",
+                  color: "white",
+                }}
+              >
+                <BiTrash />
+              </Button>
+            </Tooltip>
+          </div>
+        )}
       </Flex>
     </>
   );
@@ -160,7 +165,10 @@ export const Notifications: React.FC<NotificationsProps> = () => {
   });
 
   const [deleteNotifMutation] = useDeleteNotifMutation({
-    onCompleted: () => { getNotifs() }});
+    onCompleted: () => {
+      getNotifs();
+    },
+  });
 
   useEffect(() => {
     if (getNotifsOptions.called) {
