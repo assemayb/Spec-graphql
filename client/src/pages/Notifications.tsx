@@ -87,7 +87,7 @@ export const NotifItem: React.FC<NotifItemProps> = ({
           <Tooltip label="visit this reply">
             <Button
               onClick={goToThread}
-              bgColor="gray.400"
+              bgColor="gray.300"
               borderRadius="-50px"
               fontSize="20px"
               marginRight="5px"
@@ -105,9 +105,6 @@ export const NotifItem: React.FC<NotifItemProps> = ({
                 deleteNotifMutation({
                   variables: {
                     id: data?.id!,
-                  },
-                  update: () => {
-                    console.log("donee");
                   },
                 })
               }
@@ -163,12 +160,7 @@ export const Notifications: React.FC<NotificationsProps> = () => {
   });
 
   const [deleteNotifMutation] = useDeleteNotifMutation({
-    onCompleted: () => {
-      getNotifs();
-      const newList = getNotifsOptions.data?.listUserNotifs!;
-      console.log(newList);
-    },
-  });
+    onCompleted: () => { getNotifs() }});
 
   useEffect(() => {
     if (getNotifsOptions.called) {
@@ -189,8 +181,9 @@ export const Notifications: React.FC<NotificationsProps> = () => {
           p={["0.2rem", "0.4rem", "0.8rem", "1rem"]}
         >
           <InfiniteScroll
-            // hasMore={getNotifsNumOptions.data?.getNotifsCount! > notifsSec.length}
-            hasMore={false}
+            hasMore={
+              getNotifsNumOptions.data?.getNotifsCount! >= notifsSec.length
+            }
             loadMore={laodMoreNotifs}
             pageStart={0}
             loader={
@@ -199,14 +192,15 @@ export const Notifications: React.FC<NotificationsProps> = () => {
               </Center>
             }
           >
-            {notifsSec?.map((val, index: number) => (
-              <NotifItem
-                key={index.toString() + "_" + index.toString()}
-                val={val.text!}
-                data={val}
-                deleteNotifMutation={deleteNotifMutation}
-              />
-            ))}
+            {notifsSec.length > 0 &&
+              notifsSec?.map((val, index: number) => (
+                <NotifItem
+                  key={index.toString() + "_" + index.toString()}
+                  val={val.text!}
+                  data={val}
+                  deleteNotifMutation={deleteNotifMutation}
+                />
+              ))}
           </InfiniteScroll>
         </Flex>
       </Flex>

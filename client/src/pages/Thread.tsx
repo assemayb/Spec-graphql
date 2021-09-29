@@ -128,24 +128,23 @@ export const Thread: React.FC<ThreadProps> = () => {
 
       setTimeout(() => {
         if (data?.getThread?.replies?.length !== 0) {
-          console.log(passedReplyText);
-          let repliesHTMLCollection = document.getElementsByClassName(
-            "chakra-heading css-1o73blb"
-          );
+          let repliesHTMLCollection = document.querySelectorAll("h2");
           const repliesList = Array.from(repliesHTMLCollection);
-          const exactReply = repliesList.filter(
-            (rep) => rep.firstChild?.textContent === passedReplyText
-          )[0];
-          exactReply && exactReply.scrollIntoView({
-            behavior: "smooth",
-            // block: "start"
-          });
+          let reply;
+
+          for (let item of repliesList) {
+            if (item.firstChild?.textContent === passedReplyText) {
+              console.log(item.firstChild?.textContent);
+              reply = item;
+            }
+          }
+          reply && reply.scrollIntoView({ behavior: "smooth", block: "center" });
         }
       }, 1000);
 
       setTimeout(() => {
         setExactReplyId(passedReplyId);
-      }, 3000);
+      }, 1500);
     }
   }, [state]);
 
