@@ -54,8 +54,8 @@ export const AddReplyModal: React.FC<AddReplyModalProps> = ({
       },
     });
     refetch();
+    setNewReply("");
     setShowModal(false);
-    // setNewReply("");
   };
 
   let Form: any = (
@@ -63,6 +63,7 @@ export const AddReplyModal: React.FC<AddReplyModalProps> = ({
       <Flex alignItems="center" p="0.5rem">
         <FormControl id="reply" isRequired my="5px">
           <Input
+            borderRadius="-10px"
             value={newReply}
             onChange={(e) => setNewReply(e.target.value)}
           />
@@ -70,8 +71,8 @@ export const AddReplyModal: React.FC<AddReplyModalProps> = ({
         <Button
           borderRadius="-10px"
           type="submit"
-          p="0.2rm"
-          marginLeft="0.2rem"
+          p="0.3rm"
+          marginLeft="0.4rem"
         >
           {" "}
           submit{" "}
@@ -85,7 +86,8 @@ export const AddReplyModal: React.FC<AddReplyModalProps> = ({
       <ModalOverlay />
       <ModalContent
         marginTop="14rem"
-        w={{ base: "250px", md: "350px" }}
+        width={{ base: "250px", md: "450px" }}
+        borderRadius="-20px"
       >
         {/* <ModalCloseButton /> */}
         <ModalBody marginTop="1.5rem">{Form}</ModalBody>

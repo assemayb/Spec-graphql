@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 
-import { Flex, Center, Button, Tooltip } from "@chakra-ui/react";
+import { Flex, Center } from "@chakra-ui/react";
 import React, { useEffect } from "react";
 import { useState } from "react";
 import { HeaderComp } from "../smallComps/HeaderComp";
@@ -8,127 +8,11 @@ import InfiniteScroll from "react-infinite-scroller";
 import { FastBigSpinner } from "../smallComps/Spinners";
 import { useGetNotification } from "../hooks/useListNotifications";
 import {
-  NotificationType,
   useDeleteNotifMutation,
   useGetNotifsNumLazyQuery,
-  useGetThreadByReplyQuery,
-  useListUserNotifsLazyQuery,
 } from "../generated/graphql";
-import { useHistory } from "react-router";
-import { BiTrash, BiArrowToRight } from "react-icons/bi";
 
-interface NotifItemProps {
-  val?: string;
-  data?: NotificationType;
-  deleteNotifMutation: any;
-  // setRange: any;
-  // range: {
-  //   offset: number;
-  //   limit: number;
-  // };
-}
-
-export const NotifItem: React.FC<NotifItemProps> = ({
-  val,
-  data,
-  deleteNotifMutation,
-}) => {
-  const notificationInfo = useGetThreadByReplyQuery({
-    variables: {
-      replyId: data?.replyId as number,
-    },
-    fetchPolicy: "network-only",
-  });
-  const [showDelBtn, setShowDelBtn] = useState(false);
-  const notifThreadId = notificationInfo.data?.getThreadByReplyId;
-
-  const history = useHistory();
-  function goToThread() {
-    const repID = data?.replyId;
-    const repText = data?.text;
-
-    history.push(`/threads/${notifThreadId}`, {
-      repID: repID,
-      repText: repText,
-    });
-  }
-
-  return (
-    <>
-      <Flex
-        // as="button"
-        // w="100%"
-        onMouseOver={() => setShowDelBtn(true)}
-        onMouseLeave={() => setShowDelBtn(false)}
-        p="1rem"
-        borderRadius="-20px"
-        justify="space-between"
-        flexDirection="row"
-        //TODO:  make it darker if not openned
-        bgColor="gray.100"
-        shadow="base"
-        fontSize="1.3rem"
-        fontWeight="bold"
-        color="#335344"
-        minH="80px"
-        // borderLeft="7px solid #1e8244"
-        textAlign="left"
-        _hover={{
-          bgColor: "gray.200",
-        }}
-        my="1rem"
-        pos="relative"
-      >
-        <div
-          style={{ width: "80%", cursor: "pointer" }}
-          onClick={() => goToThread()}
-        >
-          {val}
-        </div>
-        {showDelBtn && (
-          <div>
-            <Tooltip label="visit this reply">
-              <Button
-                onClick={goToThread}
-                bgColor="gray.300"
-                borderRadius="-50px"
-                fontSize="20px"
-                marginRight="5px"
-                _hover={{
-                  bgColor: "blue.300",
-                  color: "white",
-                }}
-              >
-                <BiArrowToRight />
-              </Button>
-            </Tooltip>
-
-            <Tooltip label="delete">
-              <Button
-                onClick={() =>
-                  deleteNotifMutation({
-                    variables: {
-                      id: data?.id!,
-                    },
-                  })
-                }
-                borderRadius="-50px"
-                fontSize="20px"
-                bgColor="gray.300"
-                _hover={{
-                  bgColor: "red.300",
-                  color: "white",
-                }}
-              >
-                <BiTrash />
-              </Button>
-            </Tooltip>
-          </div>
-        )}
-      </Flex>
-    </>
-  );
-};
+import { NotifItem } from "../smallComps/NotifItem";
 
 interface NotificationsProps {}
 export const Notifications: React.FC<NotificationsProps> = () => {
@@ -146,13 +30,13 @@ export const Notifications: React.FC<NotificationsProps> = () => {
     };
   }, []);
 
-  const notifs = useGetNotification(range.offset, range.limit);
-  const [notifsSec, setNotifsSec] = useState<any[]>([]);
-  useEffect(() => {
-    if (notifs.length !== 0) {
-      setNotifsSec(notifs);
-    }
-  }, [notifs]);
+  const [reload, setReload] = useState<boolean>(false);
+  // using the notification getter custom hook
+  const notifs = useGetNotification({
+    start: range.offset,
+    end: range.limit,
+    reload: reload,
+  });
 
   const laodMoreNotifs = () => {
     setTimeout(() => {
@@ -160,27 +44,15 @@ export const Notifications: React.FC<NotificationsProps> = () => {
       setRange((value) => ({ ...value, limit: prevLimit + 10 }));
     }, 850);
   };
-  const [getNotifs, getNotifsOptions] = useListUserNotifsLazyQuery({
-    fetchPolicy: "network-only",
-  });
 
   const [deleteNotifMutation] = useDeleteNotifMutation({
-    onCompleted: () => {
-      getNotifs();
-    },
+    onCompleted: () => setReload((prev) => !prev),
   });
-
-  useEffect(() => {
-    if (getNotifsOptions.called) {
-      const newList = getNotifsOptions.data?.listUserNotifs!;
-      setNotifsSec(newList);
-    }
-  }, [getNotifsOptions.called]);
 
   return (
     <>
       <HeaderComp header={"Notifications"} />
-      <Flex marginTop="0.5rem">
+      <Flex marginTop="1rem">
         <Flex
           flexDirection="column"
           flex="5"
@@ -189,9 +61,8 @@ export const Notifications: React.FC<NotificationsProps> = () => {
           p={["0.2rem", "0.4rem", "0.8rem", "1rem"]}
         >
           <InfiniteScroll
-            hasMore={
-              getNotifsNumOptions.data?.getNotifsCount! >= notifsSec.length
-            }
+            // hasMore={getNotifsNumOptions.data?.getNotifsCount! >= notifs.length}
+            hasMore={false}
             loadMore={laodMoreNotifs}
             pageStart={0}
             loader={
@@ -200,8 +71,8 @@ export const Notifications: React.FC<NotificationsProps> = () => {
               </Center>
             }
           >
-            {notifsSec.length > 0 &&
-              notifsSec?.map((val, index: number) => (
+            {notifs.length > 0 &&
+              notifs.map((val, index: number) => (
                 <NotifItem
                   key={index.toString() + "_" + index.toString()}
                   val={val.text!}
