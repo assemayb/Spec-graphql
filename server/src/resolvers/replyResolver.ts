@@ -19,9 +19,7 @@ import { isAuthenticated } from "../utils/isAuth";
 import { MyContext } from "../utils/context";
 import { ReplyCreateType } from "./replyResolverTypes";
 import { ReplyType } from "./replyResolverTypes";
-import { User } from "../models/User";
 import { Thread } from "../models/Thread";
-import { not } from "sequelize/types/lib/operators";
 import { ReplyNotifType } from "./notificationsTypes";
 import { ReplyInfo } from "../models/ReplyInfo";
 

@@ -15,11 +15,6 @@ interface NotifItemProps {
   val?: string;
   data?: NotificationType;
   deleteNotifMutation: any;
-  // setRange: any;
-  // range: {
-  //   offset: number;
-  //   limit: number;
-  // };
 }
 
 export const NotifItem: React.FC<NotifItemProps> = ({
@@ -27,6 +22,7 @@ export const NotifItem: React.FC<NotifItemProps> = ({
   data,
   deleteNotifMutation,
 }) => {
+
   const repID = data?.replyId;
   const repText = data?.text;
 
@@ -58,8 +54,6 @@ export const NotifItem: React.FC<NotifItemProps> = ({
   return (
     <>
       <Flex
-        // as="button"
-        // w="100%"
         onMouseOver={() => setShowDelBtn(true)}
         onMouseLeave={() => setShowDelBtn(false)}
         p="1.2rem"
@@ -78,8 +72,10 @@ export const NotifItem: React.FC<NotifItemProps> = ({
         _hover={{
           bgColor: "gray.200",
         }}
-        my="0.5rem"
+        my="0.3rem"
         pos="relative"
+        lineHeight="tall"
+
       >
         <div style={{ width: "80%", cursor: "pointer" }} onClick={goToThread}>
           {val}

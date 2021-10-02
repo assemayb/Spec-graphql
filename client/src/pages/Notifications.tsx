@@ -7,30 +7,18 @@ import { HeaderComp } from "../smallComps/HeaderComp";
 import InfiniteScroll from "react-infinite-scroller";
 import { FastBigSpinner } from "../smallComps/Spinners";
 import { useGetNotification } from "../hooks/useListNotifications";
-import {
-  useDeleteNotifMutation,
-  useGetNotifsNumLazyQuery,
-} from "../generated/graphql";
+import { useDeleteNotifMutation } from "../generated/graphql";
 
 import { NotifItem } from "../smallComps/NotifItem";
 
 interface NotificationsProps {}
 export const Notifications: React.FC<NotificationsProps> = () => {
-  const [getNotifsNum, getNotifsNumOptions] = useGetNotifsNumLazyQuery();
   const [range, setRange] = useState({
     offset: 0,
     limit: 10,
   });
-
-  useEffect(() => {
-    let isMounted = true;
-    isMounted && getNotifsNum();
-    return () => {
-      isMounted = false;
-    };
-  }, []);
-
   const [reload, setReload] = useState<boolean>(false);
+
   // using the notification getter custom hook
   const notifs = useGetNotification({
     start: range.offset,
@@ -38,12 +26,12 @@ export const Notifications: React.FC<NotificationsProps> = () => {
     reload: reload,
   });
 
-  const laodMoreNotifs = () => {
+  function laodMoreNotifs() {
     setTimeout(() => {
       const prevLimit = range.limit;
       setRange((value) => ({ ...value, limit: prevLimit + 10 }));
-    }, 850);
-  };
+    }, 1000);
+  }
 
   const [deleteNotifMutation] = useDeleteNotifMutation({
     onCompleted: () => setReload((prev) => !prev),
@@ -71,7 +59,7 @@ export const Notifications: React.FC<NotificationsProps> = () => {
               </Center>
             }
           >
-            {notifs.length > 0 &&
+            {notifs &&
               notifs.map((val, index: number) => (
                 <NotifItem
                   key={index.toString() + "_" + index.toString()}

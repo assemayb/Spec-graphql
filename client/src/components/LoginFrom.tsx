@@ -13,7 +13,7 @@ import {
   IsUserLoggedInQuery,
   useLoginMutation,
 } from "../generated/graphql";
-import { useHistory } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 import { setAccessToken } from "../accessToken";
 
 export const LoginFrom = () => {
@@ -21,11 +21,22 @@ export const LoginFrom = () => {
   const [password, setPassword] = useState("");
   const toast = useToast();
   const history = useHistory();
+  const location = useLocation();
+
   const [login] = useLoginMutation({
     onCompleted: () => {
       setUsername("");
       setPassword("");
-      history.push("/");
+      const path = location.pathname;
+      if (path === "/") {
+        history.push("/");
+      } else {
+        history.push("/");
+        setTimeout(() => {
+          history.push(path);
+        }, 100);
+      }
+
       toast({
         description: "you are logged in",
         status: "success",

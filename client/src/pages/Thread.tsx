@@ -64,7 +64,6 @@ export const Thread: React.FC<ThreadProps> = () => {
   }, []);
 
   const isLoggedUserSpec = meQueryoptions.data?.me?.isSpec!;
-
   const [getThreadDataQuery, { data, refetch }] = useGetThreadDataLazyQuery({
     fetchPolicy: "network-only",
     variables: {
@@ -99,6 +98,7 @@ export const Thread: React.FC<ThreadProps> = () => {
       sortBy: type,
     });
   };
+  
   const fetchByUpvotes = () => fetch("upvotes");
   const refetchByDate = () => fetch("recent");
 
