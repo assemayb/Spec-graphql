@@ -7,6 +7,7 @@ import { useState } from "react";
 import {
   NotificationType,
   useGetThreadByReplyQuery,
+  useMarkAsOpenedMutation,
 } from "../generated/graphql";
 import { useHistory } from "react-router";
 import { BiTrash, BiArrowToRight } from "react-icons/bi";
@@ -22,7 +23,6 @@ export const NotifItem: React.FC<NotifItemProps> = ({
   data,
   deleteNotifMutation,
 }) => {
-
   const repID = data?.replyId;
   const repText = data?.text;
 
@@ -33,16 +33,23 @@ export const NotifItem: React.FC<NotifItemProps> = ({
     fetchPolicy: "network-only",
   });
 
+  const [markOpned] = useMarkAsOpenedMutation();
+
   const [showDelBtn, setShowDelBtn] = useState(false);
   const notifThreadId = notificationInfo.data?.getThreadByReplyId;
 
   const history = useHistory();
-  function goToThread() {
+  const goToThread = () => {
+    markOpned({
+      variables: {
+        id: repID as number,
+      },
+    });
     history.push(`/threads/${notifThreadId}`, {
       repID: repID,
       repText: repText,
     });
-  }
+  };
 
   function deleteNotif() {
     deleteNotifMutation({
@@ -61,7 +68,9 @@ export const NotifItem: React.FC<NotifItemProps> = ({
         justify="space-between"
         flexDirection="row"
         //TODO:  make it darker if not openned
-        bgColor="gray.100"
+        bgColor={data?.opened === true ? "gray.100" : "gray.200"}
+        // bgColor="gray.100"
+
         shadow="base"
         fontSize="1.3rem"
         fontWeight="bold"
@@ -75,7 +84,6 @@ export const NotifItem: React.FC<NotifItemProps> = ({
         my="0.3rem"
         pos="relative"
         lineHeight="tall"
-
       >
         <div style={{ width: "80%", cursor: "pointer" }} onClick={goToThread}>
           {val}

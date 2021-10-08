@@ -15,6 +15,111 @@ export type Scalars = {
   DateTime: any;
 };
 
+export type CreateThreadInput = {
+  question: Scalars['String'];
+  specialization: Scalars['String'];
+  threadCreator?: Maybe<Scalars['String']>;
+};
+
+
+export type LoginResponse = {
+  __typename?: 'LoginResponse';
+  accessToken: Scalars['String'];
+  user: UserType;
+};
+
+export type Mutation = {
+  __typename?: 'Mutation';
+  register: Scalars['Boolean'];
+  loginUser?: Maybe<LoginResponse>;
+  logout: Scalars['Boolean'];
+  deleteUser: Scalars['Boolean'];
+  updateUserInfo: Scalars['Boolean'];
+  createThread: Scalars['Boolean'];
+  updateThread: Scalars['Boolean'];
+  deleteThread?: Maybe<Scalars['Boolean']>;
+  addReply: Scalars['Boolean'];
+  deleteReply?: Maybe<Scalars['Boolean']>;
+  upvoteReply: Scalars['Boolean'];
+  markAsOpened: Scalars['Boolean'];
+  deleteNotif?: Maybe<Scalars['Boolean']>;
+};
+
+
+export type MutationRegisterArgs = {
+  spec?: Maybe<Scalars['String']>;
+  isSpec?: Maybe<Scalars['Boolean']>;
+  email: Scalars['String'];
+  password: Scalars['String'];
+  username: Scalars['String'];
+};
+
+
+export type MutationLoginUserArgs = {
+  password: Scalars['String'];
+  username: Scalars['String'];
+};
+
+
+export type MutationDeleteUserArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type MutationUpdateUserInfoArgs = {
+  options: UserUpdateInputType;
+};
+
+
+export type MutationCreateThreadArgs = {
+  options: CreateThreadInput;
+};
+
+
+export type MutationUpdateThreadArgs = {
+  options: UpdateThreadInput;
+  id: Scalars['Int'];
+};
+
+
+export type MutationDeleteThreadArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type MutationAddReplyArgs = {
+  options: ReplyCreateType;
+};
+
+
+export type MutationDeleteReplyArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type MutationUpvoteReplyArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type MutationMarkAsOpenedArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type MutationDeleteNotifArgs = {
+  id: Scalars['Int'];
+};
+
+export type NotificationType = {
+  __typename?: 'NotificationType';
+  id: Scalars['Int'];
+  opened: Scalars['Boolean'];
+  userId: Scalars['Int'];
+  replyId?: Maybe<Scalars['Int']>;
+  text?: Maybe<Scalars['String']>;
+};
+
 export type Query = {
   __typename?: 'Query';
   hello: Scalars['String'];
@@ -91,14 +196,35 @@ export type QueryListUserNotifsArgs = {
   offset?: Maybe<Scalars['Int']>;
 };
 
-export type UserType = {
-  __typename?: 'UserType';
-  username: Scalars['String'];
-  password: Scalars['String'];
-  email?: Maybe<Scalars['String']>;
-  isSpec: Scalars['Boolean'];
-  spec?: Maybe<Scalars['String']>;
-  id?: Maybe<Scalars['Int']>;
+export type ReplyCreateType = {
+  text: Scalars['String'];
+  replyThread: Scalars['Int'];
+  replySpecialist?: Maybe<Scalars['Int']>;
+};
+
+export type ReplyNotifType = {
+  __typename?: 'ReplyNotifType';
+  id: Scalars['Int'];
+  upvotes: Scalars['Int'];
+  text: Scalars['String'];
+  replyThread: Scalars['Int'];
+  replySpecialist?: Maybe<Scalars['String']>;
+  replySpecialistId?: Maybe<Scalars['Int']>;
+};
+
+export type ReplyType = {
+  __typename?: 'ReplyType';
+  id: Scalars['Int'];
+  upvotes: Scalars['Int'];
+  text: Scalars['String'];
+  replyThread: Scalars['Int'];
+  replySpecialist?: Maybe<Scalars['Int']>;
+};
+
+export type Subscription = {
+  __typename?: 'Subscription';
+  threadCreated: ThreadType;
+  onReplyCreated: ReplyNotifType;
 };
 
 export type ThreadType = {
@@ -111,106 +237,19 @@ export type ThreadType = {
   replies?: Maybe<Array<ReplyType>>;
 };
 
-
-export type ReplyType = {
-  __typename?: 'ReplyType';
-  id: Scalars['Int'];
-  upvotes: Scalars['Int'];
-  text: Scalars['String'];
-  replyThread: Scalars['Int'];
-  replySpecialist?: Maybe<Scalars['Int']>;
+export type UpdateThreadInput = {
+  question?: Maybe<Scalars['String']>;
+  specialization?: Maybe<Scalars['String']>;
 };
 
-export type NotificationType = {
-  __typename?: 'NotificationType';
-  id: Scalars['Int'];
-  opened: Scalars['Boolean'];
-  userId: Scalars['Int'];
-  replyId?: Maybe<Scalars['Int']>;
-  text?: Maybe<Scalars['String']>;
-};
-
-export type Mutation = {
-  __typename?: 'Mutation';
-  register: Scalars['Boolean'];
-  loginUser?: Maybe<LoginResponse>;
-  logout: Scalars['Boolean'];
-  deleteUser: Scalars['Boolean'];
-  updateUserInfo: Scalars['Boolean'];
-  createThread: Scalars['Boolean'];
-  updateThread: Scalars['Boolean'];
-  deleteThread?: Maybe<Scalars['Boolean']>;
-  addReply: Scalars['Boolean'];
-  deleteReply?: Maybe<Scalars['Boolean']>;
-  upvoteReply: Scalars['Boolean'];
-  deleteNotif?: Maybe<Scalars['Boolean']>;
-};
-
-
-export type MutationRegisterArgs = {
+export type UserType = {
+  __typename?: 'UserType';
+  username: Scalars['String'];
+  password: Scalars['String'];
+  email?: Maybe<Scalars['String']>;
+  isSpec: Scalars['Boolean'];
   spec?: Maybe<Scalars['String']>;
-  isSpec?: Maybe<Scalars['Boolean']>;
-  email: Scalars['String'];
-  password: Scalars['String'];
-  username: Scalars['String'];
-};
-
-
-export type MutationLoginUserArgs = {
-  password: Scalars['String'];
-  username: Scalars['String'];
-};
-
-
-export type MutationDeleteUserArgs = {
-  id: Scalars['Int'];
-};
-
-
-export type MutationUpdateUserInfoArgs = {
-  options: UserUpdateInputType;
-};
-
-
-export type MutationCreateThreadArgs = {
-  options: CreateThreadInput;
-};
-
-
-export type MutationUpdateThreadArgs = {
-  options: UpdateThreadInput;
-  id: Scalars['Int'];
-};
-
-
-export type MutationDeleteThreadArgs = {
-  id: Scalars['Int'];
-};
-
-
-export type MutationAddReplyArgs = {
-  options: ReplyCreateType;
-};
-
-
-export type MutationDeleteReplyArgs = {
-  id: Scalars['Int'];
-};
-
-
-export type MutationUpvoteReplyArgs = {
-  id: Scalars['Int'];
-};
-
-
-export type MutationDeleteNotifArgs = {
-  id: Scalars['Int'];
-};
-
-export type LoginResponse = {
-  __typename?: 'LoginResponse';
-  accessToken: Scalars['String'];
-  user: UserType;
+  id?: Maybe<Scalars['Int']>;
 };
 
 export type UserUpdateInputType = {
@@ -219,39 +258,6 @@ export type UserUpdateInputType = {
   email?: Maybe<Scalars['String']>;
   isSpec?: Maybe<Scalars['Boolean']>;
   spec?: Maybe<Scalars['String']>;
-};
-
-export type CreateThreadInput = {
-  question: Scalars['String'];
-  specialization: Scalars['String'];
-  threadCreator?: Maybe<Scalars['String']>;
-};
-
-export type UpdateThreadInput = {
-  question?: Maybe<Scalars['String']>;
-  specialization?: Maybe<Scalars['String']>;
-};
-
-export type ReplyCreateType = {
-  text: Scalars['String'];
-  replyThread: Scalars['Int'];
-  replySpecialist?: Maybe<Scalars['Int']>;
-};
-
-export type Subscription = {
-  __typename?: 'Subscription';
-  threadCreated: ThreadType;
-  onReplyCreated: ReplyNotifType;
-};
-
-export type ReplyNotifType = {
-  __typename?: 'ReplyNotifType';
-  id: Scalars['Int'];
-  upvotes: Scalars['Int'];
-  text: Scalars['String'];
-  replyThread: Scalars['Int'];
-  replySpecialist?: Maybe<Scalars['String']>;
-  replySpecialistId?: Maybe<Scalars['Int']>;
 };
 
 export type AddReplyMutationVariables = Exact<{
@@ -486,6 +492,16 @@ export type LogoutMutationVariables = Exact<{ [key: string]: never; }>;
 export type LogoutMutation = (
   { __typename?: 'Mutation' }
   & Pick<Mutation, 'logout'>
+);
+
+export type MarkAsOpenedMutationVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type MarkAsOpenedMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'markAsOpened'>
 );
 
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
@@ -1238,6 +1254,36 @@ export function useLogoutMutation(baseOptions?: Apollo.MutationHookOptions<Logou
 export type LogoutMutationHookResult = ReturnType<typeof useLogoutMutation>;
 export type LogoutMutationResult = Apollo.MutationResult<LogoutMutation>;
 export type LogoutMutationOptions = Apollo.BaseMutationOptions<LogoutMutation, LogoutMutationVariables>;
+export const MarkAsOpenedDocument = gql`
+    mutation MarkAsOpened($id: Int!) {
+  markAsOpened(id: $id)
+}
+    `;
+export type MarkAsOpenedMutationFn = Apollo.MutationFunction<MarkAsOpenedMutation, MarkAsOpenedMutationVariables>;
+
+/**
+ * __useMarkAsOpenedMutation__
+ *
+ * To run a mutation, you first call `useMarkAsOpenedMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useMarkAsOpenedMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [markAsOpenedMutation, { data, loading, error }] = useMarkAsOpenedMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useMarkAsOpenedMutation(baseOptions?: Apollo.MutationHookOptions<MarkAsOpenedMutation, MarkAsOpenedMutationVariables>) {
+        return Apollo.useMutation<MarkAsOpenedMutation, MarkAsOpenedMutationVariables>(MarkAsOpenedDocument, baseOptions);
+      }
+export type MarkAsOpenedMutationHookResult = ReturnType<typeof useMarkAsOpenedMutation>;
+export type MarkAsOpenedMutationResult = Apollo.MutationResult<MarkAsOpenedMutation>;
+export type MarkAsOpenedMutationOptions = Apollo.BaseMutationOptions<MarkAsOpenedMutation, MarkAsOpenedMutationVariables>;
 export const MeDocument = gql`
     query Me {
   me {

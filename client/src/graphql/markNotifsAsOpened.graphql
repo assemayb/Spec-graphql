@@ -1,0 +1,3 @@
+mutation MarkAsOpened($id: Int!) {
+    markAsOpened(id: $id)
+}
