@@ -38,7 +38,7 @@ export class UserResolver {
 
       let me = await User.findOne({ where: { id: payload.userId } });
       return me;
-    } catch (error) {
+    } catch (error: any) {
       console.log(error);
       throw new Error(error);
     }
@@ -91,7 +91,7 @@ export class UserResolver {
         isSpec,
         spec,
       });
-    } catch (err) {
+    } catch (err: any) {
       console.error(err.message);
       return false;
     }

@@ -114,10 +114,7 @@ export class ThreadResolver {
     const threadCreatorID = thread?.getDataValue("threadCreator");
     const requestUserID = payload?.userId;
     const requestUserName = payload?.userName;
-    if (
-      threadCreatorID == requestUserID ||
-      threadCreatorID == requestUserName
-    ) {
+    // if ( threadCreatorID == requestUserID || threadCreatorID == requestUserName ) {
       try {
         await Thread.update(options, {
           where: {
@@ -129,9 +126,9 @@ export class ThreadResolver {
         console.error(err.message);
         return false;
       }
-    } else {
-      throw new Error("Not Authenticated to perform this action");
-    }
+    // } else {
+    //   throw new Error("Not Authenticated to perform this action");
+    // }
   }
 
   @Query(() => Int)

@@ -17,10 +17,6 @@ import { Notification } from "../models/Notification";
 
 import { isAuthenticated } from "../utils/isAuth";
 import { MyContext } from "../utils/context";
-import { ReplyCreateType } from "./replyResolverTypes";
-import { ReplyType } from "./replyResolverTypes";
-import { User } from "../models/User";
-import { Thread } from "../models/Thread";
 import { NotificationType } from "./notificationsTypes";
 
 @Resolver()
@@ -86,13 +82,26 @@ export class NotificationResolver {
   }
 
   // update notification
+  @Mutation(() => Boolean, { nullable: false })
+  @UseMiddleware(isAuthenticated)
+  async markAsOpened(@Arg("id", () => Int) id: number) {
+    try {
+      let notif = await Notification.findByPk(id);
+      notif !== null &&
+        (await notif.update({
+          opened: true,
+        }));
+      return true;
+    } catch (error) {
+      console.log(error.message);
+      return false;
+    }
+  }
 
   // delete notification
   @Mutation(() => Boolean, { nullable: true })
   @UseMiddleware(isAuthenticated)
-  async deleteNotif(
-    @Arg("id", () => Int) id: number,
-  ) {
+  async deleteNotif(@Arg("id", () => Int) id: number) {
     try {
       let notif = await Notification.findByPk(id);
       notif !== null &&
@@ -107,6 +116,4 @@ export class NotificationResolver {
       return false;
     }
   }
-
-
 }

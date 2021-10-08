@@ -26,12 +26,12 @@ export const Notifications: React.FC<NotificationsProps> = () => {
     reload: reload,
   });
 
-  function laodMoreNotifs() {
+  const laodMoreNotifs = () => {
     setTimeout(() => {
       const prevLimit = range.limit;
       setRange((value) => ({ ...value, limit: prevLimit + 10 }));
     }, 1000);
-  }
+  };
 
   const [deleteNotifMutation] = useDeleteNotifMutation({
     onCompleted: () => setReload((prev) => !prev),
@@ -62,7 +62,7 @@ export const Notifications: React.FC<NotificationsProps> = () => {
             {notifs &&
               notifs.map((val, index: number) => (
                 <NotifItem
-                  key={index.toString() + "_" + index.toString()}
+                  key={index.toString() + index.toString()}
                   val={val.text!}
                   data={val}
                   deleteNotifMutation={deleteNotifMutation}
