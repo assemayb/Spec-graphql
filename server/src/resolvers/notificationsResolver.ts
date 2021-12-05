@@ -6,10 +6,6 @@ import {
   Query,
   UseMiddleware,
   Arg,
-  Subscription,
-  Root,
-  PubSub,
-  PubSubEngine,
 } from "type-graphql";
 
 import { Reply } from "../models/Reply";

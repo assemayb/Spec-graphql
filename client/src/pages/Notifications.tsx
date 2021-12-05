@@ -7,7 +7,11 @@ import { HeaderComp } from "../smallComps/HeaderComp";
 import InfiniteScroll from "react-infinite-scroller";
 import { FastBigSpinner } from "../smallComps/Spinners";
 import { useGetNotification } from "../hooks/useListNotifications";
-import { useDeleteNotifMutation } from "../generated/graphql";
+
+import {
+  useDeleteNotifMutation,
+  useGetNotifsNumLazyQuery,
+} from "../generated/graphql";
 
 import { NotifItem } from "../smallComps/NotifItem";
 
@@ -17,25 +21,42 @@ export const Notifications: React.FC<NotificationsProps> = () => {
     offset: 0,
     limit: 10,
   });
-  const [reload, setReload] = useState<boolean>(false);
 
-  // using the notification getter custom hook
+  const [hasMore, setHasMore] = useState(true);
+  const [reload, setReload] = useState(false);
   const notifs = useGetNotification({
     start: range.offset,
     end: range.limit,
     reload: reload,
   });
 
-  const laodMoreNotifs = () => {
-    setTimeout(() => {
-      const prevLimit = range.limit;
-      setRange((value) => ({ ...value, limit: prevLimit + 10 }));
-    }, 1000);
-  };
+  const [getNotifsNum, getNotifsNumOptions] = useGetNotifsNumLazyQuery({
+    fetchPolicy: "network-only",
+  });
+
+  useEffect(() => {
+    let mounted = true;
+    mounted && getNotifsNum();
+    return () => {
+      mounted = false;
+    };
+  }, []);
 
   const [deleteNotifMutation] = useDeleteNotifMutation({
-    onCompleted: () => setReload((prev) => !prev),
+    onCompleted: () => {
+      
+    },
   });
+
+  const laodMoreNotifs = () => {
+    if (notifs) {
+      if (getNotifsNumOptions.data?.getNotifsCount! < notifs.length) {
+        return setHasMore(false);
+      }
+      const newLimit = range.limit + 10;
+      setRange((value) => ({ ...value, limit: newLimit }));
+    }
+  };
 
   return (
     <>
@@ -49,23 +70,28 @@ export const Notifications: React.FC<NotificationsProps> = () => {
           p={["0.2rem", "0.4rem", "0.8rem", "1rem"]}
         >
           <InfiniteScroll
-            // hasMore={getNotifsNumOptions.data?.getNotifsCount! >= notifs.length}
-            hasMore={false}
+            hasMore={hasMore}
             loadMore={laodMoreNotifs}
-            pageStart={0}
             loader={
               <Center key={0}>
                 <FastBigSpinner />
               </Center>
             }
           >
-            {notifs &&
+            {notifs !== undefined &&
+              notifs !== null &&
               notifs.map((val, index: number) => (
                 <NotifItem
                   key={index.toString() + index.toString()}
                   val={val.text!}
                   data={val}
-                  deleteNotifMutation={deleteNotifMutation}
+                  deleteNotifMutation={() =>
+                    deleteNotifMutation({
+                      variables: {
+                        id: val.id,
+                      },
+                    })
+                  }
                 />
               ))}
           </InfiniteScroll>

@@ -10,6 +10,7 @@ interface Range {
 
 export const useGetNotification = ({ start, end, reload }: Range) => {
   const [notifs, setNotifs] = useState<NotificationType[]>([]);
+
   const { data, refetch } = useListUserNotifsQuery({
     fetchPolicy: "network-only",
     onCompleted: (data) => {
@@ -22,9 +23,7 @@ export const useGetNotification = ({ start, end, reload }: Range) => {
     refetch();
     const chunk = data?.listUserNotifs!.slice(start, end);
     setNotifs(chunk!);
-  }, [data, reload]);
-
-
+  }, [start, end, reload]);
 
   return notifs;
 };

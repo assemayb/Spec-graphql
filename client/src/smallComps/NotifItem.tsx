@@ -23,6 +23,7 @@ export const NotifItem: React.FC<NotifItemProps> = ({
   data,
   deleteNotifMutation,
 }) => {
+
   const repID = data?.replyId;
   const repText = data?.text;
 
@@ -34,12 +35,12 @@ export const NotifItem: React.FC<NotifItemProps> = ({
   });
 
   const [markOpned] = useMarkAsOpenedMutation();
-
   const [showDelBtn, setShowDelBtn] = useState(false);
   const notifThreadId = notificationInfo.data?.getThreadByReplyId;
 
   const history = useHistory();
-  const goToThread = () => {
+
+  const  goToThread = () => {
     markOpned({
       variables: {
         id: repID as number,
@@ -49,15 +50,9 @@ export const NotifItem: React.FC<NotifItemProps> = ({
       repID: repID,
       repText: repText,
     });
-  };
-
-  function deleteNotif() {
-    deleteNotifMutation({
-      variables: {
-        id: data?.id!,
-      },
-    });
   }
+
+  
   return (
     <>
       <Flex
@@ -108,7 +103,7 @@ export const NotifItem: React.FC<NotifItemProps> = ({
 
             <Tooltip label="delete">
               <Button
-                onClick={() => deleteNotif()}
+                onClick={deleteNotifMutation}
                 borderRadius="-50px"
                 fontSize="20px"
                 bgColor="gray.300"
